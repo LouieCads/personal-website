@@ -67,7 +67,7 @@
 						</div>
 					</div>
 					<div class="mt-3 text-center">
-						<p class="font-mono text-xs tracking-[0.25em] text-(--color-text-muted)">LOUIGIE C. CAMINOY</p>
+						<p class="font-mono text-xs tracking-[0.25em] text-(--color-text-secondary)">LOUIGIE C. CAMINOY</p>
 					</div>
 				</div>
 
