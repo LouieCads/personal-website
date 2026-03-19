@@ -45,9 +45,16 @@
 		'/email': () => window.open('https://mail.google.com/mail/u/0/#all?compose=new', '_blank')
 	};
 
+	let showAllCommandsSuggestion = $derived.by(() => {
+		const trimmed = input.trim().toLowerCase();
+		return trimmed === '/';
+	});
+
 	let suggestion = $derived.by(() => {
 		const trimmed = input.trim().toLowerCase();
-		if (!trimmed || trimmed.length < 2) return '';
+		if (!trimmed) return '';
+		if (trimmed === '/') return '';
+		if (trimmed.length < 2) return '';
 		const match = allCommands.find((cmd) => cmd.startsWith(trimmed) && cmd !== trimmed);
 		return match ?? '';
 	});
@@ -129,7 +136,15 @@
 </script>
 
 <div class="relative z-40 border-t border-(--color-border) bg-(--color-surface)">
-	{#if suggestion}
+	{#if showAllCommandsSuggestion}
+		<div class="absolute bottom-full left-0 right-0 border-b border-t border-(--color-border) bg-(--color-surface) px-24 py-2">
+			<span class="font-mono text-xs text-(--color-text-secondary)">
+				<b>Navigation:</b> /home /about /projects /contact /commands
+				<span class="mx-2"></span>
+				<b>External:</b> /resume /github /linkedin /instagram /facebook /email
+			</span>
+		</div>
+	{:else if suggestion}
 		<div class="absolute bottom-full left-0 right-0 border-b border-t border-(--color-border) bg-(--color-surface) px-24 py-2">
 			<span class="font-mono text-xs text-(--color-text-primary)">
 				{suggestion}
