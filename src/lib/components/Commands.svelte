@@ -24,7 +24,7 @@
 </script>
 
 <div class="view-enter flex h-full flex-col px-18 py-8">
-	<div class="mb-8 flex items-center gap-4">
+	<div class="flex items-center gap-4">
 		<button
 			onclick={() => navigate('home')}
 			class="cursor-pointer font-mono text-[11px] tracking-widest text-(--color-text-secondary) transition-colors hover:text-(--color-text-primary)"
@@ -37,7 +37,7 @@
 	</div>
 
 	<div class="flex flex-1 flex-col justify-center">
-		<p class="mb-6 font-mono text-xs text-(--color-text-muted)">
+		<p class="mb-6 font-mono text-sm text-(--color-text-muted)">
 			Type any command in the terminal below, or click an actionable one directly.
 		</p>
 
@@ -52,8 +52,8 @@
 				<div class="divide-y divide-(--color-border)">
 					{#each staticCommands as { cmd, desc } (cmd)}
 						<div class="flex items-center gap-4 px-4 py-3">
-							<code class="w-28 shrink-0 font-mono text-xs text-(--color-text-secondary)">{cmd}</code>
-							<span class="flex-1 font-mono text-[11px] text-(--color-text-muted)">{desc}</span>
+							<code class="w-28 shrink-0 font-mono text-sm text-(--color-text-secondary)">{cmd}</code>
+							<span class="flex-1 font-mono text-xs text-(--color-text-muted)">{desc}</span>
 						</div>
 					{/each}
 				</div>
@@ -72,8 +72,8 @@
 							onclick={action}
 							class="group flex w-full cursor-pointer items-center gap-4 px-4 py-3 text-left transition-colors hover:bg-(--color-surface)"
 						>
-							<code class="w-28 shrink-0 font-mono text-xs text-(--color-accent)">{cmd}</code>
-							<span class="flex-1 font-mono text-[11px] text-(--color-text-muted) transition-colors group-hover:text-(--color-text-secondary)">{desc}</span>
+							<code class="w-28 shrink-0 font-mono text-sm text-(--color-accent)">{cmd}</code>
+							<span class="flex-1 font-mono text-xs text-(--color-text-muted) transition-colors group-hover:text-(--color-text-secondary)">{desc}</span>
 							<span class="font-mono text-[10px] text-(--color-text-muted) opacity-0 transition-opacity group-hover:opacity-100">&nearr;</span>
 						</button>
 					{/each}
