@@ -20,14 +20,27 @@
 
 	<div class="grid flex-1 gap-12 lg:grid-cols-2">
 		<div class="flex flex-col justify-center">
+			<div class="mb-8">
+				<p class="mb-3 font-mono text-md font-semibold text-(--color-text-primary)">LET'S TALK ABOUT:</p>
+				<ul class="space-y-2 text-sm text-(--color-text-secondary)">
+					<li>Emerging Technologies</li>
+					<li>Fitness</li>
+					<li>Collaborations</li>
+					<li>Partnerships</li>
+					<li>Academics</li>
+					<li>Tech, Crypto, Networking Events</li>
+					<li>Life</li>
+				</ul>
+			</div>
+
 			<p class="mb-6 max-w-md text-base leading-relaxed text-(--color-text-secondary)">
 				Interested in working together or have something in mind?
-				I'm always open to discussing new projects, ideas, or opportunities.
+				I'm always open to discussing new opportunities, projects, or ideas.
 			</p>
 
 			<div class="flex items-center gap-3">
-				<span class="inline-block h-2 w-2 animate-pulse rounded-full bg-emerald-500"></span>
-				<span class="font-mono text-xs text-emerald-400/80">Available for new opportunities</span>
+				<span class="inline-block h-2 w-2 animate-pulse rounded-full bg-(--color-accent)"></span>
+				<span class="font-mono text-xs text-(--color-accent)">Available for new opportunities and collaborations</span>
 			</div>
 		</div>
 
