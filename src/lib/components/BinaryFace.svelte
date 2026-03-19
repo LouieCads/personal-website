@@ -4,8 +4,7 @@
 	let canvas: HTMLCanvasElement;
 	let container: HTMLDivElement;
 
-	const COLS = 72;
-	const ROWS = 90;
+	const SIZE = 80; // square grid
 
 	onMount(() => {
 		const ctx = canvas.getContext('2d');
@@ -16,7 +15,6 @@
 		let w = 0;
 		let h = 0;
 
-		// Per-cell animated binary state
 		interface CellState {
 			value: string;
 			nextChange: number;
@@ -24,8 +22,8 @@
 		}
 
 		const cells: CellState[] = [];
-		for (let i = 0; i < COLS * ROWS; i++) {
-			const interval = 500 + Math.random() * 2500;
+		for (let i = 0; i < SIZE * SIZE; i++) {
+			const interval = 600 + Math.random() * 3000;
 			cells.push({
 				value: Math.random() > 0.5 ? '1' : '0',
 				nextChange: Math.random() * interval,
@@ -40,25 +38,28 @@
 			}
 		}
 
-		// Sample brightness from image
 		let brightness: Float32Array | null = null;
 
 		const offscreen = document.createElement('canvas');
-		offscreen.width = COLS;
-		offscreen.height = ROWS;
+		offscreen.width = SIZE;
+		offscreen.height = SIZE;
 		const offCtx = offscreen.getContext('2d')!;
 
 		const img = new Image();
 		img.src = '/profile.jpg';
 		img.onload = () => {
-			offCtx.drawImage(img, 0, 0, COLS, ROWS);
-			const data = offCtx.getImageData(0, 0, COLS, ROWS);
-			brightness = new Float32Array(COLS * ROWS);
-			for (let i = 0; i < COLS * ROWS; i++) {
+			// Center-crop to square
+			const side = Math.min(img.width, img.height);
+			const sx = (img.width - side) / 2;
+			const sy = (img.height - side) / 2;
+			offCtx.drawImage(img, sx, sy, side, side, 0, 0, SIZE, SIZE);
+
+			const data = offCtx.getImageData(0, 0, SIZE, SIZE);
+			brightness = new Float32Array(SIZE * SIZE);
+			for (let i = 0; i < SIZE * SIZE; i++) {
 				const r = data.data[i * 4];
 				const g = data.data[i * 4 + 1];
 				const b = data.data[i * 4 + 2];
-				// Perceived luminance
 				brightness[i] = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
 			}
 		};
@@ -81,33 +82,40 @@
 				return;
 			}
 
-			const cellW = w / COLS;
-			const cellH = h / ROWS;
-			const fontSize = Math.max(cellW * 0.72, 5);
+			// Square: fit inside container, centered
+			const side = Math.min(w, h);
+			const offsetX = (w - side) / 2;
+			const offsetY = (h - side) / 2;
+
+			// Fill square with hero background color
+			ctx!.fillStyle = '#050505';
+			ctx!.fillRect(offsetX, offsetY, side, side);
+
+			const cellSize = side / SIZE;
+			const fontSize = Math.max(cellSize * 0.78, 4);
 
 			ctx!.font = `600 ${fontSize}px 'JetBrains Mono', monospace`;
 			ctx!.textAlign = 'center';
 			ctx!.textBaseline = 'middle';
 
-			for (let r = 0; r < ROWS; r++) {
-				for (let c = 0; c < COLS; c++) {
-					const idx = r * COLS + c;
+			for (let r = 0; r < SIZE; r++) {
+				for (let c = 0; c < SIZE; c++) {
+					const idx = r * SIZE + c;
 					const b = brightness[idx];
 
-					// Skip very bright pixels (white background)
-					if (b > 0.88) continue;
+					if (b > 0.90) continue;
 
 					const cell = cells[idx];
 					tickCell(cell, time);
 
-					// Darker pixel = more opaque/visible character
-					// Add subtle sine pulse for vitality
-					const base = (1 - b) * 0.92;
-					const pulse = base * (0.85 + 0.15 * Math.sin(time * 0.003 + c * 0.3 + r * 0.5));
-					const opacity = Math.max(0, Math.min(1, pulse));
+					const invB = 1 - b;
+					const base = Math.pow(invB, 0.7) * 0.95;
+					const pulse = 0.88 + 0.12 * Math.sin(time * 0.002 + c * 0.25 + r * 0.35);
+					const opacity = Math.max(0, Math.min(1, base * pulse));
+					if (opacity < 0.02) continue;
 
-					const x = c * cellW + cellW / 2;
-					const y = r * cellH + cellH / 2;
+					const x = offsetX + c * cellSize + cellSize / 2;
+					const y = offsetY + r * cellSize + cellSize / 2;
 
 					ctx!.fillStyle = `rgba(255, 255, 255, ${opacity})`;
 					ctx!.fillText(cell.value, x, y);

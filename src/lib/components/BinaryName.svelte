@@ -121,7 +121,9 @@
 	const LINE2 = 'CAMINOY';
 	const LETTER_GAP = 2;
 	const ROWS = 8;
-	const LINE_GAP = 4; // extra rows of space between the two name lines
+	const LINE_GAP = 4;
+	// Extra cols of left indent for the last name
+	const LINE2_INDENT = 3;
 
 	interface LetterPos {
 		letter: string;
@@ -144,35 +146,6 @@
 
 	const layout1 = computeLayout(LINE1);
 	const layout2 = computeLayout(LINE2);
-	const maxCols = Math.max(layout1.totalCols, layout2.totalCols);
-
-	function colHasActive(col: number, positions: LetterPos[]): boolean {
-		for (const lp of positions) {
-			const localCol = col - lp.startCol;
-			if (localCol >= 0 && localCol < lp.width) {
-				return FONT[lp.letter].some((row) => row[localCol] === 1);
-			}
-		}
-		return false;
-	}
-
-	// Stream heights above line 1
-	const streamHeights: number[] = [];
-	for (let c = 0; c < maxCols; c++) {
-		const localC = c - Math.floor((maxCols - layout1.totalCols) / 2);
-		if (localC >= 0 && localC < layout1.totalCols && colHasActive(localC, layout1.positions)) {
-			streamHeights.push(Math.floor(Math.random() * 14) + 2);
-		} else {
-			streamHeights.push(Math.random() > 0.7 ? Math.floor(Math.random() * 3) + 1 : 0);
-		}
-	}
-
-	// Chart bars on the right side
-	const chartBars: { col: number; height: number }[] = [];
-	const chartBarCount = 25;
-	for (let i = 0; i < chartBarCount; i++) {
-		chartBars.push({ col: i, height: Math.floor(Math.random() * 18) + 3 });
-	}
 
 	const BIN_LEN = 4;
 
@@ -188,54 +161,33 @@
 		interval: number;
 	}
 
-	const streamCells = new Map<string, CellState>();
 	const line1Cells = new Map<string, CellState>();
 	const line2Cells = new Map<string, CellState>();
-	const chartCells = new Map<string, CellState>();
 
-	function makeCell(offset = 0): CellState {
+	function makeCell(): CellState {
 		const interval = 800 + Math.random() * 1800;
-		return { value: randomBin(), nextChange: offset + Math.random() * interval, interval };
+		return { value: randomBin(), nextChange: Math.random() * interval, interval };
 	}
 
-	// Init stream cells
-	for (let c = 0; c < maxCols; c++) {
-		const sH = streamHeights[c];
-		for (let s = sH; s > 0; s--) {
-			streamCells.set(`${c}-${s}`, makeCell());
-		}
-	}
-
-	// Init line 1 letter cells
 	for (const lp of layout1.positions) {
 		for (let localCol = 0; localCol < lp.width; localCol++) {
 			const bitmap = FONT[lp.letter];
 			for (let r = 0; r < ROWS; r++) {
 				if (bitmap[r][localCol]) {
-					const globalCol = lp.startCol + localCol;
-					line1Cells.set(`${globalCol}-${r}`, makeCell());
+					line1Cells.set(`${lp.startCol + localCol}-${r}`, makeCell());
 				}
 			}
 		}
 	}
 
-	// Init line 2 letter cells
 	for (const lp of layout2.positions) {
 		for (let localCol = 0; localCol < lp.width; localCol++) {
 			const bitmap = FONT[lp.letter];
 			for (let r = 0; r < ROWS; r++) {
 				if (bitmap[r][localCol]) {
-					const globalCol = lp.startCol + localCol;
-					line2Cells.set(`${globalCol}-${r}`, makeCell());
+					line2Cells.set(`${lp.startCol + localCol}-${r}`, makeCell());
 				}
 			}
-		}
-	}
-
-	// Init chart cells
-	for (const bar of chartBars) {
-		for (let r = 0; r < bar.height; r++) {
-			chartCells.set(`${bar.col}-${r}`, makeCell());
 		}
 	}
 
@@ -268,43 +220,29 @@
 		function draw(time: number) {
 			ctx!.clearRect(0, 0, w, h);
 
-			const maxCellW = (w * 0.62) / maxCols;
-			const cellW = Math.min(maxCellW, 28);
+			// Size cells to fit both lines within 90% of container width
+			const widestLine = Math.max(layout1.totalCols, layout2.totalCols + LINE2_INDENT);
+			const maxCellW = (w * 0.90) / widestLine;
+			const cellW = Math.min(maxCellW, 30);
 			const cellH = cellW * 0.75;
 			const fontSize = Math.max(cellW * 0.32, 6);
 
 			const startX = w * 0.05;
 
-			// Horizontal offset to center each line within maxCols
-			const line1OffX = startX + Math.floor((maxCols - layout1.totalCols) / 2) * cellW;
-			const line2OffX = startX + Math.floor((maxCols - layout2.totalCols) / 2) * cellW;
+			// Line 1: left-aligned at startX
+			const line1OffX = startX;
+			// Line 2: indented by LINE2_INDENT cells
+			const line2OffX = startX + LINE2_INDENT * cellW;
 
 			// Vertical: center the two-line block
 			const totalBlockH = (2 * ROWS + LINE_GAP) * cellH;
-			const blockStartY = h * 0.5 - totalBlockH * 0.52;
+			const blockStartY = (h - totalBlockH) * 0.48;
 			const line1StartY = blockStartY;
 			const line2StartY = blockStartY + (ROWS + LINE_GAP) * cellH;
 
 			ctx!.font = `500 ${fontSize}px 'JetBrains Mono', monospace`;
 			ctx!.textAlign = 'center';
 			ctx!.textBaseline = 'middle';
-
-			// Draw streams above line 1
-			for (let c = 0; c < maxCols; c++) {
-				const x = startX + c * cellW + cellW / 2;
-				const sH = streamHeights[c];
-				for (let s = sH; s > 0; s--) {
-					const y = line1StartY - s * cellH + cellH / 2;
-					if (y < 0) continue;
-					const cell = streamCells.get(`${c}-${s}`);
-					if (!cell) continue;
-					tickCell(cell, time);
-					const distRatio = s / sH;
-					const opacity = 0.05 + (1 - distRatio) * 0.10;
-					ctx!.fillStyle = `rgba(255, 255, 255, ${opacity})`;
-					ctx!.fillText(cell.value, x, y);
-				}
-			}
 
 			// Draw line 1 (LOUIGIE)
 			for (const lp of layout1.positions) {
@@ -325,7 +263,7 @@
 				}
 			}
 
-			// Draw line 2 (CAMINOY)
+			// Draw line 2 (CAMINOY) — indented
 			for (const lp of layout2.positions) {
 				const bitmap = FONT[lp.letter];
 				for (let localCol = 0; localCol < lp.width; localCol++) {
@@ -342,36 +280,6 @@
 						ctx!.fillText(cell.value, x, y);
 					}
 				}
-			}
-
-			// Chart bars (right side)
-			const chartStartX = w * 0.72;
-			const chartCellW = cellW * 0.9;
-			const chartBaseY = line2StartY + ROWS * cellH;
-
-			for (const bar of chartBars) {
-				const bx = chartStartX + bar.col * chartCellW + chartCellW / 2;
-				if (bx > w - 20) continue;
-				for (let r = 0; r < bar.height; r++) {
-					const by = chartBaseY - r * cellH - cellH / 2;
-					if (by < 0) continue;
-					const cell = chartCells.get(`${bar.col}-${r}`);
-					if (!cell) continue;
-					tickCell(cell, time);
-					const opacity = 0.03 + (r / bar.height) * 0.07;
-					ctx!.fillStyle = `rgba(255, 255, 255, ${opacity})`;
-					ctx!.fillText(cell.value, bx, by);
-				}
-			}
-
-			// Horizontal scanlines (very subtle)
-			ctx!.strokeStyle = 'rgba(255, 255, 255, 0.008)';
-			ctx!.lineWidth = 0.5;
-			for (let y = 0; y < h; y += 3) {
-				ctx!.beginPath();
-				ctx!.moveTo(0, y);
-				ctx!.lineTo(w, y);
-				ctx!.stroke();
 			}
 
 			animId = requestAnimationFrame(draw);
