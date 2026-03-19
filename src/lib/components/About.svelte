@@ -23,7 +23,7 @@
 	];
 </script>
 
-<div class="view-enter flex h-full flex-col px-18 py-8 gap-6">
+<div class="view-enter flex h-full flex-col px-24 py-8 gap-6">
 
 	<!-- Header -->
 	<div class="mb-10 flex items-center gap-4">

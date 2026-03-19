@@ -124,7 +124,7 @@
 	const ROWS = 8;
 	const LINE_GAP = 4;
 	// Extra cols of left indent for the last name
-	const LINE2_INDENT = 12;
+	const LINE2_INDENT = 10;
 
 	interface LetterPos {
 		letter: string;
@@ -231,8 +231,8 @@
 
 			// Size cells to fill the full container width
 			const widestLine = Math.max(layout1.totalCols, layout2.totalCols + LINE2_INDENT);
-			const maxCellW = (w * 0.90) / widestLine;
-			const cellW = Math.min(maxCellW, 52);
+			const maxCellW = (w * 0.87) / widestLine;
+			const cellW = Math.min(maxCellW, 48);
 			const cellH = cellW * 0.75;
 			const fontSize = Math.max(cellW * 0.32, 6);
 

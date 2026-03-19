@@ -13,7 +13,7 @@
 	<!-- Full-cover binary background -->
 	<BinaryBackground />
 	<!-- Top anchor row -->
-	<div class="relative z-10 flex items-center justify-between px-18 pt-6">
+	<div class="relative z-10 flex items-center justify-between px-24 pt-6">
 		<div class="flex items-center gap-2">
 			<span class="h-1.5 w-1.5 animate-pulse rounded-full bg-(--color-accent)"></span>
 			<span class="font-mono text-xs tracking-widest text-(--color-accent)">Welcome!</span>
@@ -27,7 +27,7 @@
 	</div>
 
 	<!-- Bottom anchor row -->
-	<div class="relative z-10 px-18 pb-18">
+	<div class="relative z-10 px-24 pb-14">
 		<p class="mb-6 font-mono text-lg font-light tracking-[0.3em] text-(--color-text-secondary) sm:text-xl md:text-2xl">
 			<span class="font-medium text-(--color-text-primary)">CTO</span>
 			|
@@ -47,7 +47,7 @@
 				onclick={() => navigate('projects')}
 				class="cursor-pointer border border-(--color-border) bg-(--color-surface-alt)/50 px-8 py-3 font-mono text-xs tracking-[0.25em] text-(--color-text-secondary) backdrop-blur-sm transition-all hover:border-(--color-border-hover) hover:text-(--color-text-primary)"
 			>
-				[ PROJECTS]
+				[ PROJECTS ]
 			</button>
 			<button
 				onclick={() => navigate('contact')}
