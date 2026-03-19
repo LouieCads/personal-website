@@ -16,6 +16,7 @@
 		'/about',
 		'/projects',
 		'/contact',
+		'/commands',
 		'/resume',
 		'/github',
 		'/linkedin',
@@ -28,14 +29,15 @@
 		'/home': 'home',
 		'/about': 'about',
 		'/projects': 'projects',
-		'/contact': 'contact'
+		'/contact': 'contact',
+		'/commands': 'commands'
 	};
 
 	const externalCommands: Record<string, () => void> = {
 		'/resume': () => window.open('/resume.pdf', '_blank'),
 		'/github': () => window.open('https://github.com/LouieCads', '_blank'),
 		'/linkedin': () => window.open('https://www.linkedin.com/in/louie1221/', '_blank'),
-		'/email': () => (window.location.href = 'mailto:louigiecads143@gmail.com')
+		'/email': () => window.open('https://mail.google.com/mail/u/0/#all?compose=new', '_blank')
 	};
 
 	let suggestion = $derived.by(() => {
@@ -59,7 +61,7 @@
 
 		if (cmd === '/help') {
 			showFeedback(
-				'Navigation: /home /about /projects /contact  |  External: /resume /github /linkedin /email',
+				'Navigation: /home /about /projects /contact /commands  |  External: /resume /github /linkedin /email',
 				'info'
 			);
 			input = '';

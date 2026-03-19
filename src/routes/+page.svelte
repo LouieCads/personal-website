@@ -3,6 +3,7 @@
 	import About from '$lib/components/About.svelte';
 	import Projects from '$lib/components/Project.svelte';
 	import Contact from '$lib/components/Contact.svelte';
+	import Commands from '$lib/components/Commands.svelte';
 	import CLI from '$lib/components/CLI.svelte';
 
 	let currentView = $state('home');
@@ -34,6 +35,10 @@
 			{:else if currentView === 'contact'}
 				<div class="absolute inset-0">
 					<Contact {navigate} />
+				</div>
+			{:else if currentView === 'commands'}
+				<div class="absolute inset-0">
+					<Commands {navigate} />
 				</div>
 			{/if}
 		{/key}
