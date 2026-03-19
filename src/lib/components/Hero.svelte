@@ -9,7 +9,7 @@
 	let { navigate }: Props = $props();
 </script>
 
-<div class="view-enter scanlines relative flex h-full flex-col overflow-hidden">
+<div class="view-enter scanlines relative grid h-full grid-rows-[auto_1fr_auto] overflow-hidden">
 	<!-- Full-cover binary background -->
 	<BinaryBackground />
 	<!-- Top anchor row -->
@@ -22,10 +22,11 @@
 	</div>
 
 	<!-- Main area: name canvas left, binary face right -->
-	<div class="relative flex flex-1 overflow-hidden">
+	<div class="relative flex overflow-hidden">
 		<BinaryName />
 	</div>
 
+	<!-- Bottom anchor row -->
 	<div class="relative z-10 px-18 pb-18">
 		<p class="mb-6 font-mono text-lg font-light tracking-[0.3em] text-(--color-text-secondary) sm:text-xl md:text-2xl">
 			<span class="font-medium text-(--color-text-primary)">CTO</span>
@@ -38,7 +39,7 @@
 		<div class="mt-2 flex flex-wrap items-center gap-3">
 			<button
 				onclick={() => navigate('about')}
-				class="cursor-pointer border border-(--color-border) bg-(--color-surface-alt)/50 px-8 py-3 font-mono text-xs tracking-[0.25em] text-(--color-text-secondary)] backdrop-blur-sm transition-all hover:border-(--color-border-hover)] hover:text-(--color-text-primary)"
+				class="cursor-pointer border border-(--color-border) bg-(--color-surface-alt)/50 px-8 py-3 font-mono text-xs tracking-[0.25em] text-(--color-text-secondary)/ backdrop-blur-sm transition-all hover:border-(--color-border-hover) hover:text-(--color-text-primary)"
 			>
 				[ ABOUT ME ]
 			</button>

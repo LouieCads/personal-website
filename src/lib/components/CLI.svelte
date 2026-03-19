@@ -121,14 +121,14 @@
 
 <div class="relative z-40 border-t border-(--color-border) bg-(--color-surface)">
 	{#if suggestion}
-		<div class="border-b border-(--color-border) px-18 py-2">
+		<div class="absolute bottom-full left-0 right-0 border-b border-t border-(--color-border) bg-(--color-surface) px-18 py-2">
 			<span class="font-mono text-xs text-(--color-text-primary)">
 				{suggestion}
 				<span class="ml-2 text-[10px] opacity-60">TAB to complete</span>
 			</span>
 		</div>
 	{:else if feedback}
-		<div class="border-b border-(--color-border) px-18 py-2">
+		<div class="absolute bottom-full left-0 right-0 border-b border-t border-(--color-border) bg-(--color-surface) px-18 py-2">
 			<span
 				class="font-mono text-xs {feedbackType === 'error'
 					? 'text-red-400/80'
@@ -141,7 +141,7 @@
 
 	<div class="px-18">
 		<form onsubmit={handleSubmit} class="flex items-center gap-2 py-4">
-			<span class="font-mono text-sm text-(--color-text-secondary)">type-a-command-to-know-me</span>
+			<span class="font-mono text-sm text-(--color-text-secondary)">type-commands-to-know-me</span>
 			<span class="font-mono text-sm text-(--color-text-secondary)">~</span>
 			<span class="font-mono text-sm text-(--color-text-primary)">$</span>
 			<input

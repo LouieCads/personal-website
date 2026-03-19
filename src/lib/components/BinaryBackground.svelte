@@ -62,7 +62,7 @@
 		// Cache theme values — only read DOM when theme changes
 		let isDark = document.documentElement.classList.contains('dark');
 		let textRgb = isDark ? '255, 255, 255' : '0, 0, 0';
-		let baseOpacity = isDark ? 0.055 : 0.065;
+		let baseOpacity = isDark ? 0.035 : 0.045;
 
 		const observer = new MutationObserver(() => {
 			isDark = document.documentElement.classList.contains('dark');

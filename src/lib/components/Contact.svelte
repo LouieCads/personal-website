@@ -9,7 +9,7 @@
 	<div class="mb-8 flex items-center gap-4">
 		<button
 			onclick={() => navigate('home')}
-			class="cursor-pointer font-mono text-[11px] tracking-widest text-(--color-text-muted) transition-colors hover:text-(--color-text-primary)"
+			class="cursor-pointer font-mono text-[11px] tracking-widest text-(--color-text-secondary) transition-colors hover:text-(--color-text-primary)"
 		>
 			&larr; HOME
 		</button>

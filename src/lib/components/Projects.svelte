@@ -31,13 +31,13 @@
 	<div class="mb-8 flex items-center gap-4">
 		<button
 			onclick={() => navigate('home')}
-			class="cursor-pointer font-mono text-[11px] tracking-widest text-(--color-text-muted)] transition-colors hover:text-(--color-text-primary)]"
+			class="cursor-pointer font-mono text-[11px] tracking-widest text-(--color-text-muted) transition-colors hover:text-(--color-text-primary)"
 		>
 			&larr; HOME
 		</button>
-		<span class="font-mono text-2xl text-(--color-accent)]">02</span>
-		<span class="font-mono text-sm tracking-wider text-(--color-text-primary)]">PROJECTS</span>
-		<span class="h-px flex-1 bg-(--color-border)]"></span>
+		<span class="font-mono text-2xl text-(--color-accent)">02</span>
+		<span class="font-mono text-sm tracking-wider text-(--color-text-primary)">PROJECTS</span>
+		<span class="h-px flex-1 bg-(--color-border)"></span>
 	</div>
 
 	<div class="flex flex-1 flex-col justify-center gap-5">
@@ -46,10 +46,10 @@
 				href={project.link}
 				target="_blank"
 				rel="noopener noreferrer external"
-				class="group flex h-55 border border-(--color-border)] bg-(--color-surface-card)] transition-all hover:border-(--color-border-hover)] hover:bg-(--color-surface-alt)]"
+				class="group flex h-55 border border-(--color-border) bg-(--color-surface-card) transition-all hover:border-(--color-border-hover) hover:bg-(--color-surface-alt)"
 			>
 				<!-- Left: image -->
-				<div class="w-95 shrink-0 overflow-hidden border-r border-(--color-border)]">
+				<div class="w-95 shrink-0 overflow-hidden border-r border-(--color-border)">
 					<img
 						src={project.image}
 						alt={project.title}
@@ -62,22 +62,22 @@
 					<div>
 						<div class="mb-3 flex items-start justify-between">
 							<div>
-								<span class="mb-2 block font-mono text-[11px] text-(--color-text-muted)]">{project.index}</span>
-								<h3 class="text-xl font-medium text-(--color-text-primary)] transition-colors group-hover:text-(--color-accent)]">
+								<span class="mb-2 block font-mono text-[11px] text-(--color-text-muted)">{project.index}</span>
+								<h3 class="text-xl font-medium text-(--color-text-primary) transition-colors group-hover:text-(--color-accent)">
 									{project.title}
 								</h3>
 							</div>
-							<span class="font-mono text-sm text-(--color-text-muted)] transition-transform group-hover:translate-x-1 group-hover:text-(--color-accent)]">
+							<span class="font-mono text-sm text-(--color-text-muted) transition-transform group-hover:translate-x-1 group-hover:text-(--color-accent)">
 								&nearr;
 							</span>
 						</div>
-						<p class="mb-5 text-md leading-relaxed text-(--color-text-secondary)]">
+						<p class="mb-5 text-md leading-relaxed text-(--color-text-secondary)">
 							{project.description}
 						</p>
 					</div>
 					<div class="flex flex-wrap gap-2">
 						{#each project.tech as t (t)}
-							<span class="border border-(--color-border)] px-3 py-1 font-mono text-[10px] text-(--color-text-secondary)]">
+							<span class="border border-(--color-border) px-3 py-1 font-mono text-[10px] text-(--color-text-secondary)">
 								{t}
 							</span>
 						{/each}
