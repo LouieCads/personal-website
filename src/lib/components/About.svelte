@@ -29,13 +29,13 @@
 	<div class="mb-10 flex items-center gap-4">
 		<button
 			onclick={() => navigate('home')}
-			class="cursor-pointer font-mono text-[11px] tracking-widest text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text-primary)]"
+			class="cursor-pointer font-mono text-[11px] tracking-widest text-(--color-text-muted) transition-colors hover:text-(--color-text-primary)"
 		>
 			&larr; HOME
 		</button>
-		<span class="font-mono text-2xl text-[var(--color-accent)]">01</span>
-		<span class="font-mono text-sm tracking-[0.2em] text-[var(--color-text-primary)]">ABOUT</span>
-		<span class="h-px flex-1 bg-[var(--color-border)]"></span>
+		<span class="font-mono text-2xl text-(--color-accent)">01</span>
+		<span class="font-mono text-sm tracking-[0.2em] text-(--color-text-primary)">ABOUT</span>
+		<span class="h-px flex-1 bg-(--color-border)"></span>
 		<div class="flex items-center gap-2">
 			<span class="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500"></span>
 			<span class="font-mono text-[10px] tracking-widest text-emerald-500/70">OPEN TO OPPORTUNITIES</span>
@@ -53,39 +53,39 @@
 				<!-- Binary face -->
 				<div class="flex shrink-0 flex-col items-center">
 					<div class="relative w-52">
-						<span class="absolute -top-1 -left-1 h-2 w-2 border-t border-l border-[var(--color-border-hover)]"></span>
-						<span class="absolute -top-1 -right-1 h-2 w-2 border-t border-r border-[var(--color-border-hover)]"></span>
-						<span class="absolute -bottom-1 -left-1 h-2 w-2 border-b border-l border-[var(--color-border-hover)]"></span>
-						<span class="absolute -bottom-1 -right-1 h-2 w-2 border-b border-r border-[var(--color-border-hover)]"></span>
+						<span class="absolute -top-1 -left-1 h-2 w-2 border-t border-l border-(--color-border-hover)"></span>
+						<span class="absolute -top-1 -right-1 h-2 w-2 border-t border-r border-(--color-border-hover)"></span>
+						<span class="absolute -bottom-1 -left-1 h-2 w-2 border-b border-l border-(--color-border-hover)"></span>
+						<span class="absolute -bottom-1 -right-1 h-2 w-2 border-b border-r border-(--color-border-hover)"></span>
 						<div class="aspect-square w-full overflow-hidden">
 							<BinaryFace />
 						</div>
 					</div>
 					<div class="mt-3 text-center">
-						<p class="font-mono text-xs tracking-[0.25em] text-[var(--color-text-muted)]">LOUIGIE C. CAMINOY</p>
+						<p class="font-mono text-xs tracking-[0.25em] text-(--color-text-muted)">LOUIGIE C. CAMINOY</p>
 					</div>
 				</div>
 
 				<!-- Bio description -->
 				<div class="flex-1">
-					<p class="mb-1 font-mono text-xs tracking-widest text-[var(--color-text-muted)]">// WHO I AM</p>
-					<h2 class="mb-3 text-xl font-light leading-snug tracking-tight text-[var(--color-text-primary)]">
+					<p class="mb-1 font-mono text-xs tracking-widest text-(--color-text-muted)">// WHO I AM</p>
+					<h2 class="mb-3 text-xl font-light leading-snug tracking-tight text-(--color-text-primary)">
 						Growth-driven engineer.
-						<span class="text-[var(--color-text-secondary)]">Discipline over comfort.</span>
+						<span class="text-(--color-text-secondary)">Discipline over comfort.</span>
 					</h2>
-					<p class="mb-3 text-sm leading-relaxed text-[var(--color-text-secondary)]">
+					<p class="mb-3 text-sm leading-relaxed text-(--color-text-secondary)">
 						A neuroplastic software engineer focused on blockchain, systems architecture, and emerging technologies. 
 						I build at the intersection of decentralized systems and scalable infrastructure — turning ideas into real, working products.
 					</p>
-					<p class="mb-3 text-sm leading-relaxed text-[var(--color-text-secondary)]">
+					<p class="mb-3 text-sm leading-relaxed text-(--color-text-secondary)">
 						I prioritize execution: make it exist first, refine it later. Every project is a chance to push boundaries through clean architecture, 
 						pragmatic decisions, and continuous iteration. 
 					</p>
-					<p class="mb-3 text-sm leading-relaxed text-[var(--color-text-secondary)]">
+					<p class="mb-3 text-sm leading-relaxed text-(--color-text-secondary)">
 						Alongside building, I serve as a student leader at the University of Makati, 
 						where I contribute to academic and technical activities within the community.
 					</p>
-					<p class="text-sm leading-relaxed text-[var(--color-text-secondary)]">
+					<p class="text-sm leading-relaxed text-(--color-text-secondary)">
 						Outside of code, I stay disciplined through gym training, calisthenics, and running — 
 						building both systems and self.
 					</p>
@@ -93,11 +93,11 @@
 			</div>
 
 			<!-- Stats row — below face and bio -->
-			<div class="flex gap-12 border-t border-[var(--color-border)] pt-8">
-				{#each stats as stat}
+			<div class="flex gap-12 border-t border-(--color-border) pt-8">
+				{#each stats as stat (stat)}
 					<div>
-						<p class="font-mono text-xl font-semibold text-[var(--color-text-primary)]">{stat.value}</p>
-						<p class="mt-0.5 font-mono text-xs tracking-wider text-[var(--color-text-muted)]">{stat.label}</p>
+						<p class="font-mono text-xl font-semibold text-(--color-text-primary)">{stat.value}</p>
+						<p class="mt-0.5 font-mono text-xs tracking-wider text-(--color-text-muted)">{stat.label}</p>
 					</div>
 				{/each}
 			</div>
@@ -105,18 +105,18 @@
 
 		<!-- Column 2: Specialties -->
 		<div class="flex flex-col lg:col-span-3 justify-center">
-			<p class="mb-4 font-mono text-xs tracking-widest text-[var(--color-text-muted)]">// SPECIALTIES</p>
+			<p class="mb-4 font-mono text-xs tracking-widest text-(--color-text-muted)">// SPECIALTIES</p>
 			<div class="flex flex-col gap-3">
-				{#each specialties as spec}
-					<div class="group relative border border-[var(--color-border)] bg-[var(--color-surface-card)] p-4 transition-all duration-200 hover:border-[var(--color-border-hover)] hover:bg-[var(--color-surface-alt)]">
+				{#each specialties as spec (spec)}
+					<div class="group relative border border-(--color-border) bg-(--color-surface-card) p-4 transition-all duration-200 hover:border-(--color-border-hover) hover:bg-(--color-surface-alt)">
 						<div class="flex items-center gap-3">
-							<span class="font-mono text-xs text-[var(--color-primary)]">{spec.index}</span>
-							<h3 class="font-mono text-sm font-semibold tracking-wide text-[var(--color-text-primary)]">
+							<span class="font-mono text-xs text-(--color-primary)">{spec.index}</span>
+							<h3 class="font-mono text-sm font-semibold tracking-wide text-(--color-text-primary)">
 								{spec.label}
 							</h3>
-							<span class="h-px flex-1 bg-[var(--color-border)] transition-colors group-hover:bg-[var(--color-border-hover)]"></span>
+							<span class="h-px flex-1 bg-(--color-border) transition-colors group-hover:bg-(--color-border-hover)"></span>
 						</div>
-						<p class="mt-2 pl-8 text-xs leading-relaxed text-[var(--color-text-muted)]">
+						<p class="mt-2 pl-8 text-xs leading-relaxed text-(--color-text-muted)">
 							{spec.detail}
 						</p>
 					</div>

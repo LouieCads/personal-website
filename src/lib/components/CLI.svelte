@@ -119,20 +119,20 @@
 	});
 </script>
 
-<div class="relative z-40 border-t border-[var(--color-border)] bg-[var(--color-surface)]">
+<div class="relative z-40 border-t border-(--color-border) bg-(--color-surface)">
 	{#if suggestion}
-		<div class="border-b border-[var(--color-border)] px-18 py-2">
-			<span class="font-mono text-xs text-[var(--color-text-primary)]">
+		<div class="border-b border-(--color-border) px-18 py-2">
+			<span class="font-mono text-xs text-(--color-text-primary)">
 				{suggestion}
 				<span class="ml-2 text-[10px] opacity-60">TAB to complete</span>
 			</span>
 		</div>
 	{:else if feedback}
-		<div class="border-b border-[var(--color-border)] px-18 py-2">
+		<div class="border-b border-(--color-border) px-18 py-2">
 			<span
 				class="font-mono text-xs {feedbackType === 'error'
 					? 'text-red-400/80'
-					: 'text-[var(--color-text-secondary)]'}"
+					: 'text-(--color-text-secondary)'}"
 			>
 				{feedback}
 			</span>
@@ -141,16 +141,16 @@
 
 	<div class="px-18">
 		<form onsubmit={handleSubmit} class="flex items-center gap-2 py-4">
-			<span class="font-mono text-sm text-[var(--color-text-secondary)]">type-a-command-to-know-me</span>
-			<span class="font-mono text-sm text-[var(--color-text-secondary)]">~</span>
-			<span class="font-mono text-sm text-[var(--color-text-primary)]">$</span>
+			<span class="font-mono text-sm text-(--color-text-secondary)">type-a-command-to-know-me</span>
+			<span class="font-mono text-sm text-(--color-text-secondary)">~</span>
+			<span class="font-mono text-sm text-(--color-text-primary)">$</span>
 			<input
 				bind:this={inputEl}
 				type="text"
 				bind:value={input}
 				onkeydown={handleKeydown}
 				placeholder="/help for commands"
-				class="flex-1 border-none bg-transparent font-mono text-sm text-[var(--color-text-primary)] caret-[var(--color-text-primary)] placeholder-[var(--color-text-muted)] outline-none focus:ring-0"
+				class="flex-1 border-none bg-transparent font-mono text-sm text-(--color-text-primary) caret-(--color-text-primary) placeholder-(--color-text-muted) outline-none focus:ring-0"
 				spellcheck="false"
 				autocomplete="off"
 				aria-label="Command input"
@@ -158,7 +158,7 @@
 			<button
 				type="button"
 				onclick={toggleTheme}
-				class="ml-2 flex shrink-0 cursor-pointer items-center justify-center font-mono text-base text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text-primary)]"
+				class="ml-2 flex shrink-0 cursor-pointer items-center justify-center font-mono text-base text-(--color-text-muted) transition-colors hover:text-(--color-text-primary)"
 				aria-label="Toggle theme"
 			>{$theme === 'dark' ? '☀' : '☽'}</button>
 		</form>

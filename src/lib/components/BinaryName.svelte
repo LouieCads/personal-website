@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { SvelteMap } from 'svelte/reactivity';
 
 	let canvas: HTMLCanvasElement;
 	let container: HTMLDivElement;
@@ -161,8 +162,8 @@
 		interval: number;
 	}
 
-	const line1Cells = new Map<string, CellState>();
-	const line2Cells = new Map<string, CellState>();
+	const line1Cells = new SvelteMap<string, CellState>();
+	const line2Cells = new SvelteMap<string, CellState>();
 
 	function makeCell(): CellState {
 		const interval = 800 + Math.random() * 1800;
