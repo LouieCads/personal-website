@@ -53,12 +53,17 @@
 				<!-- Binary face -->
 				<div class="flex shrink-0 flex-col items-center">
 					<div class="relative w-52">
-						<span class="absolute -top-1 -left-1 h-2 w-2 border-t border-l border-(--color-border-hover)"></span>
-						<span class="absolute -top-1 -right-1 h-2 w-2 border-t border-r border-(--color-border-hover)"></span>
-						<span class="absolute -bottom-1 -left-1 h-2 w-2 border-b border-l border-(--color-border-hover)"></span>
-						<span class="absolute -bottom-1 -right-1 h-2 w-2 border-b border-r border-(--color-border-hover)"></span>
-						<div class="aspect-square w-full overflow-hidden">
+						<span class="absolute -top-1 -left-1 h-3 w-3 border-t border-l border-(--color-border-hover)"></span>
+						<span class="absolute -top-1 -right-1 h-3 w-3 border-t border-r border-(--color-border-hover)"></span>
+						<span class="absolute -bottom-1 -left-1 h-3 w-3 border-b border-l border-(--color-border-hover)"></span>
+						<span class="absolute -bottom-1 -right-1 h-3 w-3 border-b border-r border-(--color-border-hover)"></span>
+						<div class="group/face aspect-square w-full overflow-hidden">
 							<BinaryFace />
+							<img
+								src="/profile.jpg"
+								alt="Louigie Caminoy"
+								class="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500 group-hover/face:opacity-100"
+							/>
 						</div>
 					</div>
 					<div class="mt-3 text-center">
