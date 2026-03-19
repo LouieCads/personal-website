@@ -1,5 +1,6 @@
 <script lang="ts">
-	import BitName from './BitName.svelte';
+	import BinaryName from './BinaryName.svelte';
+	import BinaryFace from './BinaryFace.svelte';
 
 	interface Props {
 		navigate: (view: string) => void;
@@ -18,9 +19,20 @@
 		<span class="font-mono text-xs tracking-widest text-[var(--color-text-muted)]">// comfort kills greatness</span>
 	</div>
 
-	<BitName />
+	<!-- Main area: name canvas left, binary face right -->
+	<div class="relative flex flex-1 overflow-hidden">
+		<!-- Binary name takes up the left portion -->
+		<div class="relative flex-1">
+			<BinaryName />
+		</div>
 
-	<div class="relative z-10 mt-auto px-18 pb-18">
+		<!-- Binary face portrait on the right -->
+		<div class="relative z-10 flex w-[36%] items-center justify-center pr-8 pt-4 pb-4">
+			<BinaryFace />
+		</div>
+	</div>
+
+	<div class="relative z-10 px-18 pb-18">
 		<p class="mb-6 font-mono text-lg font-light tracking-[0.3em] text-[var(--color-text-secondary)] sm:text-xl md:text-2xl">
 			<span class="font-medium text-white">CTO</span>
 			|
