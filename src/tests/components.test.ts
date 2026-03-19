@@ -18,29 +18,29 @@ describe('Hero', () => {
 	it('renders all CTA buttons', () => {
 		const navigate = vi.fn();
 		render(Hero, { props: { navigate } });
-		expect(screen.getByText('ABOUT')).toBeInTheDocument();
-		expect(screen.getByText('PROJECTS')).toBeInTheDocument();
-		expect(screen.getByText('TOUCH')).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: /ABOUT ME/i })).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: /PROJECTS/i })).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: /GET IN TOUCH/i })).toBeInTheDocument();
 	});
 
 	it('calls navigate to contact when GET IN TOUCH clicked', async () => {
 		const navigate = vi.fn();
 		render(Hero, { props: { navigate } });
-		await fireEvent.click(screen.getByText('TOUCH').closest('button')!);
+		await fireEvent.click(screen.getByRole('button', { name: /GET IN TOUCH/i }));
 		expect(navigate).toHaveBeenCalledWith('contact');
 	});
 
-	it('calls navigate to about when ABOUT clicked', async () => {
+	it('calls navigate to about when ABOUT ME clicked', async () => {
 		const navigate = vi.fn();
 		render(Hero, { props: { navigate } });
-		await fireEvent.click(screen.getByText('ABOUT').closest('button')!);
+		await fireEvent.click(screen.getByRole('button', { name: /ABOUT ME/i }));
 		expect(navigate).toHaveBeenCalledWith('about');
 	});
 
 	it('calls navigate to projects when PROJECTS clicked', async () => {
 		const navigate = vi.fn();
 		render(Hero, { props: { navigate } });
-		await fireEvent.click(screen.getByText('PROJECTS').closest('button')!);
+		await fireEvent.click(screen.getByRole('button', { name: /PROJECTS/i }));
 		expect(navigate).toHaveBeenCalledWith('projects');
 	});
 
@@ -53,12 +53,12 @@ describe('Hero', () => {
 
 describe('About', () => {
 	it('renders section heading', () => {
-		render(About);
+		render(About, { props: { navigate: vi.fn() } });
 		expect(screen.getByText('ABOUT')).toBeInTheDocument();
 	});
 
 	it('renders all specialties', () => {
-		render(About);
+		render(About, { props: { navigate: vi.fn() } });
 		expect(screen.getByText('Blockchain Development')).toBeInTheDocument();
 		expect(screen.getByText('Systems Architecture')).toBeInTheDocument();
 		expect(screen.getByText('System Design')).toBeInTheDocument();
@@ -66,13 +66,20 @@ describe('About', () => {
 	});
 
 	it('renders availability status', () => {
-		render(About);
-		expect(screen.getByText('Open to opportunities')).toBeInTheDocument();
+		render(About, { props: { navigate: vi.fn() } });
+		expect(screen.getByText('OPEN TO OPPORTUNITIES')).toBeInTheDocument();
 	});
 
 	it('renders bio text', () => {
-		render(About);
-		expect(screen.getByText(/neuroplastic, growth-driven/i)).toBeInTheDocument();
+		render(About, { props: { navigate: vi.fn() } });
+		expect(screen.getByText(/neuroplastic software engineer/i)).toBeInTheDocument();
+	});
+
+	it('calls navigate home when back button clicked', async () => {
+		const navigate = vi.fn();
+		render(About, { props: { navigate } });
+		await fireEvent.click(screen.getByRole('button', { name: /HOME/i }));
+		expect(navigate).toHaveBeenCalledWith('home');
 	});
 });
 

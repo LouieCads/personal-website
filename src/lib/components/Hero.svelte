@@ -11,11 +11,11 @@
 <div class="view-enter scanlines relative flex h-full flex-col overflow-hidden">
 	<!-- Top anchor row -->
 	<div class="relative z-10 flex items-center justify-between px-18 pt-6">
-		<span class="font-mono text-xs tracking-widest text-[var(--color-text-muted)]">// comfort kills greatness</span>
 		<div class="flex items-center gap-2">
 			<span class="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500"></span>
-			<span class="font-mono text-xs tracking-widest text-emerald-500/70">Welcome</span>
+			<span class="font-mono text-xs tracking-widest text-emerald-500/70">Welcome!</span>
 		</div>
+		<span class="font-mono text-xs tracking-widest text-[var(--color-text-muted)]">// comfort kills greatness</span>
 	</div>
 
 	<BitName />

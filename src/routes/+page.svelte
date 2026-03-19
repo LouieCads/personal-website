@@ -25,7 +25,7 @@
 				</div>
 			{:else if currentView === 'about'}
 				<div class="absolute inset-0">
-					<About />
+					<About {navigate} />
 				</div>
 			{:else if currentView === 'projects'}
 				<div class="absolute inset-0">
