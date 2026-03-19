@@ -39,7 +39,7 @@
 		<div class="mt-2 flex flex-wrap items-center gap-3">
 			<button
 				onclick={() => navigate('about')}
-				class="cursor-pointer border border-(--color-border) bg-(--color-surface-alt)/50 px-8 py-3 font-mono text-xs tracking-[0.25em] text-(--color-text-secondary)/ backdrop-blur-sm transition-all hover:border-(--color-border-hover) hover:text-(--color-text-primary)"
+				class="cursor-pointer border border-(--color-border) bg-(--color-surface-alt)/50 px-8 py-3 font-mono text-xs tracking-[0.25em] text-(--color-text-secondary) backdrop-blur-sm transition-all hover:border-(--color-border-hover) hover:text-(--color-text-primary)"
 			>
 				[ ABOUT ME ]
 			</button>

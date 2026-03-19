@@ -158,7 +158,7 @@
 			<button
 				type="button"
 				onclick={toggleTheme}
-				class="ml-2 flex shrink-0 cursor-pointer items-center justify-center font-mono text-base text-(--color-text-muted) transition-colors hover:text-(--color-text-primary)"
+				class="ml-2 flex shrink-0 cursor-pointer items-center justify-center font-mono text-2xl text-(--color-text-muted) transition-colors hover:text-(--color-text-primary)"
 				aria-label="Toggle theme"
 			>{$theme === 'dark' ? '☀' : '☽'}</button>
 		</form>
