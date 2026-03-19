@@ -123,8 +123,8 @@
 	const LETTER_GAP = 2;
 	const ROWS = 8;
 	const LINE_GAP = 4;
-	// Extra cols of left indent for the last name
-	const LINE2_INDENT = 10;
+	// Extra cols of left indent for the last name (responsive in draw)
+	let LINE2_INDENT = 10;
 
 	interface LetterPos {
 		letter: string;
@@ -221,6 +221,9 @@
 		function draw(time: number) {
 			ctx!.clearRect(0, 0, w, h);
 
+			// Responsive indent: reduce on narrow screens
+			LINE2_INDENT = w < 480 ? 0 : w < 768 ? 4 : 10;
+
 			const isDark = document.documentElement.classList.contains('dark');
 			const textRgb = isDark ? '255, 255, 255' : '0, 0, 0';
 			// Light mode needs higher base opacity so black reads strongly on a light bg
@@ -236,7 +239,7 @@
 			const cellH = cellW * 0.75;
 			const fontSize = Math.max(cellW * 0.32, 6);
 
-			const startX = w * 0.06;
+			const startX = w < 640 ? w * 0.02 : w * 0.06;
 
 			// Line 1: left-aligned at startX
 			const line1OffX = startX;

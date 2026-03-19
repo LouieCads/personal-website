@@ -137,7 +137,7 @@
 
 <div class="relative z-40 border-t border-(--color-border) bg-(--color-surface)">
 	{#if showAllCommandsSuggestion}
-		<div class="absolute bottom-full left-0 right-0 border-b border-t border-(--color-border) bg-(--color-surface) px-24 py-2">
+		<div class="absolute bottom-full left-0 right-0 border-b border-t border-(--color-border) bg-(--color-surface) px-4 py-2 sm:px-8 md:px-16 lg:px-24">
 			<span class="font-mono text-xs text-(--color-text-secondary)">
 				<b>Navigation:</b> /home /about /projects /contact /commands
 				<span class="mx-2"></span>
@@ -145,14 +145,14 @@
 			</span>
 		</div>
 	{:else if suggestion}
-		<div class="absolute bottom-full left-0 right-0 border-b border-t border-(--color-border) bg-(--color-surface) px-24 py-2">
+		<div class="absolute bottom-full left-0 right-0 border-b border-t border-(--color-border) bg-(--color-surface) px-4 py-2 sm:px-8 md:px-16 lg:px-24">
 			<span class="font-mono text-xs text-(--color-text-primary)">
 				{suggestion}
 				<span class="ml-2 text-[10px] opacity-60">TAB to complete</span>
 			</span>
 		</div>
 	{:else if showHelp}
-		<div class="absolute bottom-full left-0 right-0 border-b border-t border-(--color-border) bg-(--color-surface) px-24 py-2">
+		<div class="absolute bottom-full left-0 right-0 border-b border-t border-(--color-border) bg-(--color-surface) px-4 py-2 sm:px-8 md:px-16 lg:px-24">
 			<span class="font-mono text-xs text-(--color-text-secondary)">
 				<b>Navigation:</b> /home /about /projects /contact /commands
 				<span class="mx-2"></span>
@@ -160,7 +160,7 @@
 			</span>
 		</div>
 	{:else if feedback}
-		<div class="absolute bottom-full left-0 right-0 border-b border-t border-(--color-border) bg-(--color-surface) px-24 py-2">
+		<div class="absolute bottom-full left-0 right-0 border-b border-t border-(--color-border) bg-(--color-surface) px-4 py-2 sm:px-8 md:px-16 lg:px-24">
 			<span
 				class="font-mono text-xs {feedbackType === 'error'
 					? 'text-red-400/80'
@@ -171,10 +171,10 @@
 		</div>
 	{/if}
 
-	<div class="px-24">
-		<form onsubmit={handleSubmit} class="flex items-center gap-2 py-4">
-			<span class="font-mono text-sm text-(--color-text-secondary)">type-commands-to-know-me</span>
-			<span class="font-mono text-sm text-(--color-text-secondary)">~</span>
+	<div class="px-4 sm:px-8 md:px-16 lg:px-24">
+		<form onsubmit={handleSubmit} class="flex items-center gap-2 py-3 sm:py-4">
+			<span class="hidden font-mono text-sm text-(--color-text-secondary) sm:inline">type-commands-to-know-me ~</span>
+			<span class="font-mono text-sm text-(--color-text-secondary) sm:hidden">~</span>
 			<span class="font-mono text-sm text-(--color-text-primary)">$</span>
 			<input
 				bind:this={inputEl}

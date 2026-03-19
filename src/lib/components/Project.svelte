@@ -26,30 +26,30 @@
 	];
 </script>
 
-<div class="view-enter flex h-full flex-col px-24 py-8">
+<div class="view-enter flex h-full flex-col px-4 py-4 sm:px-8 sm:py-6 md:px-16 md:py-8 lg:px-24">
 
-	<div class="mb-8 flex items-center gap-4">
+	<div class="mb-4 flex items-center gap-3 sm:mb-6 sm:gap-4 md:mb-8">
 		<button
 			onclick={() => navigate('home')}
 			class="cursor-pointer font-mono text-[11px] tracking-widest text-(--color-text-secondary) transition-colors hover:text-(--color-text-primary)"
 		>
 			&larr; HOME
 		</button>
-		<span class="font-mono text-2xl text-(--color-accent)">02</span>
+		<span class="font-mono text-xl text-(--color-accent) sm:text-2xl">02</span>
 		<span class="font-mono text-sm tracking-wider text-(--color-text-primary)">PROJECTS</span>
 		<span class="h-px flex-1 bg-(--color-border)"></span>
 	</div>
 
-	<div class="flex flex-1 flex-col justify-center gap-5">
+	<div class="flex flex-1 flex-col justify-center gap-4 overflow-y-auto sm:gap-5">
 		{#each projects as project (project.index)}
 			<a
 				href={project.link}
 				target="_blank"
 				rel="noopener noreferrer external"
-				class="group flex h-55 border border-(--color-border) bg-(--color-surface-card) transition-all hover:border-(--color-border-hover) hover:bg-(--color-surface-alt)"
+				class="group flex flex-col border border-(--color-border) bg-(--color-surface-card) transition-all hover:border-(--color-border-hover) hover:bg-(--color-surface-alt) sm:flex-row sm:h-55"
 			>
 				<!-- Left: image -->
-				<div class="w-95 shrink-0 overflow-hidden border-r border-(--color-border)">
+				<div class="h-40 shrink-0 overflow-hidden border-b border-(--color-border) sm:h-auto sm:w-60 sm:border-b-0 sm:border-r md:w-72 lg:w-95">
 					<img
 						src={project.image}
 						alt={project.title}
@@ -58,12 +58,12 @@
 				</div>
 
 				<!-- Right: content -->
-				<div class="flex flex-1 flex-col justify-between px-6 py-4 lg:px-8 lg:py-6">
+				<div class="flex flex-1 flex-col justify-between p-4 sm:px-5 sm:py-4 lg:px-8 lg:py-6">
 					<div>
-						<div class="mb-3 flex items-start justify-between">
+						<div class="mb-2 flex items-start justify-between sm:mb-3">
 							<div>
-								<span class="mb-2 block font-mono text-xs text-(--color-text-muted)">{project.index}</span>
-								<h3 class="text-xl font-medium text-(--color-text-primary) transition-colors group-hover:text-(--color-accent)">
+								<span class="mb-1 block font-mono text-xs text-(--color-text-muted) sm:mb-2">{project.index}</span>
+								<h3 class="text-lg font-medium text-(--color-text-primary) transition-colors group-hover:text-(--color-accent) sm:text-xl">
 									{project.title}
 								</h3>
 							</div>
@@ -71,13 +71,13 @@
 								&nearr;
 							</span>
 						</div>
-						<p class="mb-5 text-md leading-relaxed text-(--color-text-secondary)">
+						<p class="mb-3 text-sm leading-relaxed text-(--color-text-secondary) sm:mb-5 sm:text-base">
 							{project.description}
 						</p>
 					</div>
-					<div class="flex flex-wrap gap-2">
+					<div class="flex flex-wrap gap-1.5 sm:gap-2">
 						{#each project.tech as t (t)}
-							<span class="border border-(--color-border) px-3 py-1 font-mono text-[10px] text-(--color-text-secondary)]">
+							<span class="border border-(--color-border) px-2 py-0.5 font-mono text-[9px] text-(--color-text-secondary) sm:px-3 sm:py-1 sm:text-[10px]">
 								{t}
 							</span>
 						{/each}

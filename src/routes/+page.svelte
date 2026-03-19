@@ -18,7 +18,7 @@
 </svelte:head>
 
 <div class="flex h-screen flex-col overflow-hidden bg-(--color-surface)">
-	<main class="relative flex-1 overflow-hidden">
+	<main class="relative min-h-0 flex-1 overflow-hidden">
 		{#key currentView}
 			{#if currentView === 'home'}
 				<div class="absolute inset-0">

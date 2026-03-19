@@ -23,8 +23,8 @@
 	];
 </script>
 
-<div class="view-enter flex h-full flex-col px-18 py-8">
-	<div class="flex items-center gap-4">
+<div class="view-enter flex h-full flex-col px-4 py-4 sm:px-8 sm:py-6 md:px-16 md:py-8 lg:px-18">
+	<div class="flex items-center gap-3 sm:gap-4">
 		<button
 			onclick={() => navigate('home')}
 			class="cursor-pointer font-mono text-[11px] tracking-widest text-(--color-text-secondary) transition-colors hover:text-(--color-text-primary)"
@@ -36,8 +36,8 @@
 		<span class="h-px flex-1 bg-(--color-border)"></span>
 	</div>
 
-	<div class="flex flex-1 flex-col justify-center">
-		<p class="mb-6 font-mono text-sm text-(--color-text-muted)">
+	<div class="flex flex-1 flex-col justify-center overflow-y-auto">
+		<p class="mb-4 font-mono text-sm text-(--color-text-muted) sm:mb-6">
 			Type any command in the terminal below, or click an actionable one directly.
 		</p>
 
