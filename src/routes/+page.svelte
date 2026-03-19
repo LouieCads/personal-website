@@ -1,25 +1,43 @@
 <script lang="ts">
-	import ParticleBackground from '$lib/components/ParticleBackground.svelte';
-	import Nav from '$lib/components/Nav.svelte';
 	import Hero from '$lib/components/Hero.svelte';
 	import About from '$lib/components/About.svelte';
 	import Projects from '$lib/components/Projects.svelte';
 	import Contact from '$lib/components/Contact.svelte';
 	import CLI from '$lib/components/CLI.svelte';
+
+	let currentView = $state('home');
+
+	function navigate(view: string) {
+		currentView = view;
+	}
 </script>
 
 <svelte:head>
-	<title>Louigie — CTO, Blockchain Developer, Project Manager</title>
+	<title>Louigie Caminoy</title>
 </svelte:head>
 
-<ParticleBackground />
-<Nav />
+<div class="flex h-screen flex-col overflow-hidden bg-[var(--color-surface)]">
+	<main class="relative flex-1 overflow-hidden">
+		{#key currentView}
+			{#if currentView === 'home'}
+				<div class="absolute inset-0">
+					<Hero {navigate} />
+				</div>
+			{:else if currentView === 'about'}
+				<div class="absolute inset-0">
+					<About />
+				</div>
+			{:else if currentView === 'projects'}
+				<div class="absolute inset-0">
+					<Projects />
+				</div>
+			{:else if currentView === 'contact'}
+				<div class="absolute inset-0">
+					<Contact />
+				</div>
+			{/if}
+		{/key}
+	</main>
 
-<main class="pb-16">
-	<Hero />
-	<About />
-	<Projects />
-	<Contact />
-</main>
-
-<CLI />
+	<CLI {navigate} />
+</div>

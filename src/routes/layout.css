@@ -8,20 +8,23 @@
 
 	--color-surface: #050505;
 	--color-surface-alt: #0a0a0a;
-	--color-surface-card: #0f0f0f;
+	--color-surface-card: #0e0e0e;
 	--color-border: #1a1a1a;
 	--color-border-hover: #2a2a2a;
 	--color-text-primary: #e5e5e5;
 	--color-text-secondary: #737373;
-	--color-text-muted: #525252;
+	--color-text-muted: #404040;
 	--color-accent: #3b82f6;
 	--color-accent-dim: #1e3a5f;
 	--color-glow: rgba(59, 130, 246, 0.08);
 }
 
 * {
-	scrollbar-width: thin;
-	scrollbar-color: var(--color-border) transparent;
+	scrollbar-width: none;
+}
+
+*::-webkit-scrollbar {
+	display: none;
 }
 
 ::selection {
@@ -29,8 +32,11 @@
 	color: var(--color-text-primary);
 }
 
-html {
-	scroll-behavior: smooth;
+html,
+body {
+	height: 100%;
+	overflow: hidden;
+	scroll-behavior: auto;
 }
 
 body {
@@ -39,4 +45,53 @@ body {
 	font-family: var(--font-sans);
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+}
+
+@keyframes blink {
+	0%,
+	100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0;
+	}
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.animate-blink {
+	animation: blink 1s step-end infinite;
+}
+
+.animate-fade-in {
+	animation: fadeIn 0.4s ease-out both;
+}
+
+.view-enter {
+	animation: fadeIn 0.3s ease-out both;
+}
+
+/* Scanline overlay */
+.scanlines::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: repeating-linear-gradient(
+		0deg,
+		transparent,
+		transparent 2px,
+		rgba(0, 0, 0, 0.03) 2px,
+		rgba(0, 0, 0, 0.03) 4px
+	);
+	pointer-events: none;
+	z-index: 1;
 }

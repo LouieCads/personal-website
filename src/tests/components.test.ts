@@ -5,38 +5,56 @@ import About from '$lib/components/About.svelte';
 import Projects from '$lib/components/Projects.svelte';
 import Contact from '$lib/components/Contact.svelte';
 import CLI from '$lib/components/CLI.svelte';
-import Nav from '$lib/components/Nav.svelte';
 
 describe('Hero', () => {
-	it('renders the name and role', () => {
-		render(Hero);
-		expect(screen.getByText('LOUIGIE')).toBeInTheDocument();
-		expect(screen.getByText(/Blockchain Developer/)).toBeInTheDocument();
-		expect(screen.getByText(/Project Manager/)).toBeInTheDocument();
+	it('renders the role subtitle', () => {
+		const navigate = vi.fn();
+		render(Hero, { props: { navigate } });
+		expect(screen.getByText('CTO')).toBeInTheDocument();
+		expect(screen.getByText('BLOCKCHAIN DEVELOPER')).toBeInTheDocument();
+		expect(screen.getByText('PROJECT MANAGER')).toBeInTheDocument();
 	});
 
-	it('renders tagline', () => {
-		render(Hero);
-		expect(screen.getByText(/comfort_kills_greatness/)).toBeInTheDocument();
+	it('renders all CTA buttons', () => {
+		const navigate = vi.fn();
+		render(Hero, { props: { navigate } });
+		expect(screen.getByText('ABOUT')).toBeInTheDocument();
+		expect(screen.getByText('PROJECTS')).toBeInTheDocument();
+		expect(screen.getByText('TOUCH')).toBeInTheDocument();
 	});
 
-	it('renders CTA buttons', () => {
-		render(Hero);
-		expect(screen.getByText('View Projects')).toBeInTheDocument();
-		expect(screen.getByText('Get in Touch')).toBeInTheDocument();
+	it('calls navigate to contact when GET IN TOUCH clicked', async () => {
+		const navigate = vi.fn();
+		render(Hero, { props: { navigate } });
+		await fireEvent.click(screen.getByText('TOUCH').closest('button')!);
+		expect(navigate).toHaveBeenCalledWith('contact');
 	});
 
-	it('links View Projects to #projects', () => {
-		render(Hero);
-		const link = screen.getByText('View Projects').closest('a');
-		expect(link).toHaveAttribute('href', '#projects');
+	it('calls navigate to about when ABOUT clicked', async () => {
+		const navigate = vi.fn();
+		render(Hero, { props: { navigate } });
+		await fireEvent.click(screen.getByText('ABOUT').closest('button')!);
+		expect(navigate).toHaveBeenCalledWith('about');
+	});
+
+	it('calls navigate to projects when PROJECTS clicked', async () => {
+		const navigate = vi.fn();
+		render(Hero, { props: { navigate } });
+		await fireEvent.click(screen.getByText('PROJECTS').closest('button')!);
+		expect(navigate).toHaveBeenCalledWith('projects');
+	});
+
+	it('renders BitName canvas with aria-label', () => {
+		const navigate = vi.fn();
+		render(Hero, { props: { navigate } });
+		expect(screen.getByRole('img', { name: /LOUIGIE/i })).toBeInTheDocument();
 	});
 });
 
 describe('About', () => {
 	it('renders section heading', () => {
 		render(About);
-		expect(screen.getByText('About')).toBeInTheDocument();
+		expect(screen.getByText('ABOUT')).toBeInTheDocument();
 	});
 
 	it('renders all specialties', () => {
@@ -51,12 +69,17 @@ describe('About', () => {
 		render(About);
 		expect(screen.getByText('Open to opportunities')).toBeInTheDocument();
 	});
+
+	it('renders bio text', () => {
+		render(About);
+		expect(screen.getByText(/neuroplastic, growth-driven/i)).toBeInTheDocument();
+	});
 });
 
 describe('Projects', () => {
 	it('renders section heading', () => {
 		render(Projects);
-		expect(screen.getByText('Projects')).toBeInTheDocument();
+		expect(screen.getByText('PROJECTS')).toBeInTheDocument();
 	});
 
 	it('renders project names', () => {
@@ -89,7 +112,7 @@ describe('Projects', () => {
 describe('Contact', () => {
 	it('renders section heading', () => {
 		render(Contact);
-		expect(screen.getByText('Contact')).toBeInTheDocument();
+		expect(screen.getByText('CONTACT')).toBeInTheDocument();
 	});
 
 	it('renders email link', () => {
@@ -118,95 +141,79 @@ describe('Contact', () => {
 	});
 });
 
-describe('Nav', () => {
-	it('renders navigation links', () => {
-		render(Nav);
-		expect(screen.getByText('About')).toBeInTheDocument();
-		expect(screen.getByText('Projects')).toBeInTheDocument();
-		expect(screen.getByText('Contact')).toBeInTheDocument();
-	});
-
-	it('renders resume link', () => {
-		render(Nav);
-		const resumeLink = screen.getByText('Resume').closest('a');
-		expect(resumeLink).toHaveAttribute('href', '/resume.pdf');
-		expect(resumeLink).toHaveAttribute('target', '_blank');
-	});
-
-	it('renders home link with terminal-style path', () => {
-		render(Nav);
-		expect(screen.getByText('~/louigie')).toBeInTheDocument();
-	});
-});
 
 describe('CLI', () => {
 	beforeEach(() => {
-		// Mock scrollIntoView
 		Element.prototype.scrollIntoView = vi.fn();
 	});
 
 	it('renders the terminal prompt', () => {
-		render(CLI);
-		expect(screen.getByText('~$')).toBeInTheDocument();
+		const navigate = vi.fn();
+		render(CLI, { props: { navigate } });
+		expect(screen.getByText('visitor@louigie')).toBeInTheDocument();
+		expect(screen.getByText('$')).toBeInTheDocument();
 	});
 
 	it('renders the input with placeholder', () => {
-		render(CLI);
-		const input = screen.getByPlaceholderText(/Try/);
+		const navigate = vi.fn();
+		render(CLI, { props: { navigate } });
+		const input = screen.getByPlaceholderText(/help/i);
 		expect(input).toBeInTheDocument();
 	});
 
 	it('shows error for invalid command', async () => {
-		render(CLI);
-		const input = screen.getByPlaceholderText(/Try/);
+		const navigate = vi.fn();
+		render(CLI, { props: { navigate } });
+		const input = screen.getByPlaceholderText(/help/i);
 		await fireEvent.input(input, { target: { value: '/invalid' } });
 		await fireEvent.submit(input.closest('form')!);
 		expect(screen.getByText(/command not found: \/invalid/)).toBeInTheDocument();
 	});
 
-	it('scrolls to section for valid navigation command', async () => {
-		// Create a target element
-		const section = document.createElement('section');
-		section.id = 'about';
-		document.body.appendChild(section);
-
-		render(CLI);
-		const input = screen.getByPlaceholderText(/Try/);
+	it('calls navigate for valid navigation command', async () => {
+		const navigate = vi.fn();
+		render(CLI, { props: { navigate } });
+		const input = screen.getByPlaceholderText(/help/i);
 		await fireEvent.input(input, { target: { value: '/about' } });
 		await fireEvent.submit(input.closest('form')!);
-
-		expect(section.scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth' });
-
-		document.body.removeChild(section);
+		expect(navigate).toHaveBeenCalledWith('about');
 	});
 
 	it('opens external link for /github command', async () => {
+		const navigate = vi.fn();
 		const openSpy = vi.spyOn(window, 'open').mockImplementation(() => null);
-
-		render(CLI);
-		const input = screen.getByPlaceholderText(/Try/);
+		render(CLI, { props: { navigate } });
+		const input = screen.getByPlaceholderText(/help/i);
 		await fireEvent.input(input, { target: { value: '/github' } });
 		await fireEvent.submit(input.closest('form')!);
-
 		expect(openSpy).toHaveBeenCalledWith('https://github.com/LouieCads', '_blank');
 		openSpy.mockRestore();
 	});
 
 	it('opens resume for /resume command', async () => {
+		const navigate = vi.fn();
 		const openSpy = vi.spyOn(window, 'open').mockImplementation(() => null);
-
-		render(CLI);
-		const input = screen.getByPlaceholderText(/Try/);
+		render(CLI, { props: { navigate } });
+		const input = screen.getByPlaceholderText(/help/i);
 		await fireEvent.input(input, { target: { value: '/resume' } });
 		await fireEvent.submit(input.closest('form')!);
-
 		expect(openSpy).toHaveBeenCalledWith('/resume.pdf', '_blank');
 		openSpy.mockRestore();
 	});
 
+	it('shows help text for /help command', async () => {
+		const navigate = vi.fn();
+		render(CLI, { props: { navigate } });
+		const input = screen.getByPlaceholderText(/help/i);
+		await fireEvent.input(input, { target: { value: '/help' } });
+		await fireEvent.submit(input.closest('form')!);
+		expect(screen.getByText(/Navigation.*\/home.*\/about/)).toBeInTheDocument();
+	});
+
 	it('clears input after command submission', async () => {
-		render(CLI);
-		const input = screen.getByPlaceholderText(/Try/) as HTMLInputElement;
+		const navigate = vi.fn();
+		render(CLI, { props: { navigate } });
+		const input = screen.getByPlaceholderText(/help/i) as HTMLInputElement;
 		await fireEvent.input(input, { target: { value: '/home' } });
 		await fireEvent.submit(input.closest('form')!);
 		expect(input.value).toBe('');

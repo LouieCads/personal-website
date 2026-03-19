@@ -1,82 +1,155 @@
 <script lang="ts">
-	let input = $state('');
-	let error = $state('');
-	let errorTimeout: ReturnType<typeof setTimeout>;
+	interface Props {
+		navigate: (view: string) => void;
+	}
 
-	const commands: Record<string, () => void> = {
-		'/home': () => scrollToSection('home'),
-		'/about': () => scrollToSection('about'),
-		'/projects': () => scrollToSection('projects'),
-		'/contact': () => scrollToSection('contact'),
+	let { navigate }: Props = $props();
+
+	let input = $state('');
+	let feedback = $state('');
+	let feedbackType = $state<'error' | 'info'>('info');
+	let feedbackTimeout: ReturnType<typeof setTimeout>;
+	let inputEl: HTMLInputElement;
+
+	const allCommands = [
+		'/home',
+		'/about',
+		'/projects',
+		'/contact',
+		'/resume',
+		'/github',
+		'/linkedin',
+		'/email',
+		'/help',
+		'/clear'
+	];
+
+	const navCommands: Record<string, string> = {
+		'/home': 'home',
+		'/about': 'about',
+		'/projects': 'projects',
+		'/contact': 'contact'
+	};
+
+	const externalCommands: Record<string, () => void> = {
 		'/resume': () => window.open('/resume.pdf', '_blank'),
 		'/github': () => window.open('https://github.com/LouieCads', '_blank'),
 		'/linkedin': () => window.open('https://www.linkedin.com/in/louie1221/', '_blank'),
-		'/email': () => (window.location.href = 'mailto:louigiecads143@gmail.com'),
-		'/clear': () => {
-			error = '';
-			input = '';
-		},
-		'/help': () => {
-			error = 'Commands: /home /about /projects /contact /resume /github /linkedin /email';
-		}
+		'/email': () => (window.location.href = 'mailto:louigiecads143@gmail.com')
 	};
 
-	function scrollToSection(id: string) {
-		const el = document.getElementById(id);
-		if (el) el.scrollIntoView({ behavior: 'smooth' });
+	let suggestion = $derived.by(() => {
+		const trimmed = input.trim().toLowerCase();
+		if (!trimmed || trimmed.length < 2) return '';
+		const match = allCommands.find((cmd) => cmd.startsWith(trimmed) && cmd !== trimmed);
+		return match ?? '';
+	});
+
+	function showFeedback(msg: string, type: 'error' | 'info' = 'error') {
+		clearTimeout(feedbackTimeout);
+		feedback = msg;
+		feedbackType = type;
+		feedbackTimeout = setTimeout(() => (feedback = ''), 4000);
 	}
 
 	function handleSubmit(e: Event) {
 		e.preventDefault();
 		const cmd = input.trim().toLowerCase();
-
 		if (!cmd) return;
 
-		if (cmd in commands) {
-			error = '';
-			commands[cmd]();
-		} else {
-			clearTimeout(errorTimeout);
-			error = `command not found: ${cmd}`;
-			errorTimeout = setTimeout(() => (error = ''), 3000);
+		if (cmd === '/help') {
+			showFeedback(
+				'Navigation: /home /about /projects /contact  |  External: /resume /github /linkedin /email',
+				'info'
+			);
+			input = '';
+			return;
 		}
 
+		if (cmd === '/clear') {
+			feedback = '';
+			input = '';
+			return;
+		}
+
+		if (cmd in navCommands) {
+			feedback = '';
+			navigate(navCommands[cmd]);
+			input = '';
+			return;
+		}
+
+		if (cmd in externalCommands) {
+			feedback = '';
+			externalCommands[cmd]();
+			input = '';
+			return;
+		}
+
+		showFeedback(`command not found: ${cmd} — type /help for available commands`);
 		input = '';
 	}
 
 	function handleKeydown(e: KeyboardEvent) {
+		if (e.key === 'Tab' && suggestion) {
+			e.preventDefault();
+			input = suggestion;
+		}
 		if (e.key === 'Escape') {
 			input = '';
-			error = '';
+			feedback = '';
 		}
 	}
+
+	function refocus() {
+		inputEl?.focus();
+	}
+
+	import { onMount } from 'svelte';
+
+	onMount(() => {
+		inputEl?.focus();
+		document.addEventListener('click', refocus);
+		return () => document.removeEventListener('click', refocus);
+	});
 </script>
 
-<div class="fixed right-0 bottom-0 left-0 z-50 border-t border-[var(--color-border)] bg-[var(--color-surface)]/90 backdrop-blur-xl">
-	<div class="mx-auto max-w-6xl px-6">
-		{#if error}
-			<div class="px-0 pt-2">
-				<span class="font-mono text-xs text-red-400/80">{error}</span>
-			</div>
-		{/if}
+<div class="relative z-40 border-t border-[var(--color-border)] bg-[var(--color-surface)]">
+	{#if suggestion}
+		<div class="border-b border-[var(--color-border)] px-18 py-2">
+			<span class="font-mono text-xs text-[var(--color-text-primary)]">
+				{suggestion}
+				<span class="ml-2 text-[10px] opacity-60">TAB to complete</span>
+			</span>
+		</div>
+	{:else if feedback}
+		<div class="border-b border-[var(--color-border)] px-18 py-2">
+			<span
+				class="font-mono text-xs {feedbackType === 'error'
+					? 'text-red-400/80'
+					: 'text-[var(--color-text-secondary)]'}"
+			>
+				{feedback}
+			</span>
+		</div>
+	{/if}
 
-		<form onsubmit={handleSubmit} class="flex items-center gap-3 py-3">
-			<span class="font-mono text-xs text-[var(--color-accent)]">~$</span>
+	<div class="px-18">
+		<form onsubmit={handleSubmit} class="flex items-center gap-2 py-4">
+			<span class="font-mono text-sm text-[var(--color-text-secondary)]">visitor@louigie</span>
+			<span class="font-mono text-sm text-[var(--color-text-secondary)]">~</span>
+			<span class="font-mono text-sm text-[var(--color-text-primary)]">$</span>
 			<input
+				bind:this={inputEl}
 				type="text"
 				bind:value={input}
 				onkeydown={handleKeydown}
-				placeholder="Try /about  /projects  /contact  /help"
-				class="flex-1 border-none bg-transparent font-mono text-sm text-[var(--color-text-primary)] placeholder-[var(--color-text-muted)] outline-none focus:ring-0"
+				placeholder="/help for commands"
+				class="flex-1 border-none bg-transparent font-mono text-sm text-[var(--color-text-primary)] caret-white placeholder-[var(--color-text-muted)] outline-none focus:ring-0"
 				spellcheck="false"
 				autocomplete="off"
+				aria-label="Command input"
 			/>
-			<button
-				type="submit"
-				class="font-mono text-xs text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text-primary)]"
-			>
-				Enter
-			</button>
 		</form>
 	</div>
 </div>
