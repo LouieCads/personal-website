@@ -8,6 +8,7 @@
 	let input = $state('');
 	let feedback = $state('');
 	let feedbackType = $state<'error' | 'info'>('info');
+	let showHelp = $state(false);
 	let feedbackTimeout: ReturnType<typeof setTimeout>;
 	let inputEl: HTMLInputElement;
 
@@ -20,6 +21,8 @@
 		'/resume',
 		'/github',
 		'/linkedin',
+		'/instagram',
+		'/facebook',
 		'/email',
 		'/help',
 		'/clear'
@@ -37,6 +40,8 @@
 		'/resume': () => window.open('/resume.pdf', '_blank'),
 		'/github': () => window.open('https://github.com/LouieCads', '_blank'),
 		'/linkedin': () => window.open('https://www.linkedin.com/in/louie1221/', '_blank'),
+		'/instagram': () => window.open('https://www.instagram.com/louie.21_/', '_blank'),
+		'/facebook': () => window.open('https://www.facebook.com/louielocktorius21', '_blank'),
 		'/email': () => window.open('https://mail.google.com/mail/u/0/#all?compose=new', '_blank')
 	};
 
@@ -51,7 +56,8 @@
 		clearTimeout(feedbackTimeout);
 		feedback = msg;
 		feedbackType = type;
-		feedbackTimeout = setTimeout(() => (feedback = ''), 4000);
+		showHelp = false;
+		feedbackTimeout = setTimeout(() => (feedback = ''), 6000);
 	}
 
 	function handleSubmit(e: Event) {
@@ -60,16 +66,17 @@
 		if (!cmd) return;
 
 		if (cmd === '/help') {
-			showFeedback(
-				'Navigation: /home /about /projects /contact /commands  |  External: /resume /github /linkedin /email',
-				'info'
-			);
+			clearTimeout(feedbackTimeout);
+			showHelp = true;
+			feedback = '';
+			feedbackTimeout = setTimeout(() => (showHelp = false), 5500);
 			input = '';
 			return;
 		}
 
 		if (cmd === '/clear') {
 			feedback = '';
+			showHelp = false;
 			input = '';
 			return;
 		}
@@ -88,7 +95,7 @@
 			return;
 		}
 
-		showFeedback(`command not found: ${cmd} — type /help for available commands`);
+		showFeedback(`command not found: ${cmd}. type /help for available commands`);
 		input = '';
 	}
 
@@ -129,6 +136,14 @@
 				<span class="ml-2 text-[10px] opacity-60">TAB to complete</span>
 			</span>
 		</div>
+	{:else if showHelp}
+		<div class="absolute bottom-full left-0 right-0 border-b border-t border-(--color-border) bg-(--color-surface) px-24 py-2">
+			<span class="font-mono text-xs text-(--color-text-secondary)">
+				<b>Navigation:</b> /home /about /projects /contact /commands
+				<span class="mx-2"></span>
+				<b>External:</b> /resume /github /linkedin /instagram /facebook /email
+			</span>
+		</div>
 	{:else if feedback}
 		<div class="absolute bottom-full left-0 right-0 border-b border-t border-(--color-border) bg-(--color-surface) px-24 py-2">
 			<span
@@ -151,7 +166,7 @@
 				type="text"
 				bind:value={input}
 				onkeydown={handleKeydown}
-				placeholder="/help for commands"
+				placeholder="type /help for commands"
 				class="flex-1 border-none bg-transparent font-mono text-sm text-(--color-text-primary) caret-(--color-text-primary) placeholder-(--color-text-muted) outline-none focus:ring-0"
 				spellcheck="false"
 				autocomplete="off"

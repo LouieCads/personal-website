@@ -55,12 +55,6 @@
 			>
 				[ GET IN TOUCH ]
 			</button>
-			<button
-				onclick={() => navigate('commands')}
-				class="cursor-pointer border border-(--color-border) bg-(--color-surface-alt)/50 px-8 py-3 font-mono text-xs tracking-[0.25em] text-(--color-text-secondary) backdrop-blur-sm transition-all hover:border-(--color-border-hover) hover:text-(--color-text-primary)"
-			>
-				[ COMMANDS ]
-			</button>
 		</div>
 	</div>
 </div>
