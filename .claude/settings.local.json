@@ -8,7 +8,8 @@
       "Bash(cp \"c:/Users/louig/OneDrive/Pictures/Screenshots 1/Screenshot 2026-03-19 124128.png\" \"D:/louig/Desktop/personal-website/static/iskolar-preview.png\")",
       "Bash(cp \"c:/Users/louig/OneDrive/Pictures/Screenshots 1/Screenshot 2026-03-19 124253.png\" \"D:/louig/Desktop/personal-website/static/usmo-preview.png\")",
       "Bash(npm run:*)",
-      "Bash(find /d/louig/Desktop/personal-website -maxdepth 3 -not -path */node_modules* -not -path */.svelte-kit* -not -path */.netlify* -not -path */build* -type f)"
+      "Bash(find /d/louig/Desktop/personal-website -maxdepth 3 -not -path */node_modules* -not -path */.svelte-kit* -not -path */.netlify* -not -path */build* -type f)",
+      "Bash(npx svelte-check:*)"
     ]
   }
 }

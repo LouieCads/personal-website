@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/svelte';
 import Hero from '$lib/components/Hero.svelte';
 import About from '$lib/components/About.svelte';
-import Projects from '$lib/components/Projects.svelte';
+import Projects from '$lib/components/Project.svelte';
 import Contact from '$lib/components/Contact.svelte';
 import CLI from '$lib/components/CLI.svelte';
 
