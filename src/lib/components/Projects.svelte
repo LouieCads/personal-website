@@ -18,7 +18,7 @@
 			title: 'USMO',
 			description:
 				'A centralized landing page for UMak Student Multimedia Organization showcasing projects, initiatives, and social platforms for improved accessibility and engagement.',
-			tech: ['Hostinger'],
+			tech: ['Hostinger Website Builder', 'HTML', 'CSS', 'JavaScript'],
 			link: 'https://connect.usmo.org.ph/',
 			index: '02',
 			image: '/usmo-preview.png'
@@ -31,12 +31,12 @@
 	<div class="mb-8 flex items-center gap-4">
 		<button
 			onclick={() => navigate('home')}
-			class="cursor-pointer font-mono text-[11px] tracking-widest text-[var(--color-text-muted)] transition-colors hover:text-white"
+			class="cursor-pointer font-mono text-[11px] tracking-widest text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text-primary)]"
 		>
 			&larr; HOME
 		</button>
 		<span class="font-mono text-2xl text-[var(--color-accent)]">02</span>
-		<span class="font-mono text-sm tracking-wider text-white">PROJECTS</span>
+		<span class="font-mono text-sm tracking-wider text-[var(--color-text-primary)]">PROJECTS</span>
 		<span class="h-px flex-1 bg-[var(--color-border)]"></span>
 	</div>
 
@@ -63,7 +63,7 @@
 						<div class="mb-3 flex items-start justify-between">
 							<div>
 								<span class="mb-2 block font-mono text-[11px] text-[var(--color-text-muted)]">{project.index}</span>
-								<h3 class="text-xl font-medium text-white transition-colors group-hover:text-[var(--color-accent)]">
+								<h3 class="text-xl font-medium text-[var(--color-text-primary)] transition-colors group-hover:text-[var(--color-accent)]">
 									{project.title}
 								</h3>
 							</div>

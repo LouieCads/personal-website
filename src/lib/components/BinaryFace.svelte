@@ -82,13 +82,18 @@
 				return;
 			}
 
+			const root = document.documentElement;
+			const style = getComputedStyle(root);
+			const bgColor = style.getPropertyValue('--color-canvas-bg').trim() || '#f5f5f5';
+			const textRgb = style.getPropertyValue('--color-canvas-text').trim() || '0, 0, 0';
+
 			// Square: fit inside container, centered
 			const side = Math.min(w, h);
 			const offsetX = (w - side) / 2;
 			const offsetY = (h - side) / 2;
 
-			// Fill square with hero background color
-			ctx!.fillStyle = '#050505';
+			// Fill square with theme background color
+			ctx!.fillStyle = bgColor;
 			ctx!.fillRect(offsetX, offsetY, side, side);
 
 			const cellSize = side / SIZE;
@@ -117,7 +122,7 @@
 					const x = offsetX + c * cellSize + cellSize / 2;
 					const y = offsetY + r * cellSize + cellSize / 2;
 
-					ctx!.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+					ctx!.fillStyle = `rgba(${textRgb}, ${opacity})`;
 					ctx!.fillText(cell.value, x, y);
 				}
 			}

@@ -29,11 +29,11 @@
 				</div>
 			{:else if currentView === 'projects'}
 				<div class="absolute inset-0">
-					<Projects />
+					<Projects {navigate} />
 				</div>
 			{:else if currentView === 'contact'}
 				<div class="absolute inset-0">
-					<Contact />
+					<Contact {navigate} />
 				</div>
 			{/if}
 		{/key}

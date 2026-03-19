@@ -1,7 +1,20 @@
+<script lang="ts">
+	interface Props {
+		navigate: (view: string) => void;
+	}
+	let { navigate }: Props = $props();
+</script>
+
 <div class="view-enter flex h-full flex-col px-18 py-8">
 	<div class="mb-8 flex items-center gap-4">
-		<span class="font-mono text-xs text-[var(--color-accent)]">03</span>
-		<span class="font-mono text-sm tracking-wider text-white">CONTACT</span>
+		<button
+			onclick={() => navigate('home')}
+			class="cursor-pointer font-mono text-[11px] tracking-widest text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text-primary)]"
+		>
+			&larr; HOME
+		</button>
+		<span class="font-mono text-2xl text-[var(--color-accent)]">03</span>
+		<span class="font-mono text-sm tracking-wider text-[var(--color-text-primary)]">CONTACT</span>
 		<span class="h-px flex-1 bg-[var(--color-border)]"></span>
 	</div>
 

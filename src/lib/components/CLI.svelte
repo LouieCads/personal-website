@@ -106,6 +106,11 @@
 	}
 
 	import { onMount } from 'svelte';
+	import { theme } from '$lib/stores/theme';
+
+	function toggleTheme() {
+		theme.update((t) => (t === 'light' ? 'dark' : 'light'));
+	}
 
 	onMount(() => {
 		inputEl?.focus();
@@ -136,7 +141,7 @@
 
 	<div class="px-18">
 		<form onsubmit={handleSubmit} class="flex items-center gap-2 py-4">
-			<span class="font-mono text-sm text-[var(--color-text-secondary)]">visitor@louigie</span>
+			<span class="font-mono text-sm text-[var(--color-text-secondary)]">type-a-command-to-know-me</span>
 			<span class="font-mono text-sm text-[var(--color-text-secondary)]">~</span>
 			<span class="font-mono text-sm text-[var(--color-text-primary)]">$</span>
 			<input
@@ -145,11 +150,17 @@
 				bind:value={input}
 				onkeydown={handleKeydown}
 				placeholder="/help for commands"
-				class="flex-1 border-none bg-transparent font-mono text-sm text-[var(--color-text-primary)] caret-white placeholder-[var(--color-text-muted)] outline-none focus:ring-0"
+				class="flex-1 border-none bg-transparent font-mono text-sm text-[var(--color-text-primary)] caret-[var(--color-text-primary)] placeholder-[var(--color-text-muted)] outline-none focus:ring-0"
 				spellcheck="false"
 				autocomplete="off"
 				aria-label="Command input"
 			/>
+			<button
+				type="button"
+				onclick={toggleTheme}
+				class="ml-2 flex shrink-0 cursor-pointer items-center justify-center font-mono text-base text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text-primary)]"
+				aria-label="Toggle theme"
+			>{$theme === 'dark' ? '☀' : '☽'}</button>
 		</form>
 	</div>
 </div>

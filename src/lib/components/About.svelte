@@ -6,20 +6,20 @@
 	}
 	let { navigate }: Props = $props();
 
-	const specialties = [
-		{ label: 'Blockchain Development', detail: 'Smart contracts, DApps, and decentralized systems', index: '01' },
-		{ label: 'Systems Architecture', detail: 'Scalable infrastructure and distributed systems', index: '02' },
-		{ label: 'Technical Leadership', detail: 'Team direction, code reviews, and strategic decisions', index: '03' },
-		{ label: 'System Design', detail: 'High-level design patterns and technical blueprints', index: '04' },
-		{ label: 'Project Management', detail: 'Agile workflows, delivery pipelines, and cross-team coordination', index: '05' }
-	];
-
 	const stats = [
 		{ value: 'CTO', label: 'Current Role' },
 		{ value: 'Full Stack', label: 'Core Skillset' },
 		{ value: 'Agile', label: 'Team Workflow' },
 		{ value: '5', label: 'Devs Managed' },
 		{ value: '2', label: 'Live Projects' },
+	];
+
+	const specialties = [
+		{ label: 'Blockchain Development', detail: 'Smart contracts, DApps, and decentralized systems', index: '01' },
+		{ label: 'Systems Architecture', detail: 'Scalable infrastructure and distributed systems', index: '02' },
+		{ label: 'Technical Leadership', detail: 'Team direction, code reviews, and strategic decisions', index: '03' },
+		{ label: 'System Design', detail: 'High-level design patterns and technical blueprints', index: '04' },
+		{ label: 'Project Management', detail: 'Agile workflows, delivery pipelines, and cross-team coordination', index: '05' }
 	];
 </script>
 
@@ -29,12 +29,12 @@
 	<div class="mb-10 flex items-center gap-4">
 		<button
 			onclick={() => navigate('home')}
-			class="cursor-pointer font-mono text-[11px] tracking-widest text-[var(--color-text-muted)] transition-colors hover:text-white"
+			class="cursor-pointer font-mono text-[11px] tracking-widest text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text-primary)]"
 		>
 			&larr; HOME
 		</button>
 		<span class="font-mono text-2xl text-[var(--color-accent)]">01</span>
-		<span class="font-mono text-sm tracking-[0.2em] text-white">ABOUT</span>
+		<span class="font-mono text-sm tracking-[0.2em] text-[var(--color-text-primary)]">ABOUT</span>
 		<span class="h-px flex-1 bg-[var(--color-border)]"></span>
 		<div class="flex items-center gap-2">
 			<span class="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500"></span>
@@ -69,7 +69,7 @@
 				<!-- Bio description -->
 				<div class="flex-1">
 					<p class="mb-1 font-mono text-xs tracking-widest text-[var(--color-text-muted)]">// WHO I AM</p>
-					<h2 class="mb-3 text-xl font-light leading-snug tracking-tight text-white">
+					<h2 class="mb-3 text-xl font-light leading-snug tracking-tight text-[var(--color-text-primary)]">
 						Growth-driven engineer.
 						<span class="text-[var(--color-text-secondary)]">Discipline over comfort.</span>
 					</h2>
@@ -96,7 +96,7 @@
 			<div class="flex gap-12 border-t border-[var(--color-border)] pt-8">
 				{#each stats as stat}
 					<div>
-						<p class="font-mono text-xl font-semibold text-white">{stat.value}</p>
+						<p class="font-mono text-xl font-semibold text-[var(--color-text-primary)]">{stat.value}</p>
 						<p class="mt-0.5 font-mono text-xs tracking-wider text-[var(--color-text-muted)]">{stat.label}</p>
 					</div>
 				{/each}
@@ -110,7 +110,7 @@
 				{#each specialties as spec}
 					<div class="group relative border border-[var(--color-border)] bg-[var(--color-surface-card)] p-4 transition-all duration-200 hover:border-[var(--color-border-hover)] hover:bg-[var(--color-surface-alt)]">
 						<div class="flex items-center gap-3">
-							<span class="font-mono text-xs text-[var(--color-accent)]">{spec.index}</span>
+							<span class="font-mono text-xs text-[var(--color-primary)]">{spec.index}</span>
 							<h3 class="font-mono text-sm font-semibold tracking-wide text-[var(--color-text-primary)]">
 								{spec.label}
 							</h3>

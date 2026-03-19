@@ -123,7 +123,7 @@
 	const ROWS = 8;
 	const LINE_GAP = 4;
 	// Extra cols of left indent for the last name
-	const LINE2_INDENT = 3;
+	const LINE2_INDENT = 12;
 
 	interface LetterPos {
 		letter: string;
@@ -220,14 +220,22 @@
 		function draw(time: number) {
 			ctx!.clearRect(0, 0, w, h);
 
-			// Size cells to fit both lines within 90% of container width
+			const isDark = document.documentElement.classList.contains('dark');
+			const textRgb = isDark ? '255, 255, 255' : '0, 0, 0';
+			// Light mode needs higher base opacity so black reads strongly on a light bg
+			const line1Base = isDark ? 0.82 : 0.95;
+			const line1Swing = isDark ? 0.12 : 0.05;
+			const line2Base = isDark ? 0.72 : 0.78;
+			const line2Swing = isDark ? 0.10 : 0.06;
+
+			// Size cells to fill the full container width
 			const widestLine = Math.max(layout1.totalCols, layout2.totalCols + LINE2_INDENT);
 			const maxCellW = (w * 0.90) / widestLine;
-			const cellW = Math.min(maxCellW, 30);
+			const cellW = Math.min(maxCellW, 52);
 			const cellH = cellW * 0.75;
 			const fontSize = Math.max(cellW * 0.32, 6);
 
-			const startX = w * 0.05;
+			const startX = w * 0.06;
 
 			// Line 1: left-aligned at startX
 			const line1OffX = startX;
@@ -256,8 +264,8 @@
 						const cell = line1Cells.get(`${globalCol}-${r}`);
 						if (!cell) continue;
 						tickCell(cell, time);
-						const pulse = 0.82 + 0.12 * Math.sin(time * 0.004 + globalCol * 0.4 + r * 0.7);
-						ctx!.fillStyle = `rgba(255, 255, 255, ${pulse})`;
+						const pulse = line1Base + line1Swing * Math.sin(time * 0.004 + globalCol * 0.4 + r * 0.7);
+						ctx!.fillStyle = `rgba(${textRgb}, ${pulse})`;
 						ctx!.fillText(cell.value, x, y);
 					}
 				}
@@ -275,8 +283,8 @@
 						const cell = line2Cells.get(`${globalCol}-${r}`);
 						if (!cell) continue;
 						tickCell(cell, time);
-						const pulse = 0.72 + 0.10 * Math.sin(time * 0.004 + globalCol * 0.4 + r * 0.7);
-						ctx!.fillStyle = `rgba(255, 255, 255, ${pulse})`;
+						const pulse = line2Base + line2Swing * Math.sin(time * 0.004 + globalCol * 0.4 + r * 0.7);
+						ctx!.fillStyle = `rgba(${textRgb}, ${pulse})`;
 						ctx!.fillText(cell.value, x, y);
 					}
 				}
