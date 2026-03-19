@@ -12,7 +12,7 @@
 			tech: ['TypeScript', 'Solidity', 'Hardhat', 'React', 'Tailwind CSS', 'Express.js', 'PostgreSQL', 'Docker'],
 			link: 'https://iskolar.site/',
 			index: '01',
-			image: '/iskolar-preview.png'
+			image: '/projects/iskolar-preview.png'
 		},
 		{
 			title: 'USMO',
@@ -21,7 +21,7 @@
 			tech: ['Hostinger Website Builder', 'HTML', 'CSS', 'JavaScript'],
 			link: 'https://connect.usmo.org.ph/',
 			index: '02',
-			image: '/usmo-preview.png'
+			image: '/projects/usmo-preview.png'
 		}
 	];
 </script>
