@@ -79,12 +79,12 @@
 						<span class="text-(--color-text-secondary)">Discipline over comfort.</span>
 					</h2>
 					<p class="mb-3 text-sm leading-relaxed text-(--color-text-secondary)">
-						A neuroplastic software engineer focused on blockchain, systems architecture, and emerging technologies. 
+						A neuroplastic software engineering student focused on blockchain, systems architecture, and emerging technologies. 
 						I build at the intersection of decentralized systems and scalable infrastructure — turning ideas into real, working products.
 					</p>
 					<p class="mb-3 text-sm leading-relaxed text-(--color-text-secondary)">
-						I prioritize execution: make it exist first, refine it later. Every project is a chance to push boundaries through clean architecture, 
-						pragmatic decisions, and continuous iteration. 
+						I prioritize execution: make it exist first, refine it later. Each project is an opportunity to push boundaries through clean architecture, 
+						thoughtful decisions, and continuous improvement.
 					</p>
 					<p class="mb-3 text-sm leading-relaxed text-(--color-text-secondary)">
 						Alongside building, I serve as a student leader at the University of Makati, 
