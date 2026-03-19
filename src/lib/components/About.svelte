@@ -24,12 +24,11 @@
 	<div class="mb-10 flex items-center gap-4">
 		<button
 			onclick={() => navigate('home')}
-			class="cursor-pointer font-mono text-[10px] tracking-widest text-[var(--color-text-muted)] transition-colors hover:text-white"
+			class="cursor-pointer font-mono text-[11px] tracking-widest text-[var(--color-text-muted)] transition-colors hover:text-white"
 		>
 			&larr; HOME
 		</button>
-		<span class="h-px w-4 bg-[var(--color-border)]"></span>
-		<span class="font-mono text-[10px] text-[var(--color-accent)]">01</span>
+		<span class="font-mono text-2xl text-[var(--color-accent)]">01</span>
 		<span class="font-mono text-sm tracking-[0.2em] text-white">ABOUT</span>
 		<span class="h-px flex-1 bg-[var(--color-border)]"></span>
 		<div class="flex items-center gap-2">

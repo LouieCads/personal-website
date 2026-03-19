@@ -4,7 +4,9 @@
       "Bash(npx vite:*)",
       "Bash(npm install:*)",
       "Bash(npx vitest:*)",
-      "Bash(npm ls:*)"
+      "Bash(npm ls:*)",
+      "Bash(cp \"c:/Users/louig/OneDrive/Pictures/Screenshots 1/Screenshot 2026-03-19 124128.png\" \"D:/louig/Desktop/personal-website/static/iskolar-preview.png\")",
+      "Bash(cp \"c:/Users/louig/OneDrive/Pictures/Screenshots 1/Screenshot 2026-03-19 124253.png\" \"D:/louig/Desktop/personal-website/static/usmo-preview.png\")"
     ]
   }
 }
