@@ -17,7 +17,7 @@
 	<title>Louigie Caminoy — CTO, Blockchain Developer, Project Manager</title>
 </svelte:head>
 
-<div class="flex h-screen flex-col overflow-hidden bg-(--color-surface)">
+<div class="flex h-dvh flex-col overflow-hidden bg-(--color-surface)">
 	<main class="relative min-h-0 flex-1 overflow-hidden">
 		{#key currentView}
 			{#if currentView === 'home'}
