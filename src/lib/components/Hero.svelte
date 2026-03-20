@@ -36,7 +36,8 @@
 			<span class="hidden font-medium text-(--color-text-primary) md:inline">BLOCKCHAIN DEVELOPER</span>
 			<span class="hidden sm:inline"> | </span>
 			<span class="sm:hidden"> · </span>
-			<span class="font-medium text-(--color-text-primary)">PROJECT MANAGER</span>
+			<span class="font-medium text-(--color-text-primary) md:hidden">PM</span>
+			<span class="hidden font-medium text-(--color-text-primary) md:inline">PROJECT MANAGER</span>
 		</p>
 
 		<div class="mt-2 flex items-center gap-2 sm:gap-3">

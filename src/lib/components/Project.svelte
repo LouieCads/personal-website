@@ -40,7 +40,8 @@
 		<span class="h-px flex-1 bg-(--color-border)"></span>
 	</div>
 
-	<div class="flex flex-1 flex-col justify-center gap-4 overflow-y-auto sm:gap-5">
+	<div class="flex flex-1 flex-col overflow-y-auto">
+		<div class="my-auto flex flex-col gap-4 sm:gap-5">
 		{#each projects as project (project.index)}
 			<a
 				href={project.link}
@@ -85,5 +86,6 @@
 				</div>
 			</a>
 		{/each}
+		</div>
 	</div>
 </div>
