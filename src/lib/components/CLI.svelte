@@ -134,6 +134,9 @@
 	}
 
 	onMount(() => {
+		const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+		if (isTouchDevice) return;
+
 		inputEl?.focus();
 		document.addEventListener('click', refocus);
 		return () => document.removeEventListener('click', refocus);
