@@ -14,7 +14,7 @@
 </script>
 
 <svelte:head>
-	<title>Louigie Caminoy</title>
+	<title>Louigie Caminoy — CTO, Blockchain Developer, Project Manager</title>
 </svelte:head>
 
 <div class="flex h-screen flex-col overflow-hidden bg-(--color-surface)">
