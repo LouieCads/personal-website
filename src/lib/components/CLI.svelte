@@ -36,13 +36,18 @@
 		'/commands': 'commands'
 	};
 
+	const EMAIL = 'louigiecads143@gmail.com';
+
 	const externalCommands: Record<string, () => void> = {
 		'/resume': () => window.open('/resume.pdf', '_blank'),
 		'/github': () => window.open('https://github.com/LouieCads', '_blank'),
 		'/linkedin': () => window.open('https://www.linkedin.com/in/louie1221/', '_blank'),
 		'/instagram': () => window.open('https://www.instagram.com/louie.21_/', '_blank'),
 		'/facebook': () => window.open('https://www.facebook.com/louielocktorius21', '_blank'),
-		'/email': () => window.open('https://mail.google.com/mail/u/0/#all?compose=new', '_blank')
+		'/email': () => navigator.clipboard.writeText(EMAIL).then(() => {
+			showFeedback(`email copied: ${EMAIL}`, 'info');
+			setTimeout(() => window.open('https://mail.google.com/mail/u/0/#all?compose=new', '_blank'), 600);
+		})
 	};
 
 	let showAllCommandsSuggestion = $derived.by(() => {

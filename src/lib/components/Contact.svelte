@@ -3,6 +3,19 @@
 		navigate: (view: string) => void;
 	}
 	let { navigate }: Props = $props();
+
+	const EMAIL = 'louigiecads143@gmail.com';
+	let copied = $state(false);
+	let copiedTimeout: ReturnType<typeof setTimeout>;
+
+	async function copyEmail(e: MouseEvent) {
+		e.preventDefault();
+		await navigator.clipboard.writeText(EMAIL);
+		clearTimeout(copiedTimeout);
+		copied = true;
+		copiedTimeout = setTimeout(() => (copied = false), 2500);
+		setTimeout(() => window.open('https://mail.google.com/mail/u/0/#all?compose=new', '_blank'), 600);
+	}
 </script>
 
 <div class="view-enter flex h-full flex-col px-4 py-4 sm:px-8 sm:py-6 md:px-16 md:py-8 lg:px-18">
@@ -47,8 +60,7 @@
 		<div class="flex flex-col justify-center space-y-3">
 			<a
 				href="https://mail.google.com/mail/u/0/#all?compose=new"
-				target="_blank"
-				rel="noopener noreferrer"
+				onclick={copyEmail}
 				class="group flex items-center gap-4 border border-(--color-border) bg-(--color-surface-card) p-5 transition-all hover:border-(--color-border-hover)"
 			>
 				<svg class="h-5 w-5 shrink-0 text-(--color-text-muted) transition-colors group-hover:text-(--color-accent)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -57,9 +69,13 @@
 				</svg>
 				<div class="flex-1">
 					<span class="mb-1 block font-mono text-[10px] text-(--color-text-muted)">EMAIL</span>
-					<span class="text-sm text-(--color-text-primary)">louigiecads143@gmail.com</span>
+					<span class="text-sm text-(--color-text-primary)">{EMAIL}</span>
 				</div>
-				<span class="text-(--color-text-muted) transition-transform group-hover:translate-x-1 group-hover:text-(--color-accent)">&rarr;</span>
+				{#if copied}
+					<span class="font-mono text-[10px] text-(--color-accent)">copied!</span>
+				{:else}
+					<span class="text-(--color-text-muted) transition-transform group-hover:translate-x-1 group-hover:text-(--color-accent)">&rarr;</span>
+				{/if}
 			</a>
 
 			<a
