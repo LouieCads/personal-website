@@ -36,7 +36,7 @@
 		<span class="h-px flex-1 bg-(--color-border)"></span>
 	</div>
 
-	<div class="flex flex-1 flex-col justify-center overflow-y-auto">
+	<div class="flex flex-1 pt-2 sm:pt-0 flex-col justify-center overflow-y-auto">
 		<p class="mb-4 font-mono text-sm text-(--color-text-muted) sm:mb-6">
 			Type any command in the terminal below, or click an actionable one directly.
 		</p>

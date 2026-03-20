@@ -40,7 +40,7 @@
 		<span class="h-px flex-1 bg-(--color-border)"></span>
 	</div>
 
-	<div class="flex flex-1 flex-col overflow-y-auto">
+	<div class="flex flex-1 pt-2 sm:pt-0 flex-col overflow-y-auto">
 		<div class="my-auto flex flex-col gap-4 sm:gap-5">
 		{#each projects as project (project.index)}
 			<a

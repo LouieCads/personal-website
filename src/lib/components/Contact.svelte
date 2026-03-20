@@ -31,7 +31,7 @@
 		<span class="h-px flex-1 bg-(--color-border)"></span>
 	</div>
 
-	<div class="grid flex-1 gap-6 overflow-y-auto sm:gap-8 md:gap-12 lg:grid-cols-2">
+	<div class="grid flex-1 gap-6 pt-2 sm:pt-0 overflow-y-auto sm:gap-8 md:gap-12 lg:grid-cols-2">
 		<div class="flex flex-col justify-center">
 			<div class="mb-8">
 				<p class="mb-3 font-mono text-md font-semibold text-(--color-text-primary)">LET'S TALK ABOUT:</p>
