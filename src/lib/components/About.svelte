@@ -14,6 +14,13 @@
 		{ value: '2', label: 'Live Projects' },
 	];
 
+	let showPhoto = $state(false);
+
+	function handleFaceTap() {
+		const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+		if (isTouchDevice) showPhoto = !showPhoto;
+	}
+
 	const specialties = [
 		{ label: 'Blockchain Development', detail: 'Smart contracts, DApps, and decentralized systems', index: '01' },
 		{ label: 'Systems Architecture', detail: 'Scalable infrastructure and distributed systems', index: '02' },
@@ -42,7 +49,7 @@
 		</div>
 	</div>
 
-	<div class="grid min-h-0 flex-1 items-start grid-cols-1 gap-6 overflow-y-auto sm:gap-8 lg:grid-cols-7 lg:gap-10 lg:overflow-visible">
+	<div class="grid min-h-0 flex-1 items-start grid-cols-1 gap-6 overflow-y-auto pt-2 sm:pt-0 sm:gap-8 lg:grid-cols-7 lg:gap-10 lg:overflow-visible">
 
 		<!-- Column 1: [Face | Bio] -->
 		<div class="flex flex-col lg:col-span-4 justify-center gap-6 sm:gap-8 lg:gap-10">
@@ -57,12 +64,12 @@
 						<span class="absolute -top-1 -right-1 h-3 w-3 border-t border-r border-(--color-border-hover)"></span>
 						<span class="absolute -bottom-1 -left-1 h-3 w-3 border-b border-l border-(--color-border-hover)"></span>
 						<span class="absolute -bottom-1 -right-1 h-3 w-3 border-b border-r border-(--color-border-hover)"></span>
-						<div class="group/face aspect-square w-full overflow-hidden">
+						<div class="group/face aspect-square w-full overflow-hidden" role="button" tabindex="0" onclick={handleFaceTap} onkeydown={(e) => e.key === 'Enter' && handleFaceTap()}>
 							<BinaryFace />
 							<img
 								src="/profile.jpg"
 								alt="Louigie Caminoy"
-								class="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500 group-hover/face:opacity-100"
+								class="absolute inset-0 h-full w-full object-cover transition-opacity duration-500 {showPhoto ? 'opacity-100' : 'opacity-0 group-hover/face:opacity-100'}"
 							/>
 						</div>
 					</div>
