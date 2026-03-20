@@ -36,26 +36,25 @@
 			<span class="hidden font-medium text-(--color-text-primary) md:inline">BLOCKCHAIN DEVELOPER</span>
 			<span class="hidden sm:inline"> | </span>
 			<span class="sm:hidden"> · </span>
-			<span class="font-medium text-(--color-text-primary) md:hidden">PM</span>
-			<span class="hidden font-medium text-(--color-text-primary) md:inline">PROJECT MANAGER</span>
+			<span class="font-medium text-(--color-text-primary)">PROJECT MANAGER</span>
 		</p>
 
 		<div class="mt-2 flex items-center gap-2 sm:gap-3">
 			<button
 				onclick={() => navigate('about')}
-				class="cursor-pointer border border-(--color-border) bg-(--color-surface-alt)/50 px-3 py-2 font-mono text-[9px] md:text-[11px] tracking-widest text-(--color-text-secondary) backdrop-blur-sm transition-all hover:border-(--color-border-hover) hover:text-(--color-text-primary) sm:px-6 sm:py-2.5 sm:text-[11px] sm:tracking-[0.2em] md:px-8 md:py-3 md:text-xs md:tracking-[0.25em]"
+				class="cursor-pointer border border-(--color-border) bg-(--color-surface-alt)/50 px-3 py-2 font-mono text-[9px] tracking-widest text-(--color-text-secondary) backdrop-blur-sm transition-all hover:border-(--color-border-hover) hover:text-(--color-text-primary) sm:px-6 sm:py-2.5 sm:text-[11px] sm:tracking-[0.2em] md:px-8 md:py-3 md:text-xs md:tracking-[0.25em] lg:px-9 lg:py-3.5 lg:text-[13px] lg:tracking-[0.27em]"
 			>
 				[ ABOUT ]
 			</button>
 			<button
 				onclick={() => navigate('projects')}
-				class="cursor-pointer border border-(--color-border) bg-(--color-surface-alt)/50 px-3 py-2 font-mono text-[9px] md:text-[11px] tracking-widest text-(--color-text-secondary) backdrop-blur-sm transition-all hover:border-(--color-border-hover) hover:text-(--color-text-primary) sm:px-6 sm:py-2.5 sm:text-[11px] sm:tracking-[0.2em] md:px-8 md:py-3 md:text-xs md:tracking-[0.25em]"
+				class="cursor-pointer border border-(--color-border) bg-(--color-surface-alt)/50 px-3 py-2 font-mono text-[9px] tracking-widest text-(--color-text-secondary) backdrop-blur-sm transition-all hover:border-(--color-border-hover) hover:text-(--color-text-primary) sm:px-6 sm:py-2.5 sm:text-[11px] sm:tracking-[0.2em] md:px-8 md:py-3 md:text-xs md:tracking-[0.25em] lg:px-9 lg:py-3.5 lg:text-[13px] lg:tracking-[0.27em]"
 			>
 				[ PROJECTS ]
 			</button>
 			<button
 				onclick={() => navigate('contact')}
-				class="cursor-pointer border border-(--color-border) bg-(--color-surface-alt)/50 px-3 py-2 font-mono text-[9px] md:text-[11px] tracking-widest text-(--color-text-secondary) backdrop-blur-sm transition-all hover:border-(--color-border-hover) hover:text-(--color-text-primary) sm:px-6 sm:py-2.5 sm:text-[11px] sm:tracking-[0.2em] md:px-8 md:py-3 md:text-xs md:tracking-[0.25em]"
+				class="cursor-pointer border border-(--color-border) bg-(--color-surface-alt)/50 px-3 py-2 font-mono text-[9px] tracking-widest text-(--color-text-secondary) backdrop-blur-sm transition-all hover:border-(--color-border-hover) hover:text-(--color-text-primary) sm:px-6 sm:py-2.5 sm:text-[11px] sm:tracking-[0.2em] md:px-8 md:py-3 md:text-xs md:tracking-[0.25em] lg:px-9 lg:py-3.5 lg:text-[13px] lg:tracking-[0.27em]"
 			>
 				[ GET IN TOUCH ]
 			</button>
