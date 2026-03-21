@@ -36,6 +36,21 @@
 		'/commands': 'commands'
 	};
 
+	const MAX_INPUT_LENGTH = 10;
+	const RATE_LIMIT_MS = 500;
+	let lastCommandTime = 0;
+
+	function sanitizeInput(value: string): string {
+		return value
+			.split('')
+			.filter((ch) => {
+				const c = ch.charCodeAt(0);
+				return c > 8 && c !== 11 && c !== 12 && (c < 14 || c > 31) && c !== 127;
+			})
+			.join('')
+			.slice(0, MAX_INPUT_LENGTH);
+	}
+
 	const EMAIL = 'louigiecads143@gmail.com';
 
 	const externalCommands: Record<string, () => void> = {
@@ -74,7 +89,11 @@
 
 	function handleSubmit(e: Event) {
 		e.preventDefault();
-		const cmd = input.trim().toLowerCase();
+		const now = Date.now();
+		if (now - lastCommandTime < RATE_LIMIT_MS) return;
+		lastCommandTime = now;
+
+		const cmd = sanitizeInput(input).trim().toLowerCase();
 		if (!cmd) return;
 
 		if (cmd === '/help') {
@@ -191,6 +210,7 @@
 				onkeydown={handleKeydown}
 				placeholder="type /help for commands"
 				class="flex-1 border-none bg-transparent font-mono text-sm text-(--color-text-primary) caret-(--color-text-primary) placeholder-(--color-text-muted) outline-none focus:ring-0"
+				maxlength={MAX_INPUT_LENGTH}
 				spellcheck="false"
 				autocomplete="off"
 				aria-label="Command input"
