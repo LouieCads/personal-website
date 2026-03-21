@@ -43,10 +43,6 @@
 		<span class="font-mono text-xl text-(--color-accent) sm:text-2xl">01</span>
 		<span class="font-mono text-sm tracking-[0.2em] text-(--color-text-primary)">ABOUT</span>
 		<span class="h-px flex-1 bg-(--color-border)"></span>
-		<div class="hidden items-center gap-2 sm:flex">
-			<span class="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500"></span>
-			<span class="font-mono text-[10px] tracking-widest text-emerald-500/70">OPEN TO OPPORTUNITIES</span>
-		</div>
 	</div>
 
 	<div class="grid min-h-0 flex-1 items-start grid-cols-1 gap-6 overflow-y-auto pt-2 sm:pt-0 sm:gap-8 lg:grid-cols-7 lg:gap-10 lg:overflow-visible">
