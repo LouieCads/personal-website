@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import BinaryName from './BinaryName.svelte';
 	import BinaryBackground from './BinaryBackground.svelte';
 	import BinaryFace from './BinaryFace.svelte';
@@ -9,13 +10,26 @@
 
 	let { navigate }: Props = $props();
 
-	let showPhoto = $state(false);
+	// 'idle' → 'animating' → 'done'
+	let introPhase = $state<'idle' | 'animating' | 'done'>('idle');
 
-	function handleFaceTap() {
-		const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-		if (isTouchDevice) showPhoto = !showPhoto;
-	}
+	onMount(() => {
+		const t1 = setTimeout(() => { introPhase = 'animating'; }, 400);
+		// 400ms delay + 1200ms animation + 50ms buffer
+		const t2 = setTimeout(() => { introPhase = 'done'; }, 1650);
+		return () => { clearTimeout(t1); clearTimeout(t2); };
+	});
 </script>
+
+<style>
+	@keyframes faceIntro {
+		from { clip-path: inset(100% 0 0 0); }
+		to   { clip-path: inset(0 0 0 0); }
+	}
+	.face-intro {
+		animation: faceIntro 1.2s ease-out forwards;
+	}
+</style>
 
 <div class="view-enter scanlines relative grid h-full grid-rows-[auto_1fr_auto] overflow-hidden">
 	<!-- Full-cover binary background -->
@@ -39,18 +53,15 @@
 				<span class="absolute -top-1 -right-1 h-3 w-3 border-t border-r border-(--color-border-hover)"></span>
 				<span class="absolute -bottom-1 -left-1 h-3 w-3 border-b border-l border-(--color-border-hover)"></span>
 				<span class="absolute -bottom-1 -right-1 h-3 w-3 border-b border-r border-(--color-border-hover)"></span>
-				<div
-					class="group/face aspect-square w-full overflow-hidden lg:h-full lg:aspect-auto"
-					role="button"
-					tabindex="0"
-					onclick={handleFaceTap}
-					onkeydown={(e) => e.key === 'Enter' && handleFaceTap()}
-				>
+				<div class="group/face aspect-square w-full overflow-hidden lg:h-full lg:aspect-auto">
 					<BinaryFace />
 					<img
 						src="/profile.jpg"
 						alt="Louigie Caminoy"
-						class="absolute inset-0 h-full w-full object-cover transition-opacity duration-500 {showPhoto ? 'opacity-100' : 'opacity-0 group-hover/face:opacity-100'}"
+						class="absolute inset-0 h-full w-full object-cover
+							{introPhase === 'idle' ? 'opacity-0' : ''}
+							{introPhase === 'animating' ? 'face-intro' : ''}
+							{introPhase === 'done' ? 'opacity-100' : ''}"
 					/>
 				</div>
 			</div>
