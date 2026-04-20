@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { theme } from '$lib/stores/theme';
+
 	interface Props {
 		navigate: (view: string) => void;
 	}
@@ -21,6 +23,11 @@
 		{ cmd: '/facebook',  desc: 'open Facebook profile',    action: () => window.open('https://www.facebook.com/louielocktorius21', '_blank') },
 		{ cmd: '/email',     desc: 'open email client',        action: () => window.open('https://mail.google.com/mail/u/0/#all?compose=new', '_blank') },
 	];
+
+	const themeCommands = [
+		{ cmd: '/light', desc: 'enable light mode', action: () => theme.set('light') },
+		{ cmd: '/dark',  desc: 'enable dark mode',  action: () => theme.set('dark') },
+	];
 </script>
 
 <div class="view-enter flex h-full flex-col px-4 py-4 gap-4 sm:px-8 sm:py-6 sm:gap-5 md:px-16 md:py-8 md:gap-6 lg:px-18">
@@ -41,7 +48,7 @@
 			Type any command in the terminal below, or click an actionable one directly.
 		</p>
 
-		<div class="grid gap-4 lg:grid-cols-2">
+		<div class="grid gap-4 lg:grid-cols-3">
 			<!-- Navigation / utility commands -->
 			<div class="border border-(--color-border) bg-(--color-surface-card)">
 				<div class="flex items-center gap-2 border-b border-(--color-border) px-4 py-3">
@@ -75,6 +82,27 @@
 							<code class="w-28 shrink-0 font-mono text-sm text-(--color-accent)">{cmd}</code>
 							<span class="flex-1 font-mono text-xs text-(--color-text-muted) transition-colors group-hover:text-(--color-text-secondary)">{desc}</span>
 							<span class="font-mono text-[10px] text-(--color-text-muted) opacity-0 transition-opacity group-hover:opacity-100">&nearr;</span>
+						</button>
+					{/each}
+				</div>
+			</div>
+
+			<!-- Theme commands -->
+			<div class="border border-(--color-border) bg-(--color-surface-card)">
+				<div class="flex items-center gap-2 border-b border-(--color-border) px-4 py-3">
+					<span class="font-mono text-[10px] tracking-widest text-(--color-text-muted)">THEME</span>
+					<span class="h-px flex-1 bg-(--color-border)"></span>
+					<span class="font-mono text-[10px] text-(--color-text-muted)">{themeCommands.length}</span>
+				</div>
+				<div class="divide-y divide-(--color-border)">
+					{#each themeCommands as { cmd, desc, action } (cmd)}
+						<button
+							onclick={action}
+							class="group flex w-full cursor-pointer items-center gap-4 px-4 py-3 text-left transition-colors hover:bg-(--color-surface)"
+						>
+							<code class="w-28 shrink-0 font-mono text-sm text-(--color-accent)">{cmd}</code>
+							<span class="flex-1 font-mono text-xs text-(--color-text-muted) transition-colors group-hover:text-(--color-text-secondary)">{desc}</span>
+							<span class="font-mono text-[10px] text-(--color-text-muted) opacity-0 transition-opacity group-hover:opacity-100">&check;</span>
 						</button>
 					{/each}
 				</div>

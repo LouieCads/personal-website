@@ -25,7 +25,9 @@
 		'/facebook',
 		'/email',
 		'/help',
-		'/clear'
+		'/clear',
+		'/light',
+		'/dark'
 	];
 
 	const navCommands: Record<string, string> = {
@@ -126,6 +128,20 @@
 			return;
 		}
 
+		if (cmd === '/light') {
+			theme.set('light');
+			showFeedback('theme set to light', 'info');
+			input = '';
+			return;
+		}
+
+		if (cmd === '/dark') {
+			theme.set('dark');
+			showFeedback('theme set to dark', 'info');
+			input = '';
+			return;
+		}
+
 		showFeedback(`command not found: ${cmd}. type /help for available commands`);
 		input = '';
 	}
@@ -169,6 +185,8 @@
 				<b>Navigation:</b> /home /about /projects /contact /commands
 				<span class="mx-2"></span>
 				<b>External:</b> /resume /github /linkedin /instagram /facebook /email
+				<span class="mx-2"></span>
+				<b>Theme:</b> /light /dark
 			</span>
 		</div>
 	{:else if suggestion}
@@ -184,6 +202,8 @@
 				<b>Navigation:</b> /home /about /projects /contact /commands
 				<span class="mx-2"></span>
 				<b>External:</b> /resume /github /linkedin /instagram /facebook /email
+				<span class="mx-2"></span>
+				<b>Theme:</b> /light /dark
 			</span>
 		</div>
 	{:else if feedback}
