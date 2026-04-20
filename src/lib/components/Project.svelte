@@ -47,6 +47,12 @@
 		<span class="font-mono text-xl text-(--color-accent) sm:text-2xl">02</span>
 		<span class="font-mono text-sm tracking-wider text-(--color-text-primary)">PROJECTS</span>
 		<span class="h-px flex-1 bg-(--color-border)"></span>
+		<button
+			onclick={() => navigate('contact')}
+			class="cursor-pointer font-mono text-[11px] tracking-widest text-(--color-text-secondary) transition-colors hover:text-(--color-text-primary)"
+		>
+			CONTACT &rarr;
+		</button>
 	</div>
 
 	<div class="flex flex-1 pt-2 sm:pt-0 flex-col overflow-y-auto">

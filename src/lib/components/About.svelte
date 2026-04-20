@@ -43,6 +43,12 @@
 		<span class="font-mono text-xl text-(--color-accent) sm:text-2xl">01</span>
 		<span class="font-mono text-sm tracking-[0.2em] text-(--color-text-primary)">ABOUT</span>
 		<span class="h-px flex-1 bg-(--color-border)"></span>
+		<button
+			onclick={() => navigate('projects')}
+			class="cursor-pointer font-mono text-[11px] tracking-widest text-(--color-text-secondary) transition-colors hover:text-(--color-text-primary)"
+		>
+			PROJECTS &rarr;
+		</button>
 	</div>
 
 	<div class="grid min-h-0 flex-1 items-start grid-cols-1 gap-6 overflow-y-auto pt-2 sm:pt-0 sm:gap-8 lg:grid-cols-7 lg:gap-10 lg:overflow-visible">

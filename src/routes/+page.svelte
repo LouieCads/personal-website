@@ -15,6 +15,11 @@
 	const sectionOrder = ['about', 'projects', 'contact'];
 
 	function handleKeydown(event: KeyboardEvent) {
+		if (event.key === 'Escape' && currentView !== 'home') {
+			currentView = 'home';
+			return;
+		}
+
 		const idx = sectionOrder.indexOf(currentView);
 		if (idx === -1) return;
 
