@@ -10,8 +10,8 @@
 		{ value: 'CTO', label: 'Current Role' },
 		{ value: 'Full Stack', label: 'Core Skillset' },
 		{ value: 'Agile', label: 'Team Workflow' },
-		{ value: '5', label: 'Devs Managed' },
-		{ value: '2', label: 'Live Projects' },
+		{ value: '6', label: 'Devs Managed' },
+		{ value: '3', label: 'Live Projects' },
 	];
 
 	let showPhoto = $state(false);
