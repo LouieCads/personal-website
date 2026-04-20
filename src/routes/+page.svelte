@@ -11,11 +11,26 @@
 	function navigate(view: string) {
 		currentView = view;
 	}
+
+	const sectionOrder = ['about', 'projects', 'contact'];
+
+	function handleKeydown(event: KeyboardEvent) {
+		const idx = sectionOrder.indexOf(currentView);
+		if (idx === -1) return;
+
+		if (event.key === 'ArrowLeft' && idx > 0) {
+			currentView = sectionOrder[idx - 1];
+		} else if (event.key === 'ArrowRight' && idx < sectionOrder.length - 1) {
+			currentView = sectionOrder[idx + 1];
+		}
+	}
 </script>
 
 <svelte:head>
 	<title>Louigie Caminoy — CTO, Blockchain Developer, Project Manager</title>
 </svelte:head>
+
+<svelte:window onkeydown={handleKeydown} />
 
 <div class="flex h-dvh flex-col overflow-hidden bg-(--color-surface)">
 	<main class="relative min-h-0 flex-1 overflow-hidden">
