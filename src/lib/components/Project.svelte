@@ -9,18 +9,27 @@
 			title: 'iSkolar',
 			description:
 				'A scholarship application and management platform connecting university students with scholarship providers, streamlining the application and selection process.',
-			tech: ['TypeScript', 'Solidity', 'Hardhat', 'React', 'Tailwind CSS', 'Express.js', 'PostgreSQL', 'Docker'],
-			link: 'https://iskolar.site/',
+			tech: ['TypeScript', 'Solidity', 'Hardhat', 'React', 'Tailwind CSS', 'Express.js', 'PostgreSQL', 'Vitest', 'Docker', 'bun'],
+			link: 'https://iskolar.io',
 			index: '01',
 			image: '/projects/iskolar-preview.png'
+		},
+		{
+			title: 'Finsharc',
+			description:
+				'An intelligent mobile finance copilot that helps understand and act on personal and business finances with clarity and control, built offline first and designed to keep users oriented and in command.',
+			tech: ["TypeScript", "React Native", "Expo", "NativeWind", "Zustand", "Vitest", "ML Kit", "pnpm"],
+			link: 'https://www.finsharc.com',
+			index: '02',
+			image: '/projects/finsharc-preview.png'
 		},
 		{
 			title: 'USMO',
 			description:
 				'A centralized landing page for UMak Student Multimedia Organization showcasing projects, initiatives, and social platforms for improved accessibility and engagement.',
 			tech: ['Hostinger Website Builder', 'HTML', 'CSS', 'JavaScript'],
-			link: 'https://connect.usmo.org.ph/',
-			index: '02',
+			link: 'https://connect.usmo.org.ph',
+			index: '03',
 			image: '/projects/usmo-preview.png'
 		}
 	];
