@@ -32,7 +32,7 @@
 </script>
 
 <svelte:head>
-	<title>Louigie Caminoy — CTO, Blockchain Developer, Project Manager</title>
+	<title>Louigie Caminoy · Multidisciplinary Technopreneur</title>
 </svelte:head>
 
 <svelte:window onkeydown={handleKeydown} />

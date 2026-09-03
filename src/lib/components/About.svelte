@@ -84,7 +84,7 @@
 				<div class="flex-1">
 					<p class="mb-1 font-mono text-xs tracking-widest text-(--color-text-muted)">// WHO I AM</p>
 					<h2 class="mb-3 text-lg font-light leading-snug tracking-tight text-(--color-text-primary) sm:text-xl">
-						Growth-driven engineer.
+						Multidisciplinary Technopreneur.
 						<span class="text-(--color-text-secondary)">Discipline over comfort.</span>
 					</h2>
 					<p class="mb-3 text-sm leading-relaxed text-(--color-text-secondary)">
