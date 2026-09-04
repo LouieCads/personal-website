@@ -1,0 +1,26 @@
+<script lang="ts">
+	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
+	import { scrollToId, scrollToTop } from '$lib/scroll';
+	import Shell from '$lib/components/scroll/Shell.svelte';
+	import BackBar from '$lib/components/scroll/BackBar.svelte';
+	import Commands from '$lib/components/Commands.svelte';
+
+	function navigate(view: string) {
+		void goto(resolve('/')).then(() => {
+			if (view === 'home') scrollToTop();
+			else scrollToId(view);
+		});
+	}
+</script>
+
+<svelte:head>
+	<title>Commands | Louigie Caminoy</title>
+</svelte:head>
+
+<Shell section="">
+	<BackBar anchor="hero" title="COMMANDS" />
+	<div class="mx-auto w-full max-w-[1400px]">
+		<Commands {navigate} />
+	</div>
+</Shell>

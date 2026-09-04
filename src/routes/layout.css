@@ -7,13 +7,15 @@
 	--font-mono: 'JetBrains Mono', ui-monospace, monospace;
 }
 
-/* Light mode — default */
+/* Light mode, the default */
 :root {
 	--color-surface: #f5f5f5;
 	--color-surface-alt: #ececec;
 	--color-surface-card: #e6e6e6;
 	--color-border: #d4d4d4;
 	--color-border-hover: #a3a3a3;
+	/* Section separators, quieter than a component border */
+	--color-rule: #e4e4e4;
 	--color-text-primary: #0a0a0a;
 	--color-text-secondary: #525252;
 	--color-text-muted: #a3a3a3;
@@ -31,6 +33,7 @@
 	--color-surface-card: #0e0e0e;
 	--color-border: #1a1a1a;
 	--color-border-hover: #2a2a2a;
+	--color-rule: #121212;
 	--color-text-primary: #e5e5e5;
 	--color-text-secondary: #737373;
 	--color-text-muted: #404040;
@@ -56,9 +59,19 @@
 
 html,
 body {
-	height: 100dvh;
-	overflow: hidden;
-	scroll-behavior: auto;
+	min-height: 100dvh;
+	overflow-x: hidden;
+}
+
+html {
+	scroll-behavior: smooth;
+	scroll-padding-top: 4rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
 }
 
 body {
@@ -116,4 +129,74 @@ body {
 	);
 	pointer-events: none;
 	z-index: 1;
+}
+
+/* Scroll reveal, used by the `reveal` action. Content is only nudged, never
+   fully hidden, so a non-JS or reduced-motion visitor still reads everything. */
+.reveal {
+	opacity: 0.001;
+	transform: translateY(10px);
+	transition:
+		opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+		transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.is-visible {
+	opacity: 1;
+	transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.reveal {
+		opacity: 1;
+		transform: none;
+		transition: none;
+	}
+}
+
+/* Corner brackets, reused from the hero face treatment */
+.bracket::before,
+.bracket::after {
+	content: '';
+	position: absolute;
+	width: 8px;
+	height: 8px;
+	border-color: var(--color-border-hover);
+	pointer-events: none;
+}
+
+.bracket::before {
+	top: -1px;
+	left: -1px;
+	border-top: 1px solid;
+	border-left: 1px solid;
+}
+
+.bracket::after {
+	bottom: -1px;
+	right: -1px;
+	border-bottom: 1px solid;
+	border-right: 1px solid;
+}
+
+/* Lenis smooth scrolling */
+html.lenis,
+html.lenis body {
+	height: auto;
+}
+
+.lenis.lenis-smooth {
+	scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+	overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+	overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+	pointer-events: none;
 }

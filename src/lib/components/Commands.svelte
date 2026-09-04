@@ -16,7 +16,6 @@
 	];
 
 	const actionCommands = [
-		{ cmd: '/resume',    desc: 'open resume PDF',          action: () => window.open('/resume.pdf', '_blank') },
 		{ cmd: '/github',    desc: 'open GitHub profile',      action: () => window.open('https://github.com/LouieCads', '_blank') },
 		{ cmd: '/linkedin',  desc: 'open LinkedIn profile',    action: () => window.open('https://www.linkedin.com/in/louie1221/', '_blank') },
 		{ cmd: '/instagram', desc: 'open Instagram profile',   action: () => window.open('https://www.instagram.com/louie.21_/', '_blank') },

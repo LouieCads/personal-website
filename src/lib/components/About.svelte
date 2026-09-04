@@ -69,7 +69,7 @@
 						<div class="group/face aspect-square w-full overflow-hidden" role="button" tabindex="0" onclick={handleFaceTap} onkeydown={(e) => e.key === 'Enter' && handleFaceTap()}>
 							<BinaryFace />
 							<img
-								src="/profile.jpg"
+								src="/profile.png"
 								alt="Louigie Caminoy"
 								class="absolute inset-0 h-full w-full object-cover transition-opacity duration-500 {showPhoto ? 'opacity-100' : 'opacity-0 group-hover/face:opacity-100'}"
 							/>

@@ -1,68 +1,30 @@
 <script lang="ts">
-	import Hero from '$lib/components/Hero.svelte';
-	import About from '$lib/components/About.svelte';
-	import Projects from '$lib/components/Project.svelte';
-	import Contact from '$lib/components/Contact.svelte';
-	import Commands from '$lib/components/Commands.svelte';
-	import CLI from '$lib/components/CLI.svelte';
+	import Shell from '$lib/components/scroll/Shell.svelte';
+	import HeroSection from '$lib/components/scroll/HeroSection.svelte';
+	import AboutSection from '$lib/components/scroll/AboutSection.svelte';
+	import ProjectsSection from '$lib/components/scroll/ProjectsSection.svelte';
+	import ExperienceSection from '$lib/components/scroll/ExperienceSection.svelte';
+	import BlogSection from '$lib/components/scroll/BlogSection.svelte';
 
-	let currentView = $state('home');
-
-	function navigate(view: string) {
-		currentView = view;
-	}
-
-	const sectionOrder = ['about', 'projects', 'contact'];
-
-	function handleKeydown(event: KeyboardEvent) {
-		if (event.key === 'Escape' && currentView !== 'home') {
-			currentView = 'home';
-			return;
-		}
-
-		const idx = sectionOrder.indexOf(currentView);
-		if (idx === -1) return;
-
-		if (event.key === 'ArrowLeft' && idx > 0) {
-			currentView = sectionOrder[idx - 1];
-		} else if (event.key === 'ArrowRight' && idx < sectionOrder.length - 1) {
-			currentView = sectionOrder[idx + 1];
-		}
-	}
+	let { data } = $props();
 </script>
 
 <svelte:head>
-	<title>Louigie Caminoy · Multidisciplinary Technopreneur</title>
+	<title>Louigie Caminoy | Multidisciplinary Technopreneur</title>
+	<meta
+		name="description"
+		content="CTO, blockchain developer and project manager building decentralized systems and scalable infrastructure."
+	/>
 </svelte:head>
 
-<svelte:window onkeydown={handleKeydown} />
-
-<div class="flex h-dvh flex-col overflow-hidden bg-(--color-surface)">
-	<main class="relative min-h-0 flex-1 overflow-hidden">
-		{#key currentView}
-			{#if currentView === 'home'}
-				<div class="absolute inset-0">
-					<Hero {navigate} />
-				</div>
-			{:else if currentView === 'about'}
-				<div class="absolute inset-0">
-					<About {navigate} />
-				</div>
-			{:else if currentView === 'projects'}
-				<div class="absolute inset-0">
-					<Projects {navigate} />
-				</div>
-			{:else if currentView === 'contact'}
-				<div class="absolute inset-0">
-					<Contact {navigate} />
-				</div>
-			{:else if currentView === 'commands'}
-				<div class="absolute inset-0">
-					<Commands {navigate} />
-				</div>
-			{/if}
-		{/key}
-	</main>
-
-	<CLI {navigate} />
-</div>
+<!--
+  The home page is a preview surface: every section shows at most three items in
+  a single row and hands off to its own page for the full record.
+-->
+<Shell home>
+	<HeroSection />
+	<AboutSection preview />
+	<ProjectsSection preview />
+	<ExperienceSection preview />
+	<BlogSection preview feedItems={data.feed} />
+</Shell>

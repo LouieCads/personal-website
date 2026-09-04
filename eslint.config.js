@@ -26,6 +26,14 @@ export default defineConfig(
 		}
 	},
 	{
+		files: ['src/lib/components/**/*.svelte', 'src/routes/**/*.svelte'],
+		rules: {
+			// Hrefs in these components come from data: external profiles, mailto:,
+			// static assets and in-page #hashes. goto() stays enforced.
+			'svelte/no-navigation-without-resolve': ['error', { ignoreLinks: true }]
+		}
+	},
+	{
 		files: ['**/*.svelte', '**/*.svelte.ts', '**/*.svelte.js'],
 		languageOptions: {
 			parserOptions: {

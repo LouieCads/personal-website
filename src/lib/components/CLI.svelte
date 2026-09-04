@@ -18,7 +18,6 @@
 		'/projects',
 		'/contact',
 		'/commands',
-		'/resume',
 		'/github',
 		'/linkedin',
 		'/instagram',
@@ -56,7 +55,6 @@
 	const EMAIL = 'louigiecads143@gmail.com';
 
 	const externalCommands: Record<string, () => void> = {
-		'/resume': () => window.open('/resume.pdf', '_blank'),
 		'/github': () => window.open('https://github.com/LouieCads', '_blank'),
 		'/linkedin': () => window.open('https://www.linkedin.com/in/louie1221/', '_blank'),
 		'/instagram': () => window.open('https://www.instagram.com/louie.21_/', '_blank'),
@@ -184,7 +182,7 @@
 			<span class="font-mono text-xs text-(--color-text-secondary)">
 				<b>Navigation:</b> /home /about /projects /contact /commands
 				<span class="mx-2"></span>
-				<b>External:</b> /resume /github /linkedin /instagram /facebook /email
+				<b>External:</b> /github /linkedin /instagram /facebook /email
 				<span class="mx-2"></span>
 				<b>Theme:</b> /light /dark
 			</span>
@@ -201,7 +199,7 @@
 			<span class="font-mono text-xs text-(--color-text-secondary)">
 				<b>Navigation:</b> /home /about /projects /contact /commands
 				<span class="mx-2"></span>
-				<b>External:</b> /resume /github /linkedin /instagram /facebook /email
+				<b>External:</b> /github /linkedin /instagram /facebook /email
 				<span class="mx-2"></span>
 				<b>Theme:</b> /light /dark
 			</span>

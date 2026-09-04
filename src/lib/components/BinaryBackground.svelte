@@ -7,7 +7,7 @@
 	// Larger cells = fewer draws per frame
 	const CELL = 26;
 	// Target ~20fps — plenty for a slow decorative background
-	const TARGET_FPS = 20;
+	const TARGET_FPS = 12;
 	const FRAME_MS = 1000 / TARGET_FPS;
 
 	// Pool sized to cover a 1440×900 screen at CELL=26 (~56×35 = ~1960 cells max)
@@ -24,7 +24,11 @@
 	const cells: CellState[] = new Array(MAX_COLS * MAX_ROWS);
 	for (let i = 0; i < cells.length; i++) {
 		const interval = 1800 + Math.random() * 4000;
-		cells[i] = { value: Math.random() > 0.5 ? '1' : '0', nextChange: Math.random() * interval, interval };
+		cells[i] = {
+			value: Math.random() > 0.5 ? '1' : '0',
+			nextChange: Math.random() * interval,
+			interval
+		};
 	}
 
 	onMount(() => {

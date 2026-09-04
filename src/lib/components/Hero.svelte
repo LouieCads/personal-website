@@ -56,7 +56,7 @@
 				<div class="group/face aspect-square w-full overflow-hidden lg:h-full lg:aspect-auto">
 					<BinaryFace />
 					<img
-						src="/profile.jpg"
+						src="/profile.png"
 						alt="Louigie Caminoy"
 						class="absolute inset-0 h-full w-full object-cover
 							{introPhase === 'idle' ? 'opacity-0' : ''}

@@ -46,7 +46,7 @@
 		const offCtx = offscreen.getContext('2d')!;
 
 		const img = new Image();
-		img.src = '/profile.jpg';
+		img.src = '/profile.png';
 		img.onload = () => {
 			// Center-crop to square
 			const side = Math.min(img.width, img.height);
@@ -60,7 +60,11 @@
 				const r = data.data[i * 4];
 				const g = data.data[i * 4 + 1];
 				const b = data.data[i * 4 + 2];
-				brightness[i] = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+				const a = data.data[i * 4 + 3] / 255;
+				// Transparent pixels read as pure black; treat them as background
+				// so the cut-out area stays clear instead of filling with glyphs.
+				const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+				brightness[i] = a < 0.5 ? 1 : lum * a + (1 - a);
 			}
 		};
 

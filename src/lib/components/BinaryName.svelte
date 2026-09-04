@@ -226,12 +226,15 @@
 			const line1Base = isDark ? 0.82 : 0.95;
 			const line1Swing = isDark ? 0.12 : 0.05;
 			const line2Base = isDark ? 0.72 : 0.78;
-			const line2Swing = isDark ? 0.10 : 0.06;
+			const line2Swing = isDark ? 0.1 : 0.06;
 
-			// Size cells to fill the full container width
+			// Size cells to fit BOTH axes. Width alone used to win, so a short
+			// container clipped the two-line block instead of scaling it down.
 			const widestLine = Math.max(layout1.totalCols, layout2.totalCols + LINE2_INDENT);
+			const totalRows = 2 * ROWS + LINE_GAP;
 			const maxCellW = (w * 0.87) / widestLine;
-			const cellW = Math.min(maxCellW, 48);
+			const maxCellH = (h * 0.92) / totalRows;
+			const cellW = Math.min(maxCellW, maxCellH / 0.75, 48);
 			const cellH = cellW * 0.75;
 			const fontSize = Math.max(cellW * 0.32, 6);
 
@@ -242,8 +245,8 @@
 			const line2OffX = startX + LINE2_INDENT * cellW;
 
 			// Vertical: center the two-line block
-			const totalBlockH = (2 * ROWS + LINE_GAP) * cellH;
-			const blockStartY = (h - totalBlockH) * 0.48;
+			const totalBlockH = totalRows * cellH;
+			const blockStartY = Math.max(0, (h - totalBlockH) * 0.5);
 			const line1StartY = blockStartY;
 			const line2StartY = blockStartY + (ROWS + LINE_GAP) * cellH;
 
@@ -263,7 +266,8 @@
 						const cell = line1Cells.get(`${globalCol}-${r}`);
 						if (!cell) continue;
 						tickCell(cell, time);
-						const pulse = line1Base + line1Swing * Math.sin(time * 0.004 + globalCol * 0.4 + r * 0.7);
+						const pulse =
+							line1Base + line1Swing * Math.sin(time * 0.004 + globalCol * 0.4 + r * 0.7);
 						ctx!.fillStyle = `rgba(${textRgb}, ${pulse})`;
 						ctx!.fillText(cell.value, x, y);
 					}
@@ -282,7 +286,8 @@
 						const cell = line2Cells.get(`${globalCol}-${r}`);
 						if (!cell) continue;
 						tickCell(cell, time);
-						const pulse = line2Base + line2Swing * Math.sin(time * 0.004 + globalCol * 0.4 + r * 0.7);
+						const pulse =
+							line2Base + line2Swing * Math.sin(time * 0.004 + globalCol * 0.4 + r * 0.7);
 						ctx!.fillStyle = `rgba(${textRgb}, ${pulse})`;
 						ctx!.fillText(cell.value, x, y);
 					}
