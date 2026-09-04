@@ -10,7 +10,7 @@
 </script>
 
 <svelte:head>
-	<title>Louigie Caminoy | Multidisciplinary Technopreneur</title>
+	<title>Louigie Caminoy - Multidisciplinary Technopreneur</title>
 	<meta
 		name="description"
 		content="CTO, blockchain developer and project manager building decentralized systems and scalable infrastructure."

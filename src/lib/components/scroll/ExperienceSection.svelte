@@ -84,7 +84,7 @@
 								{formatYears(role.start, role.end)}
 							</span>
 							<span class="font-mono text-[10px] text-(--color-text-muted)">
-								({duration(role)}) · {role.location}
+								({duration(role)}) - {role.location}
 							</span>
 						</div>
 

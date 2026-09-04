@@ -12,6 +12,26 @@
 	const shown = $derived(preview ? projects.slice(0, 3) : projects);
 </script>
 
+<!-- Not every link ships a screenshot; a binary plate stands in until one does. -->
+{#snippet viewport(image: string | undefined, title: string, host: string)}
+	{#if image}
+		<img
+			src={image}
+			alt={title}
+			loading="lazy"
+			decoding="async"
+			class="h-full w-full object-cover object-top opacity-90 transition-opacity duration-500 group-hover:opacity-100"
+		/>
+	{:else}
+		<div
+			class="flex h-full w-full items-center justify-center bg-(--color-surface-alt) select-none"
+			aria-hidden="true"
+		>
+			<span class="font-mono text-[10px] tracking-[0.3em] text-(--color-text-muted)">{host}</span>
+		</div>
+	{/if}
+{/snippet}
+
 <PageSection
 	id="projects"
 	number="02"
@@ -54,13 +74,7 @@
 
 					<!-- viewport -->
 					<div class="aspect-[16/11] w-full overflow-hidden">
-						<img
-							src={p.image}
-							alt={p.title}
-							loading="lazy"
-							decoding="async"
-							class="h-full w-full object-cover object-top opacity-90 transition-all duration-500 group-hover:opacity-100"
-						/>
+						{@render viewport(p.image, p.title, p.host)}
 					</div>
 
 					<!-- caption -->
@@ -91,20 +105,14 @@
 					<div
 						class="h-44 shrink-0 overflow-hidden border-b border-(--color-border) sm:h-auto sm:w-64 sm:border-r sm:border-b-0 md:w-80 lg:w-96"
 					>
-						<img
-							src={p.image}
-							alt={p.title}
-							loading="lazy"
-							decoding="async"
-							class="h-full w-full object-cover object-top opacity-85 transition-opacity group-hover:opacity-100"
-						/>
+						{@render viewport(p.image, p.title, p.host)}
 					</div>
 
 					<div class="flex flex-1 flex-col p-5 lg:p-7">
 						<div class="mb-3 flex items-start justify-between gap-4">
 							<div>
 								<span class="font-mono text-[10px] tracking-[0.16em] text-(--color-text-muted)">
-									{p.index} · {p.year} · {p.role}
+									{[p.index, p.year, p.role].filter(Boolean).join(' - ')}
 								</span>
 								<h3
 									class="mt-1 text-xl font-medium text-(--color-text-primary) transition-colors group-hover:text-(--color-accent)"

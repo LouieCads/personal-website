@@ -8,6 +8,7 @@
 	interface Row {
 		id: string;
 		title: string;
+		blurb: string;
 		date: string;
 		url: string;
 		image?: string;
@@ -96,14 +97,17 @@
 						</span>
 					</div>
 
-					<div class="flex flex-1 flex-col gap-3 p-4">
+					<div class="flex flex-1 flex-col gap-2 p-4">
 						<h3
 							class="text-sm leading-snug font-medium text-balance text-(--color-text-primary) transition-colors group-hover:text-(--color-accent) sm:text-base"
 						>
 							{item.title}
 						</h3>
+						<p class="line-clamp-3 text-[13px] leading-relaxed text-(--color-text-secondary)">
+							{item.blurb}
+						</p>
 						<span
-							class="mt-auto text-right font-mono text-[10px] tracking-[0.14em] text-(--color-text-muted)"
+							class="mt-auto pt-2 text-right font-mono text-[10px] tracking-[0.14em] text-(--color-text-muted)"
 						>
 							{item.date}
 						</span>
@@ -134,9 +138,12 @@
 						<div class="shrink-0 border border-(--color-border)">
 							{@render cover(ep.url, ep.image, ep.title, false)}
 						</div>
-						<p class="min-w-0 flex-1 truncate text-[13px] text-(--color-text-primary)">
-							{ep.title}
-						</p>
+						<div class="min-w-0 flex-1">
+							<p class="truncate text-[13px] text-(--color-text-primary)">{ep.title}</p>
+							<p class="mt-0.5 line-clamp-1 text-[11px] text-(--color-text-secondary)">
+								{ep.blurb}
+							</p>
+						</div>
 						<span class="shrink-0 font-mono text-[10px] text-(--color-text-muted)">{ep.date}</span>
 						<span
 							class="shrink-0 font-mono text-xs text-(--color-accent) transition-transform group-hover:translate-x-1"
@@ -166,9 +173,10 @@
 						<div class="shrink-0 border border-(--color-border)">
 							{@render cover(a.url, a.image, a.title, false)}
 						</div>
-						<p class="min-w-0 flex-1 truncate text-[13px] text-(--color-text-primary)">
-							{a.title}
-						</p>
+						<div class="min-w-0 flex-1">
+							<p class="truncate text-[13px] text-(--color-text-primary)">{a.title}</p>
+							<p class="mt-0.5 line-clamp-1 text-[11px] text-(--color-text-secondary)">{a.blurb}</p>
+						</div>
 						<span class="shrink-0 font-mono text-[10px] text-(--color-text-muted)">{a.date}</span>
 						<span
 							class="shrink-0 font-mono text-xs text-(--color-accent) transition-transform group-hover:translate-x-1"

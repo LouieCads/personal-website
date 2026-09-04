@@ -78,11 +78,11 @@
 		<p class="mb-4 text-center font-mono text-xs font-light tracking-[0.2em] text-(--color-text-secondary) sm:mb-6 sm:text-sm sm:tracking-[0.3em] md:text-lg lg:text-left lg:text-2xl">
 			<span class="font-medium text-(--color-text-primary)">CTO</span>
 			<span class="hidden sm:inline"> | </span>
-			<span class="sm:hidden"> · </span>
+			<span class="sm:hidden"> - </span>
 			<span class="font-medium text-(--color-text-primary) md:hidden">BLOCKCHAIN DEV</span>
 			<span class="hidden font-medium text-(--color-text-primary) md:inline">BLOCKCHAIN DEVELOPER</span>
 			<span class="hidden sm:inline"> | </span>
-			<span class="sm:hidden"> · </span>
+			<span class="sm:hidden"> - </span>
 			<span class="font-medium text-(--color-text-primary) md:hidden">PM</span>
 			<span class="hidden font-medium text-(--color-text-primary) md:inline">PROJECT MANAGER</span>
 		</p>

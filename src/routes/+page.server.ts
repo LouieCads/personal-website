@@ -10,10 +10,11 @@ export const load: PageServerLoad = async () => {
 
 	// ship only the fields the cards render
 	return {
-		feed: resolved.map(({ id, kind, title, date, url, image }) => ({
+		feed: resolved.map(({ id, kind, title, blurb, date, url, image }) => ({
 			id,
 			kind,
 			title,
+			blurb,
 			date,
 			url,
 			image

@@ -27,7 +27,7 @@ export const experience: Role[] = [
 		kind: 'work',
 		start: '2024-06',
 		end: null,
-		location: 'Manila · Remote',
+		location: 'Manila - Remote',
 		summary:
 			'Directs a six-developer team across smart contracts, API and web. Built the on-chain escrow that holds scholarship funds until a provider releases them, and set the review and release process the team still runs on.',
 		achievements: [
@@ -44,7 +44,7 @@ export const experience: Role[] = [
 	},
 	{
 		id: 'finsharc',
-		role: 'Founder · Mobile Lead',
+		role: 'Founder - Mobile Lead',
 		company: 'Finsharc',
 		kind: 'work',
 		start: '2025-01',
@@ -86,7 +86,7 @@ export const experience: Role[] = [
 	},
 	{
 		id: 'umak',
-		role: 'BS Computer Science · Student Leader',
+		role: 'BS Computer Science - Student Leader',
 		company: 'University of Makati',
 		kind: 'education',
 		start: '2022-08',
@@ -167,14 +167,14 @@ export interface Article {
 export const articles: Article[] = [
 	{
 		id: 'escrow',
-		title: 'Escrowing scholarship funds on-chain',
+		title: 'Claude AI Recovered Lost Bitcoin',
 		blurb:
 			'What actually breaks when you put a disbursement flow on a public ledger, and the three things I would design differently on the next one.',
 		date: '2026.08.14',
 		readTime: '8 min read',
 		tag: 'Blockchain',
 		url: 'https://tutorialsdojo.com/claude-ai-recovered-lost-bitcoin/'
-	},
+	}
 	// {
 	// 	id: 'offline',
 	// 	title: 'Offline-first is a product decision',
@@ -237,7 +237,7 @@ export function isVideoLink(url: string): boolean {
 }
 
 export const heroMetrics = [
-	{ value: '3', label: 'Live Projects' },
+	{ value: '6', label: 'Live Projects' },
 	{ value: '4', label: 'Years Building' },
 	{ value: '20+', label: 'Technologies' }
 ];
@@ -352,9 +352,10 @@ export interface Project {
 	description: string;
 	tech: string[];
 	link: string;
-	image: string;
-	year: string;
-	role: string;
+	/** drop a screenshot in static/projects and point here; omit for a plate */
+	image?: string;
+	year?: string;
+	role?: string;
 	/** shown in the card's window chrome */
 	host: string;
 }
@@ -382,7 +383,7 @@ export const projects: Project[] = [
 		host: 'iskolar.io',
 		image: '/projects/iskolar-preview.webp',
 		year: '2024',
-		role: 'CTO · Architecture & contracts'
+		role: 'CTO - Architecture & contracts'
 	},
 	{
 		index: '02',
@@ -404,7 +405,7 @@ export const projects: Project[] = [
 		host: 'finsharc.com',
 		image: '/projects/finsharc-preview.webp',
 		year: '2025',
-		role: 'Founder · Mobile lead'
+		role: 'Founder - Mobile lead'
 	},
 	{
 		index: '03',
@@ -418,6 +419,35 @@ export const projects: Project[] = [
 		image: '/projects/usmo-preview.webp',
 		year: '2024',
 		role: 'Web lead'
+	},
+	{
+		index: '04',
+		title: 'inki',
+		tagline: 'A social book tracker for iOS.',
+		description:
+			'A reading companion on the App Store where readers log what they are reading and follow what the people around them read.',
+		tech: ['iOS'],
+		link: 'https://apps.apple.com/us/app/inki-social-book-tracker/id6776695671',
+		host: 'apps.apple.com'
+	},
+	{
+		index: '05',
+		title: 'fundr. studios',
+		tagline: 'Software, designed and shipped.',
+		description: 'A software studio taking products from design through to release.',
+		tech: [],
+		link: 'https://fundr.software/',
+		host: 'fundr.software'
+	},
+	{
+		index: '06',
+		title: 'Dave Malinao',
+		tagline: 'Crafting memories through food.',
+		description:
+			'A culinary portfolio for a home chef and food creator, built around signature dishes, kitchen stories and a philosophy of slow, honest cooking.',
+		tech: ['SvelteKit', 'Netlify'],
+		link: 'https://davemalinao.netlify.app/',
+		host: 'davemalinao.netlify.app'
 	}
 ];
 
@@ -441,7 +471,7 @@ export const feed: FeedItem[] = [
 			title: e.title,
 			blurb: e.blurb,
 			date: e.date,
-			meta: `${e.number} · ${e.duration}`,
+			meta: `${e.number} - ${e.duration}`,
 			url: e.url
 		})
 	),
@@ -452,7 +482,7 @@ export const feed: FeedItem[] = [
 			title: a.title,
 			blurb: a.blurb,
 			date: a.date,
-			meta: `${a.tag} · ${a.readTime}`,
+			meta: `${a.tag} - ${a.readTime}`,
 			url: a.url,
 			image: a.image
 		})
