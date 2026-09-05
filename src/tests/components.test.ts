@@ -59,7 +59,6 @@ describe('About', () => {
 
 	it('renders all specialties', () => {
 		render(About, { props: { navigate: vi.fn() } });
-		expect(screen.getByText('Blockchain Development')).toBeInTheDocument();
 		expect(screen.getByText('Systems Architecture')).toBeInTheDocument();
 		expect(screen.getByText('System Design')).toBeInTheDocument();
 		expect(screen.getByText('Technical Leadership')).toBeInTheDocument();

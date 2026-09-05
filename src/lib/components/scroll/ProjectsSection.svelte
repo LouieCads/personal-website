@@ -13,14 +13,15 @@
 </script>
 
 <!-- Not every link ships a screenshot; a binary plate stands in until one does. -->
-{#snippet viewport(image: string | undefined, title: string, host: string)}
+{#snippet viewport(image: string | undefined, title: string, host: string, position: string = 'center top')}
 	{#if image}
 		<img
 			src={image}
 			alt={title}
 			loading="lazy"
 			decoding="async"
-			class="h-full w-full object-cover object-top opacity-90 transition-opacity duration-500 group-hover:opacity-100"
+			style="object-position: {position}"
+			class="h-full w-full object-cover opacity-90 transition-opacity duration-500 group-hover:opacity-100"
 		/>
 	{:else}
 		<div
@@ -74,18 +75,18 @@
 
 					<!-- viewport -->
 					<div class="aspect-[16/11] w-full overflow-hidden">
-						{@render viewport(p.image, p.title, p.host)}
+						{@render viewport(p.image, p.title, p.host, p.imagePosition)}
 					</div>
 
 					<!-- caption -->
 					<div class="flex flex-1 flex-col border-t border-(--color-rule) p-4">
 						<h3
-							class="text-lg font-light tracking-tight text-(--color-text-primary) transition-colors group-hover:text-(--color-accent)"
+							class="text-lg font-semibold tracking-tight text-(--color-text-primary) transition-colors group-hover:text-(--color-accent)"
 						>
 							{p.title}
 						</h3>
-						<p class="mt-1.5 text-[13px] leading-relaxed text-(--color-text-secondary)">
-							{p.tagline}
+						<p class="mt-1.5 line-clamp-2 text-[13px] leading-relaxed text-(--color-text-secondary)">
+							{p.description}
 						</p>
 					</div>
 				</a>
@@ -103,19 +104,19 @@
 					use:reveal
 				>
 					<div
-						class="h-44 shrink-0 overflow-hidden border-b border-(--color-border) sm:h-auto sm:w-64 sm:border-r sm:border-b-0 md:w-80 lg:w-96"
+						class="h-44 shrink-0 overflow-hidden border-b border-(--color-border) sm:h-60 sm:w-64 sm:border-r sm:border-b-0 md:h-64 md:w-80 lg:h-72 lg:w-96"
 					>
-						{@render viewport(p.image, p.title, p.host)}
+						{@render viewport(p.image, p.title, p.host, p.imagePosition)}
 					</div>
 
 					<div class="flex flex-1 flex-col p-5 lg:p-7">
 						<div class="mb-3 flex items-start justify-between gap-4">
 							<div>
 								<span class="font-mono text-[10px] tracking-[0.16em] text-(--color-text-muted)">
-									{[p.index, p.year, p.role].filter(Boolean).join(' - ')}
+									{p.index}
 								</span>
 								<h3
-									class="mt-1 text-xl font-medium text-(--color-text-primary) transition-colors group-hover:text-(--color-accent)"
+									class="mt-1 text-xl font-semibold text-(--color-text-primary) transition-colors group-hover:text-(--color-accent)"
 								>
 									{p.title}
 								</h3>

@@ -238,7 +238,7 @@ export function isVideoLink(url: string): boolean {
 
 export const heroMetrics = [
 	{ value: '6', label: 'Live Projects' },
-	{ value: '4', label: 'Years Building' },
+	{ value: '3', label: 'Years Building' },
 	{ value: '20+', label: 'Technologies' }
 ];
 
@@ -304,11 +304,16 @@ export function formatYears(start: string, end: string | null): string {
 	return year(start) === to ? year(start) : `${year(start)} → ${to}`;
 }
 
+/** 2-paragraph summary for the scroll page's about preview. */
+export const aboutSummary = [
+	'A software engineering student and technopreneur driven by discipline and curiosity. I build across development, design, and product, with a focus on blockchain and AI.',
+	'I like building things from the ground up, testing what works and improving through iteration - and outside of tech, I stay active, train, compete, and keep enough range to move between different disciplines.'
+];
+
 export const aboutParagraphs = [
-	'A neuroplastic software engineering student focused on blockchain, systems architecture, and emerging technologies. I build at the intersection of decentralized systems and scalable infrastructure, turning ideas into real, working products.',
-	'I prioritize execution: make it exist first, refine it later. Each project is an opportunity to push boundaries through clean architecture, thoughtful decisions, and continuous improvement.',
-	'Alongside building, I serve as a student leader at the University of Makati, where I contribute to academic and technical activities within the community.',
-	'Outside of code, I stay disciplined through gym training, calisthenics, and running, building both systems and self.'
+	'A software engineering student and technopreneur driven by discipline and curiosity. I build across development, design, and product, with a focus on blockchain and AI.',
+	'I like building things from the ground up, whether it’s a product, a system, or an idea worth exploring. Most of my work comes from figuring things out as I go, testing what works, and improving through iteration.',
+	'Outside of tech, I spend my time between training, competing, creating, and exploring new interests. I value staying active, taking on difficult things, and having enough range to move between different disciplines.'
 ];
 
 export const aboutStats = [
@@ -320,8 +325,8 @@ export const aboutStats = [
 export const specialties = [
 	{
 		index: '01',
-		label: 'Blockchain Development',
-		detail: 'Smart contracts, DApps, and decentralized systems'
+		label: 'Technical Leadership',
+		detail: 'Team direction, code reviews, and strategic decisions'
 	},
 	{
 		index: '02',
@@ -330,18 +335,13 @@ export const specialties = [
 	},
 	{
 		index: '03',
-		label: 'Technical Leadership',
-		detail: 'Team direction, code reviews, and strategic decisions'
-	},
-	{
-		index: '04',
 		label: 'System Design',
 		detail: 'High-level design patterns and technical blueprints'
 	},
 	{
-		index: '05',
+		index: '04',
 		label: 'Project Management',
-		detail: 'Agile workflows, delivery pipelines, and cross-team coordination'
+		detail: 'Agile workflows and team coordination'
 	}
 ];
 
@@ -354,6 +354,8 @@ export interface Project {
 	link: string;
 	/** drop a screenshot in static/projects and point here; omit for a plate */
 	image?: string;
+	/** object-position for the crop; default 'center top' suits browser/desktop shots */
+	imagePosition?: string;
 	year?: string;
 	role?: string;
 	/** shown in the card's window chrome */
@@ -367,18 +369,7 @@ export const projects: Project[] = [
 		tagline: 'Scholarships, applied for and awarded on-chain.',
 		description:
 			'A scholarship application and management platform connecting university students with scholarship providers, streamlining the application and selection process.',
-		tech: [
-			'TypeScript',
-			'Solidity',
-			'Hardhat',
-			'React',
-			'Tailwind CSS',
-			'Express.js',
-			'PostgreSQL',
-			'Vitest',
-			'Docker',
-			'bun'
-		],
+		tech: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'TanStack Router', 'React Query', 'Gemini AI'],
 		link: 'https://iskolar.io',
 		host: 'iskolar.io',
 		image: '/projects/iskolar-preview.webp',
@@ -387,28 +378,29 @@ export const projects: Project[] = [
 	},
 	{
 		index: '02',
-		title: 'Finsharc',
-		tagline: 'A finance copilot that works with no signal.',
+		title: 'inki',
+		tagline: 'A social book tracker.',
 		description:
-			'An intelligent mobile finance copilot that helps understand and act on personal and business finances with clarity and control, built offline first and designed to keep users oriented and in command.',
-		tech: [
-			'TypeScript',
-			'React Native',
-			'Expo',
-			'NativeWind',
-			'Zustand',
-			'Vitest',
-			'ML Kit',
-			'pnpm'
-		],
-		link: 'https://www.finsharc.com',
-		host: 'finsharc.com',
-		image: '/projects/finsharc-preview.webp',
-		year: '2025',
-		role: 'Founder - Mobile lead'
+			'A reading companion where readers log what they are reading and follow what the people around them read.',
+		tech: ['React Native', 'Expo', 'TypeScript', 'Expo Router', 'SQLite'],
+		link: 'https://apps.apple.com/us/app/inki-social-book-tracker/id6776695671',
+		host: 'apps.apple.com',
+		image: '/projects/inki-preview.webp',
+		imagePosition: 'center top'
 	},
 	{
 		index: '03',
+		title: 'Dave Malinao',
+		tagline: 'A home chef’s portfolio of dishes, stories and process.',
+		description:
+			'A culinary portfolio for a home chef and food creator, built around signature dishes, kitchen stories and a philosophy of slow, honest cooking.',
+		tech: ['Svelte', 'SvelteKit', 'TypeScript', 'Tailwind CSS', 'Vite'],
+		link: 'https://davemalinao.netlify.app/',
+		host: 'davemalinao.netlify.app',
+		image: '/projects/dave-malinao-preview.webp'
+	},
+	{
+		index: '04',
 		title: 'USMO',
 		tagline: 'One front door for a student organization.',
 		description:
@@ -417,37 +409,32 @@ export const projects: Project[] = [
 		link: 'https://connect.usmo.org.ph',
 		host: 'connect.usmo.org.ph',
 		image: '/projects/usmo-preview.webp',
+		imagePosition: 'left top',
 		year: '2024',
 		role: 'Web lead'
 	},
 	{
-		index: '04',
-		title: 'inki',
-		tagline: 'A social book tracker for iOS.',
-		description:
-			'A reading companion on the App Store where readers log what they are reading and follow what the people around them read.',
-		tech: ['iOS'],
-		link: 'https://apps.apple.com/us/app/inki-social-book-tracker/id6776695671',
-		host: 'apps.apple.com'
-	},
-	{
 		index: '05',
 		title: 'fundr. studios',
-		tagline: 'Software, designed and shipped.',
+		tagline: 'A software studio site for client work, design to release.',
 		description: 'A software studio taking products from design through to release.',
-		tech: [],
+		tech: ['React', 'TypeScript', 'Tailwind CSS', 'Vite', 'Motion'],
 		link: 'https://fundr.software/',
-		host: 'fundr.software'
+		host: 'fundr.software',
+		image: '/projects/fundr-studios-preview.png'
 	},
 	{
 		index: '06',
-		title: 'Dave Malinao',
-		tagline: 'Crafting memories through food.',
+		title: 'Finsharc',
+		tagline: 'A finance copilot that works with no signal.',
 		description:
-			'A culinary portfolio for a home chef and food creator, built around signature dishes, kitchen stories and a philosophy of slow, honest cooking.',
-		tech: ['SvelteKit', 'Netlify'],
-		link: 'https://davemalinao.netlify.app/',
-		host: 'davemalinao.netlify.app'
+			'An intelligent mobile finance copilot that helps understand and act on personal and business finances with clarity and control, built offline first and designed to keep users oriented and in command.',
+		tech: ['React Native', 'Expo', 'TypeScript', 'NativeWind', 'Zustand', 'Llama'],
+		link: 'https://www.finsharc.com',
+		host: 'finsharc.com',
+		image: '/projects/finsharc-preview.webp',
+		year: '2025',
+		role: 'Founder - Mobile lead'
 	}
 ];
 

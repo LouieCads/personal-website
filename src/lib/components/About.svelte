@@ -22,11 +22,10 @@
 	}
 
 	const specialties = [
-		{ label: 'Blockchain Development', detail: 'Smart contracts, DApps, and decentralized systems', index: '01' },
+		{ label: 'Technical Leadership', detail: 'Team direction, code reviews, and strategic decisions', index: '01' },
 		{ label: 'Systems Architecture', detail: 'Scalable infrastructure and distributed systems', index: '02' },
-		{ label: 'Technical Leadership', detail: 'Team direction, code reviews, and strategic decisions', index: '03' },
-		{ label: 'System Design', detail: 'High-level design patterns and technical blueprints', index: '04' },
-		{ label: 'Project Management', detail: 'Agile workflows, delivery pipelines, and cross-team coordination', index: '05' }
+		{ label: 'System Design', detail: 'High-level design patterns and technical blueprints', index: '03' },
+		{ label: 'Project Management', detail: 'Agile workflows, delivery pipelines, and cross-team coordination', index: '04' }
 	];
 </script>
 
@@ -128,7 +127,6 @@
 							<h3 class="font-mono text-xs font-semibold tracking-wide text-(--color-text-primary) sm:text-sm">
 								{spec.label}
 							</h3>
-							<span class="h-px flex-1 bg-(--color-border) transition-colors group-hover:bg-(--color-border-hover)"></span>
 						</div>
 						<p class="mt-2 pl-8 text-xs leading-relaxed text-(--color-text-muted)">
 							{spec.detail}
