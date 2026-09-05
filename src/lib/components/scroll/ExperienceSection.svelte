@@ -2,13 +2,7 @@
 	import { resolve } from '$app/paths';
 	import PageSection from './PageSection.svelte';
 	import { reveal } from '$lib/actions/reveal';
-	import {
-		experience,
-		formatYears,
-		monthsBetween,
-		startYear,
-		type Role
-	} from '$lib/data/portfolio';
+	import { experience, formatYears, startYear } from '$lib/data/portfolio';
 
 	interface Props {
 		preview?: boolean;
@@ -16,15 +10,6 @@
 	let { preview = false }: Props = $props();
 
 	const shown = $derived(preview ? experience.slice(0, 3) : experience);
-
-	function duration(role: Role) {
-		const m = monthsBetween(role.start, role.end);
-		const y = Math.floor(m / 12);
-		const rest = m % 12;
-		if (y && rest) return `${y}y ${rest}m`;
-		if (y) return `${y}y`;
-		return `${m}m`;
-	}
 </script>
 
 <PageSection
@@ -83,9 +68,6 @@
 							<span class="font-mono text-[10px] tracking-[0.16em] text-(--color-text-muted)">
 								{formatYears(role.start, role.end)}
 							</span>
-							<span class="font-mono text-[10px] text-(--color-text-muted)">
-								({duration(role)}) - {role.location}
-							</span>
 						</div>
 
 						<h3 class="mt-1.5 font-mono text-base font-medium text-(--color-text-primary)">
@@ -121,9 +103,4 @@
 		</div>
 	{/if}
 
-	<p
-		class="mx-auto mt-8 w-full max-w-3xl font-mono text-[10px] tracking-[0.14em] text-(--color-text-muted)"
-	>
-		Placeholder history. Send the real dates and I'll swap them in.
-	</p>
 </PageSection>

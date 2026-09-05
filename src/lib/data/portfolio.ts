@@ -1,6 +1,6 @@
 /**
  * Single source of content for the scrollable page.
- * Experience / podcast / article entries are PLACEHOLDER; swap for real ones.
+ * Podcast / article entries are PLACEHOLDER; swap for real ones.
  */
 
 export interface Role {
@@ -22,87 +22,99 @@ export interface Role {
 export const experience: Role[] = [
 	{
 		id: 'iskolar',
-		role: 'Chief Technology Officer',
+		role: 'Co-founder & Chief Technology Officer',
 		company: 'iSkolar',
-		kind: 'work',
-		start: '2024-06',
-		end: null,
-		location: 'Manila - Remote',
-		summary:
-			'Directs a six-developer team across smart contracts, API and web. Built the on-chain escrow that holds scholarship funds until a provider releases them, and set the review and release process the team still runs on.',
-		achievements: [
-			'Directs a 6-developer team across contracts, API and web',
-			'Shipped on-chain escrow for scholarship disbursement',
-			'Set the review, CI and release process from zero'
-		],
-		tags: ['Solidity', 'Hardhat', 'TypeScript', 'PostgreSQL', 'Docker'],
-		kpis: [
-			{ value: '6', label: 'devs led' },
-			{ value: '3', label: 'products live' },
-			{ value: '2', label: 'chains shipped' }
-		]
-	},
-	{
-		id: 'finsharc',
-		role: 'Founder - Mobile Lead',
-		company: 'Finsharc',
 		kind: 'work',
 		start: '2025-01',
 		end: null,
-		location: 'Manila',
+		location: 'Taguig',
 		summary:
-			'An offline-first finance copilot with on-device receipt scanning. From first commit to testers’ hands in nine weeks, built solo.',
+			'Co-founded iSkolar and lead engineering as CTO. Designed a scalable platform supporting 10+ features that keeps new feature work fast to ship, and reworked client-side routing for a 60% performance jump in navigation.',
 		achievements: [
-			'Offline-first architecture with on-device receipt scanning',
-			'React Native + Expo, in testers’ hands in nine weeks',
-			'Owns product, design and release end to end'
+			'Designed a scalable platform supporting 10+ features, enabling rapid feature integration and growth',
+			'Optimized client-side routing, delivering a 60% performance improvement and faster navigation'
 		],
-		tags: ['React Native', 'Expo', 'Zustand', 'ML Kit', 'NativeWind'],
+		tags: ['React', 'TypeScript', 'Solidity', 'PostgreSQL', 'Docker', 'Microsoft Azure'],
 		kpis: [
-			{ value: '9', label: 'weeks to beta' },
-			{ value: '100%', label: 'offline capable' },
-			{ value: '1', label: 'person team' }
+			{ value: '10+', label: 'features shipped' },
+			{ value: '60%', label: 'perf improvement' }
+		]
+	},
+	{
+		id: 'heron',
+		role: 'AI Lead',
+		company: 'AWS Learning Club - Heron',
+		kind: 'work',
+		start: '2026-01',
+		end: null,
+		location: 'Taguig',
+		summary:
+			'Leads AI initiatives for the club, focused on LLMs, AI engineering and emerging AI technologies, and mentors aspiring AI developers from idea through implementation.',
+		achievements: [
+			'Led AI initiatives for 5 members, focused on LLMs, AI engineering, and emerging AI technologies',
+			'Mentored 5 aspiring AI developers, guiding teams from idea through implementation'
+		],
+		tags: ['LLMs', 'AI Engineering', 'Python'],
+		kpis: [
+			{ value: '5', label: 'members led' },
+			{ value: '5', label: 'developers mentored' }
+		]
+	},
+	{
+		id: 'tutorials-dojo',
+		role: 'Software Engineer Intern',
+		company: 'Tutorials Dojo',
+		kind: 'work',
+		start: '2026-01',
+		end: '2026-04',
+		location: 'Taguig',
+		summary:
+			'Software engineering internship building consumer mobile apps end to end. Co-developed Finsharc, a finance-tracking app, and Inki, a social book-tracking app.',
+		achievements: [
+			'Co-developed Finsharc, a finance-tracking app that reached #1 on the Australian App Store',
+			'Co-developed Inki, a social book-tracking app that reached #1 on the Philippine App Store'
+		],
+		tags: ['React Native', 'Expo', 'TypeScript', 'SQLite'],
+		kpis: [
+			{ value: '#1', label: 'AU App Store' },
+			{ value: '#1', label: 'PH App Store' }
 		]
 	},
 	{
 		id: 'usmo',
-		role: 'Web Lead',
+		role: 'Website Manager',
 		company: 'UMak Student Multimedia Organization',
 		kind: 'work',
-		start: '2024-02',
-		end: '2025-03',
-		location: 'University of Makati',
+		start: '2025-01',
+		end: '2026-02',
+		location: 'Taguig',
 		summary:
-			'Built and launched the organization’s public home at connect.usmo.org.ph, consolidating scattered social links into one entry point.',
+			'Designed the organization’s official landing page and published news across social media to grow digital presence, reach, and engagement.',
 		achievements: [
-			'Built and launched connect.usmo.org.ph',
-			'Consolidated org links, projects and socials into one page'
+			'Designed the official landing page and published news across social media to improve digital presence, reach, and engagement',
+			'Managed and published accurate, relevant website news content aligned with university standards'
 		],
 		tags: ['HTML', 'CSS', 'JavaScript'],
 		kpis: [
 			{ value: '1', label: 'site launched' },
-			{ value: '14', label: 'months' }
+			{ value: '12', label: 'months' }
 		]
 	},
 	{
 		id: 'umak',
-		role: 'BS Computer Science - Student Leader',
+		role: 'BS Computer Science',
 		company: 'University of Makati',
 		kind: 'education',
-		start: '2022-08',
+		start: '2023-06',
 		end: null,
 		location: 'Makati City',
 		summary:
-			'Studying software engineering while leading academic and technical activities inside the student community.',
+			'Studying computer science with coursework in software engineering, project management, database systems, and system design.',
 		achievements: [
-			'Leads academic and technical activities in the student community',
-			'Focus on distributed systems and applied cryptography'
+			'Relevant coursework: Software Engineering, Project Management, Database Systems, System Design'
 		],
-		tags: ['Computer Science', 'Student Leadership'],
-		kpis: [
-			{ value: '2026', label: 'expected' },
-			{ value: '3', label: 'orgs served' }
-		]
+		tags: ['Computer Science', 'Software Engineering'],
+		kpis: [{ value: '2027', label: 'expected' }]
 	}
 ];
 
@@ -369,7 +381,16 @@ export const projects: Project[] = [
 		tagline: 'Scholarships, applied for and awarded on-chain.',
 		description:
 			'A scholarship application and management platform connecting university students with scholarship providers, streamlining the application and selection process.',
-		tech: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'TanStack Router', 'React Query', 'Gemini AI'],
+		tech: [
+			'React',
+			'TypeScript',
+			'Vite',
+			'Tailwind CSS',
+			'TanStack Router',
+			'React Query',
+			'Gemini AI',
+			'Microsoft Azure'
+		],
 		link: 'https://iskolar.io',
 		host: 'iskolar.io',
 		image: '/projects/iskolar-preview.webp',
