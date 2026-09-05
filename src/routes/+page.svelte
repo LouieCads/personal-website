@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Shell from '$lib/components/scroll/Shell.svelte';
+	import SEO from '$lib/components/SEO.svelte';
 	import HeroSection from '$lib/components/scroll/HeroSection.svelte';
 	import AboutSection from '$lib/components/scroll/AboutSection.svelte';
 	import ProjectsSection from '$lib/components/scroll/ProjectsSection.svelte';
@@ -10,13 +11,10 @@
 	let { data } = $props();
 </script>
 
-<svelte:head>
-	<title>Louigie Caminoy - Multidisciplinary Technopreneur</title>
-	<meta
-		name="description"
-		content="CTO, blockchain developer and project manager building decentralized systems and scalable infrastructure."
-	/>
-</svelte:head>
+<SEO
+	title="Louigie Caminoy - Multidisciplinary Technopreneur"
+	description="CTO, blockchain developer and project manager building decentralized systems and scalable infrastructure."
+/>
 
 <!--
   The home page is a preview surface: every section shows at most three items in

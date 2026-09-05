@@ -36,6 +36,9 @@
 </script>
 
 <section id="hero" class="relative overflow-hidden border-b border-(--color-rule)">
+	<!-- The name is drawn on canvas (see BinaryName); this is the real, crawlable
+	     h1 that carries the page's primary heading and entity signal. -->
+	<h1 class="sr-only">Louigie Caminoy — CTO, Blockchain Developer & Project Manager</h1>
 	<div
 		class="relative z-10 mx-auto flex w-full max-w-[1400px] flex-col gap-8 px-5 pt-10 pb-14 sm:px-8 md:px-14 md:pb-16 lg:px-20 xl:px-24"
 	>
