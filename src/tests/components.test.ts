@@ -10,9 +10,8 @@ describe('Hero', () => {
 	it('renders the role subtitle', () => {
 		const navigate = vi.fn();
 		render(Hero, { props: { navigate } });
-		expect(screen.getByText('CTO')).toBeInTheDocument();
-		expect(screen.getByText('BLOCKCHAIN DEVELOPER')).toBeInTheDocument();
-		expect(screen.getByText('PROJECT MANAGER')).toBeInTheDocument();
+		expect(screen.getByText('DEVELOPER')).toBeInTheDocument();
+		expect(screen.getByText('PRODUCT BUILDER')).toBeInTheDocument();
 	});
 
 	it('renders all CTA buttons', () => {

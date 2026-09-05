@@ -60,7 +60,7 @@
 				<span class="corner corner-br"></span>
 			</div>
 
-			<div class="relative h-28 w-full min-w-0 flex-1 sm:h-44 md:h-60 lg:h-72">
+			<div class="relative h-28 w-full min-w-0 sm:h-44 md:h-60 lg:h-72 lg:flex-1">
 				<BinaryName />
 			</div>
 		</div>

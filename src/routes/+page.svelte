@@ -13,7 +13,7 @@
 
 <SEO
 	title="Louigie Caminoy - Multidisciplinary Technopreneur"
-	description="CTO, blockchain developer and project manager building decentralized systems and scalable infrastructure."
+	description="Developer and product builder focused on systems, architecture, and execution."
 />
 
 <!--

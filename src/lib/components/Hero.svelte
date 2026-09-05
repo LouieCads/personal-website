@@ -76,15 +76,9 @@
 	<!-- Bottom anchor row: centered on mobile/tablet; left-aligned on lg+ -->
 	<div class="relative z-10 flex flex-col items-center px-4 pb-6 sm:pb-10 lg:items-start lg:px-16 lg:pb-14 xl:px-24">
 		<p class="mb-4 text-center font-mono text-xs font-light tracking-[0.2em] text-(--color-text-secondary) sm:mb-6 sm:text-sm sm:tracking-[0.3em] md:text-lg lg:text-left lg:text-2xl">
-			<span class="font-medium text-(--color-text-primary)">CTO</span>
-			<span class="hidden sm:inline"> | </span>
-			<span class="sm:hidden"> - </span>
-			<span class="font-medium text-(--color-text-primary) md:hidden">BLOCKCHAIN DEV</span>
-			<span class="hidden font-medium text-(--color-text-primary) md:inline">BLOCKCHAIN DEVELOPER</span>
-			<span class="hidden sm:inline"> | </span>
-			<span class="sm:hidden"> - </span>
-			<span class="font-medium text-(--color-text-primary) md:hidden">PM</span>
-			<span class="hidden font-medium text-(--color-text-primary) md:inline">PROJECT MANAGER</span>
+			<span class="font-medium text-(--color-text-primary)">DEVELOPER</span>
+			<span> | </span>
+			<span class="font-medium text-(--color-text-primary)">PRODUCT BUILDER</span>
 		</p>
 
 		<div class="mt-2 flex items-center justify-center gap-2 sm:gap-3 lg:justify-start">
