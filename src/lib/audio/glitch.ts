@@ -11,10 +11,14 @@
 /** Which sound a burst uses. Each surface gets a deliberately different one. */
 export type GlitchVoice = 'face' | 'nav' | 'card';
 
+// Mono, trimmed to each voice's BURST_S cap plus a short fade. The originals
+// were stereo and ran well past the window we actually play — 582KB total,
+// which on mobile meant the first taps after a reload landed before the
+// samples had decoded. These are 158KB for identical audible content.
 const SAMPLES: Record<GlitchVoice, string> = {
-	face: '/mixkit-glitch-static-1457.wav',
-	nav: '/mixkit-digital-glitch-break-2951.wav',
-	card: '/mixkit-metal-button-push-1830.wav'
+	face: '/audio/glitch-face.wav',
+	nav: '/audio/glitch-nav.wav',
+	card: '/audio/glitch-card.wav'
 };
 
 /** Hard cap on one stab, matched to each voice's visual burst. */
@@ -78,6 +82,26 @@ function ensure(): AudioContext | null {
 }
 
 /**
+ * Unlock the context from inside a user gesture.
+ *
+ * The silent one-frame buffer is the long-standing iOS requirement: Safari
+ * only really starts a context once something has been *played* through it
+ * during the gesture, and resume() alone can settle straight back to
+ * 'suspended'. Harmless everywhere else.
+ */
+function unlock(c: AudioContext) {
+	try {
+		const src = c.createBufferSource();
+		src.buffer = c.createBuffer(1, 1, 22050);
+		src.connect(c.destination);
+		src.start(0);
+	} catch {
+		// A context too dead to take a silent buffer will fail resume() too.
+	}
+	return c.resume();
+}
+
+/**
  * Run `fn` once, as soon as audio is actually permitted to play.
  *
  * Fires immediately if the context is already running. Otherwise it waits for
@@ -112,10 +136,10 @@ export function preloadGlitchSample(voice: GlitchVoice = 'face'): Promise<void> 
 	const c = ensure();
 	if (!c) return Promise.resolve();
 
-	// Low priority: the hero portrait is the LCP element and these are a few
-	// hundred KB of audio nobody can hear for at least a second. Chrome honours
-	// the hint; everyone else ignores it harmlessly.
-	const task = fetch(SAMPLES[voice], { priority: 'low' } as RequestInit)
+	// Default priority now the samples are small. They used to be deprioritised
+	// to protect the portrait's LCP, but that also meant they could still be in
+	// flight seconds after load, which is exactly the delay we're fixing.
+	const task = fetch(SAMPLES[voice])
 		.then((res) => {
 			if (!res.ok) throw new Error(`glitch sample ${voice} ${res.status}`);
 			return res.arrayBuffer();
@@ -136,8 +160,10 @@ export function preloadGlitchSample(voice: GlitchVoice = 'face'): Promise<void> 
 /**
  * Autoplay policy: an AudioContext created outside a user gesture starts
  * 'suspended' and stays silent. Hovering is NOT a gesture, so we resume on the
- * first pointerdown/keydown anywhere on the page. Bursts before that are
- * dropped rather than queued — a delayed stab is worse than no stab.
+ * first pointerdown/keydown anywhere on the page.
+ *
+ * This is the page-wide safety net; `playGlitch` also resumes from inside its
+ * own gesture so the very first tap is not wasted.
  *
  * Returns a teardown function.
  */
@@ -148,7 +174,18 @@ export function armGlitchAudio(): () => void {
 	if (armedOnce) return () => {};
 	armedOnce = true;
 
-	const resume = () => {
+	const detach = () => {
+		window.removeEventListener('pointerdown', resume);
+		window.removeEventListener('keydown', resume);
+		window.removeEventListener('touchstart', resume);
+	};
+
+	// Deliberately NOT `once`. resume() can reject, or settle back into
+	// 'suspended' — iOS does that for an untrusted gesture, and a page restored
+	// from bfcache comes back suspended too. Detaching after one attempt would
+	// leave the site permanently silent, so we keep listening until the context
+	// is genuinely running.
+	function resume() {
 		const c = ensure();
 		// Whatever the visitor touches first, make sure every voice is on the
 		// way in — the next hover shouldn't be the thing that starts the fetch.
@@ -156,20 +193,25 @@ export function armGlitchAudio(): () => void {
 			void preloadGlitchSample(voice);
 		}
 		if (!c) return;
-		if (c.state === 'suspended') void c.resume().then(flushReady);
-		else flushReady();
-	};
+		if (c.state === 'running') {
+			flushReady();
+			detach();
+			return;
+		}
+		void unlock(c)
+			.then(() => {
+				flushReady();
+				if (c.state === 'running') detach();
+			})
+			.catch(() => {});
+	}
 
-	const opts = { once: true, passive: true } as const;
+	const opts = { passive: true } as const;
 	window.addEventListener('pointerdown', resume, opts);
 	window.addEventListener('keydown', resume, opts);
 	window.addEventListener('touchstart', resume, opts);
 
-	return () => {
-		window.removeEventListener('pointerdown', resume);
-		window.removeEventListener('keydown', resume);
-		window.removeEventListener('touchstart', resume);
-	};
+	return detach;
 }
 
 export function setGlitchMuted(next: boolean) {
@@ -182,8 +224,12 @@ export function isGlitchMuted() {
 }
 
 /**
- * Fire one glitch burst. Silent (and cheap) if the context has not been
- * unlocked by a user gesture yet.
+ * Fire one glitch burst.
+ *
+ * If audio is still locked and this call is running inside a user gesture, it
+ * unlocks the context and plays as soon as that resolves — so the very first
+ * tap on a freshly loaded page is heard, not swallowed. Outside a gesture it
+ * stays silent, because the browser would refuse anyway.
  *
  * @param intensity 0-1 scale on the burst; hover uses a softer value than the
  *                  page-load hit.
@@ -192,7 +238,38 @@ export function isGlitchMuted() {
 export function playGlitch(intensity = 1, voice: GlitchVoice = 'face') {
 	const c = ensure();
 	if (!c || !master) return;
-	if (c.state !== 'running') return;
+
+	if (c.state === 'running') {
+		emit(c, intensity, voice);
+		return;
+	}
+	if (c.state !== 'suspended') return;
+
+	// Only worth attempting from inside a gesture. Where the browser exposes
+	// user activation we check it; elsewhere (Safari, older Firefox) the
+	// property is undefined and we try regardless, which is the old behaviour.
+	if (navigator.userActivation?.isActive === false) return;
+
+	// The first tap after a reload IS the gesture that unlocks audio — but the
+	// element's own handler runs before the window-level unlock listener, and
+	// resume() is async either way, so the context is still 'suspended' right
+	// here. Dropping the stab made every first interaction silent. Resume from
+	// inside this gesture instead, and fire the moment the context is live.
+	const askedAt = performance.now();
+	void unlock(c)
+		.then(() => {
+			flushReady();
+			// If unlocking dragged on, the stab would no longer read as a
+			// response to the tap — drop it rather than play a stray noise.
+			if (performance.now() - askedAt > 350) return;
+			emit(c, intensity, voice);
+		})
+		.catch(() => {});
+}
+
+/** Rate-limit, then dispatch to the sample or the synth fallback. */
+function emit(c: AudioContext, intensity: number, voice: GlitchVoice) {
+	if (!master) return;
 
 	const last = lastPlayed.get(voice) ?? -Infinity;
 	if (c.currentTime - last < MIN_GAP_S[voice]) return;
