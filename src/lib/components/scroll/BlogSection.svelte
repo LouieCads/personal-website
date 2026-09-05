@@ -2,6 +2,7 @@
 	import { resolve } from '$app/paths';
 	import PageSection from './PageSection.svelte';
 	import { reveal } from '$lib/actions/reveal';
+	import { hoverSound } from '$lib/actions/hoverSound';
 	import { feed, episodes, articles, linkThumbnail, isVideoLink } from '$lib/data/portfolio';
 
 	/** Only what the markup actually renders, so nothing unused ships. */
@@ -96,6 +97,7 @@
 					rel={item.url ? 'noopener noreferrer' : undefined}
 					class="group flex flex-col border border-(--color-border) bg-(--color-surface-card) transition-colors hover:border-(--color-border-hover) hover:bg-(--color-surface-alt)"
 					use:reveal
+					use:hoverSound
 				>
 					<div class="relative border-b border-(--color-rule)">
 						{@render cover(item.url, item.image, item.title, true)}

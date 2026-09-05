@@ -2,6 +2,7 @@
 	import { resolve } from '$app/paths';
 	import PageSection from './PageSection.svelte';
 	import { reveal } from '$lib/actions/reveal';
+	import { hoverSound } from '$lib/actions/hoverSound';
 	import { projects } from '$lib/data/portfolio';
 
 	interface Props {
@@ -52,6 +53,7 @@
 					rel="noopener noreferrer external"
 					class="group flex flex-col border border-(--color-border) bg-(--color-surface-card) transition-all duration-300 hover:-translate-y-1.5 hover:border-(--color-accent)"
 					use:reveal
+					use:hoverSound
 				>
 					<!-- window chrome -->
 					<div

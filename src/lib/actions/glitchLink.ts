@@ -1,7 +1,5 @@
 import { armGlitchAudio, playGlitch, preloadGlitchSample } from '$lib/audio/glitch';
-
-/** Arm the audio context once per page load, from whichever target mounts first. */
-let armed = false;
+import { isHoverDevice } from './hoverSound';
 
 /**
  * Marks a link or button as a glitch target.
@@ -16,11 +14,8 @@ export function glitchLink(node: HTMLElement, intensity = 0.55) {
 
 	if (typeof window === 'undefined') return;
 
-	if (!armed) {
-		armed = true;
-		armGlitchAudio();
-		void preloadGlitchSample('nav');
-	}
+	armGlitchAudio();
+	void preloadGlitchSample('nav');
 
 	let level = intensity;
 	let tapTimer: ReturnType<typeof setTimeout> | undefined;
@@ -30,7 +25,7 @@ export function glitchLink(node: HTMLElement, intensity = 0.55) {
 	// A mouse *click* never triggers anything — the hover that preceded it
 	// already did. Touch has no hover at all, so a tap stands in for it.
 	const onEnter = () => {
-		if (window.matchMedia('(hover: hover)').matches) stab();
+		if (isHoverDevice()) stab();
 	};
 
 	// Touch and pen only. On a pure touch device the browser also synthesises a

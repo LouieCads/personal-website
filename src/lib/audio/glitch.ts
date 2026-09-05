@@ -8,36 +8,41 @@
  * goes silently missing.
  */
 
-/** Which sound a burst uses. The portrait and the nav are deliberately different. */
-export type GlitchVoice = 'face' | 'nav';
+/** Which sound a burst uses. Each surface gets a deliberately different one. */
+export type GlitchVoice = 'face' | 'nav' | 'card';
 
 const SAMPLES: Record<GlitchVoice, string> = {
 	face: '/mixkit-glitch-static-1457.wav',
-	nav: '/mixkit-digital-glitch-break-2951.wav'
+	nav: '/mixkit-digital-glitch-break-2951.wav',
+	card: '/mixkit-metal-button-push-1830.wav'
 };
 
 /** Hard cap on one stab, matched to each voice's visual burst. */
 const BURST_S: Record<GlitchVoice, number> = {
 	face: 0.9,
-	nav: 0.42
+	nav: 0.42,
+	card: 0.34
 };
 
 /**
  * Minimum gap between two stabs of the same voice. Without this, sweeping the
- * cursor across the four nav links machine-guns four overlapping samples.
+ * cursor across the four nav links (or a row of cards) machine-guns a stack of
+ * overlapping samples.
  */
 const MIN_GAP_S: Record<GlitchVoice, number> = {
 	face: 0.25,
-	nav: 0.11
+	nav: 0.11,
+	card: 0.09
 };
 
 /** Peak output. Single knob for the whole effect — turn this to taste. */
-const MASTER_GAIN = 0.26;
+const MASTER_GAIN = 0.45;
 
 let ctx: AudioContext | null = null;
 let master: GainNode | null = null;
 let noise: AudioBuffer | null = null;
 let muted = false;
+let armedOnce = false;
 
 const buffers = new Map<GlitchVoice, AudioBuffer>();
 const pending = new Map<GlitchVoice, Promise<void>>();
@@ -138,13 +143,18 @@ export function preloadGlitchSample(voice: GlitchVoice = 'face'): Promise<void> 
  */
 export function armGlitchAudio(): () => void {
 	if (typeof window === 'undefined') return () => {};
+	// Idempotent: several components call this, and one set of listeners for
+	// the page is enough. Later callers get a no-op teardown.
+	if (armedOnce) return () => {};
+	armedOnce = true;
 
 	const resume = () => {
 		const c = ensure();
-		// Whatever the visitor touches first, make sure both voices are on the
+		// Whatever the visitor touches first, make sure every voice is on the
 		// way in — the next hover shouldn't be the thing that starts the fetch.
-		void preloadGlitchSample('face');
-		void preloadGlitchSample('nav');
+		for (const voice of Object.keys(SAMPLES) as GlitchVoice[]) {
+			void preloadGlitchSample(voice);
+		}
 		if (!c) return;
 		if (c.state === 'suspended') void c.resume().then(flushReady);
 		else flushReady();
