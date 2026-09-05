@@ -51,6 +51,10 @@
 						class="absolute inset-0 h-full w-full object-cover {faceClass}"
 					/>
 				</div>
+				<span class="corner corner-tl"></span>
+				<span class="corner corner-tr"></span>
+				<span class="corner corner-bl"></span>
+				<span class="corner corner-br"></span>
 			</div>
 
 			<div class="relative h-28 w-full min-w-0 flex-1 sm:h-44 md:h-60 lg:h-72">

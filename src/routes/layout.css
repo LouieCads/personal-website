@@ -64,14 +64,10 @@ body {
 }
 
 html {
-	scroll-behavior: smooth;
+	/* No `scroll-behavior: smooth` here - it fights Lenis, which drives its
+	   own rAF-based interpolation on scrollTop every frame. Stacking the
+	   browser's native smooth-scroll on top of that is what read as lag. */
 	scroll-padding-top: 4rem;
-}
-
-@media (prefers-reduced-motion: reduce) {
-	html {
-		scroll-behavior: auto;
-	}
 }
 
 body {
@@ -154,10 +150,13 @@ body {
 	}
 }
 
-/* Corner brackets, reused from the hero face treatment */
-.bracket::before,
-.bracket::after {
-	content: '';
+/* Corner brackets, reused from the hero face treatment. Real elements, not
+   ::before/::after - a pseudo-element on .bracket only gives 2 corners, and
+   painting them as a background gets hidden behind the photo/canvas that
+   fills the same box (backgrounds always paint under content). Each .corner
+   sits at a -1px offset, just outside the box the photo fills, so it stays
+   visible regardless of paint order. */
+.bracket .corner {
 	position: absolute;
 	width: 8px;
 	height: 8px;
@@ -165,14 +164,28 @@ body {
 	pointer-events: none;
 }
 
-.bracket::before {
+.corner-tl {
 	top: -1px;
 	left: -1px;
 	border-top: 1px solid;
 	border-left: 1px solid;
 }
 
-.bracket::after {
+.corner-tr {
+	top: -1px;
+	right: -1px;
+	border-top: 1px solid;
+	border-right: 1px solid;
+}
+
+.corner-bl {
+	bottom: -1px;
+	left: -1px;
+	border-bottom: 1px solid;
+	border-left: 1px solid;
+}
+
+.corner-br {
 	bottom: -1px;
 	right: -1px;
 	border-bottom: 1px solid;

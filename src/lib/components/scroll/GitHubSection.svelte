@@ -21,66 +21,66 @@
 	cta={username}
 >
 	{#if graph && graph.weeks.length}
-		<div class="overflow-x-auto" use:reveal>
-			<div class="inline-block">
-				<p class="mb-4 font-mono text-[13px] text-(--color-text-primary)">
-					{graph.total.toLocaleString()} contributions in the last year
-				</p>
+		<div class="w-full" use:reveal>
+			<p class="mb-4 font-mono text-[13px] text-(--color-text-primary)">
+				{graph.total.toLocaleString()} contributions in the last year
+			</p>
 
-				<div class="flex gap-2">
-					<!-- weekday labels, offset down to clear the month header row -->
-					<div
-						class="mt-[18px] grid shrink-0 grid-rows-7 gap-1 font-mono text-[9px] text-(--color-text-muted)"
+			<!-- One grid for labels + calendar, so week columns are true 1fr tracks
+			     that stretch to fill the section width, and day-label / month-header
+			     rows and columns stay pixel-locked to the day cells instead of
+			     drifting apart the way three separately-sized grids would. -->
+			<div
+				class="grid gap-1"
+				style="grid-template-columns: max-content repeat({graph.weeks.length}, minmax(0, 1fr)); grid-template-rows: auto repeat(7, minmax(0, 1fr));"
+				role="img"
+				aria-label="{graph.total} GitHub contributions in the last year"
+			>
+				<span style="grid-row: 1; grid-column: 1"></span>
+
+				<!-- month labels, row 1, auto-placed across the week columns. min-w-0 +
+				     overflow-hidden: a grid item's text otherwise imposes its own
+				     min-content width on the fr tracks it spans, which is what forced
+				     the whole calendar wider than its container on narrow screens. -->
+				{#each graph.months as month, i (i)}
+					<span
+						class="min-w-0 overflow-hidden font-mono text-[10px] text-(--color-text-muted)"
+						style="grid-row: 1; grid-column: span {month.span}">{month.label}</span
 					>
-						{#each DAY_LABELS as label, i (i)}
-							<span class="flex h-3 items-center">{label}</span>
-						{/each}
-					</div>
+				{/each}
 
-					<div>
-						<!-- month labels, sharing the day grid's own column template below
-						     so a label can never drift off from the columns it names -->
-						<div
-							class="mb-1 grid gap-1 font-mono text-[10px] text-(--color-text-muted)"
-							style="grid-template-columns: repeat({graph.weeks.length}, 12px);"
-						>
-							{#each graph.months as month, i (i)}
-								<span style="grid-column: span {month.span}">{month.label}</span>
-							{/each}
-						</div>
+				<!-- weekday labels, column 1 -->
+				{#each DAY_LABELS as label, r (r)}
+					<span
+						class="flex items-center font-mono text-[9px] text-(--color-text-muted)"
+						style="grid-row: {r + 2}; grid-column: 1">{label}</span
+					>
+				{/each}
 
-						<!-- contribution grid, oldest week first -->
-						<div
-							class="grid grid-rows-7 gap-1"
-							style="grid-template-columns: repeat({graph.weeks.length}, 12px); grid-auto-flow: column;"
-							role="img"
-							aria-label="{graph.total} GitHub contributions in the last year"
-						>
-							{#each graph.weeks as week, wi (wi)}
-								{#each week.days as day, di (di)}
-									{#if day}
-										<span
-											class="h-3 w-3 rounded-[2px] border border-(--color-border) contrib-level-{day.level}"
-											title="{day.count} contribution{day.count === 1 ? '' : 's'} on {day.date}"
-										></span>
-									{:else}
-										<span class="h-3 w-3"></span>
-									{/if}
-								{/each}
-							{/each}
-						</div>
-					</div>
-				</div>
-
-				<!-- legend -->
-				<div class="mt-3 flex items-center justify-end gap-1.5 pr-0.5">
-					<span class="font-mono text-[10px] text-(--color-text-muted)">Less</span>
-					{#each [0, 1, 2, 3, 4] as level (level)}
-						<span class="h-3 w-3 rounded-[2px] border border-(--color-border) contrib-level-{level}"
-						></span>
+				<!-- contribution cells, oldest week first -->
+				{#each graph.weeks as week, wi (wi)}
+					{#each week.days as day, di (di)}
+						{#if day}
+							<span
+								class="aspect-square w-full min-w-0 rounded-[2px] border border-(--color-border) contrib-level-{day.level}"
+								style="grid-row: {di + 2}; grid-column: {wi + 2}"
+								title="{day.count} contribution{day.count === 1 ? '' : 's'} on {day.date}"
+							></span>
+						{:else}
+							<span style="grid-row: {di + 2}; grid-column: {wi + 2}"></span>
+						{/if}
 					{/each}
-					<span class="font-mono text-[10px] text-(--color-text-muted)">More</span>
-				</div>
+				{/each}
+			</div>
+
+			<!-- legend -->
+			<div class="mt-3 flex items-center justify-end gap-1.5 pr-0.5">
+				<span class="font-mono text-[10px] text-(--color-text-muted)">Less</span>
+				{#each [0, 1, 2, 3, 4] as level (level)}
+					<span class="h-3 w-3 shrink-0 rounded-[2px] border border-(--color-border) contrib-level-{level}"
+					></span>
+				{/each}
+				<span class="font-mono text-[10px] text-(--color-text-muted)">More</span>
 			</div>
 		</div>
 	{:else}

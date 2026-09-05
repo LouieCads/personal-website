@@ -38,6 +38,15 @@
 			}
 		}
 
+		// Cache theme color, update only when the theme actually toggles instead
+		// of calling getComputedStyle every frame — that forces a full style
+		// recalc at 60fps and was the main source of scroll jank.
+		let textRgb = document.documentElement.classList.contains('dark') ? '255, 255, 255' : '0, 0, 0';
+		const themeObserver = new MutationObserver(() => {
+			textRgb = document.documentElement.classList.contains('dark') ? '255, 255, 255' : '0, 0, 0';
+		});
+		themeObserver.observe(document.documentElement, { attributeFilter: ['class'] });
+
 		let brightness: Float32Array | null = null;
 
 		const offscreen = document.createElement('canvas');
@@ -86,19 +95,13 @@
 				return;
 			}
 
-			const root = document.documentElement;
-			const style = getComputedStyle(root);
-			const bgColor = style.getPropertyValue('--color-canvas-bg').trim() || '#f5f5f5';
-			const textRgb = style.getPropertyValue('--color-canvas-text').trim() || '0, 0, 0';
-
 			// Square: fit inside container, centered
 			const side = Math.min(w, h);
 			const offsetX = (w - side) / 2;
 			const offsetY = (h - side) / 2;
 
-			// Fill square with theme background color
-			ctx!.fillStyle = bgColor;
-			ctx!.fillRect(offsetX, offsetY, side, side);
+			// No backfill here - stay transparent so the profile photo's cut-out
+			// edges reveal the actual page background instead of a flat patch.
 
 			const cellSize = side / SIZE;
 			const fontSize = Math.max(cellSize * 0.78, 4);
@@ -143,6 +146,7 @@
 		return () => {
 			cancelAnimationFrame(animId);
 			window.removeEventListener('resize', resize);
+			themeObserver.disconnect();
 		};
 	});
 </script>
