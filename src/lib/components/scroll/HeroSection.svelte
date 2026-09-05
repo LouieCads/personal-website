@@ -33,6 +33,56 @@
 	const faceClass = $derived(
 		introPhase === 'idle' ? 'opacity-0' : introPhase === 'animating' ? 'face-intro' : 'opacity-100'
 	);
+
+	// header (bracket/corners) + socials fade-and-rise in once the face starts revealing
+	const revealClass = $derived(introPhase === 'idle' ? 'pre-reveal' : 'post-reveal');
+
+	// metrics count-up: parse the leading integer out of each value (keeping
+	// any prefix/suffix, e.g. the "20+" technologies count or a comma-formatted
+	// GitHub contributions total) and tween it from 0 on reveal.
+	const reduceMotion =
+		typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+	function parseMetric(value: string) {
+		const m = value.match(/^(\D*)([\d,]+)(.*)$/);
+		if (!m) return null;
+		const [, prefix, digits, suffix] = m;
+		return { prefix, target: parseInt(digits.replace(/,/g, ''), 10), suffix };
+	}
+
+	let displayMetrics = $state(heroMetrics.map((m) => ({ ...m })));
+	let countUpStarted = false;
+
+	function animateMetrics(targets: { value: string; label: string }[]) {
+		const parsed = targets.map((t) => ({ label: t.label, raw: t.value, parts: parseMetric(t.value) }));
+
+		if (reduceMotion) {
+			displayMetrics = targets.map((t) => ({ ...t }));
+			return;
+		}
+
+		const duration = 1200;
+		const start = performance.now();
+
+		function tick(now: number) {
+			const p = Math.min((now - start) / duration, 1);
+			const eased = 1 - (1 - p) ** 3;
+			displayMetrics = parsed.map(({ label, raw, parts }) => {
+				if (!parts) return { label, value: raw };
+				const current = Math.round(parts.target * eased);
+				return { label, value: `${parts.prefix}${current.toLocaleString()}${parts.suffix}` };
+			});
+			if (p < 1) requestAnimationFrame(tick);
+		}
+		requestAnimationFrame(tick);
+	}
+
+	$effect(() => {
+		if (introPhase === 'idle') return;
+		if (countUpStarted) return;
+		countUpStarted = true;
+		animateMetrics(metrics);
+	});
 </script>
 
 <section id="hero" class="relative overflow-hidden border-b border-(--color-rule)">
@@ -54,10 +104,10 @@
 						class="absolute inset-0 h-full w-full object-cover {faceClass}"
 					/>
 				</div>
-				<span class="corner corner-tl"></span>
-				<span class="corner corner-tr"></span>
-				<span class="corner corner-bl"></span>
-				<span class="corner corner-br"></span>
+				<span class="corner corner-tl {revealClass}"></span>
+				<span class="corner corner-tr {revealClass}"></span>
+				<span class="corner corner-bl {revealClass}"></span>
+				<span class="corner corner-br {revealClass}"></span>
 			</div>
 
 			<div class="relative h-28 w-full min-w-0 sm:h-44 md:h-60 lg:h-72 lg:flex-1">
@@ -67,12 +117,13 @@
 
 		<!-- contact links, in place of the old role line -->
 		<div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 lg:justify-start">
-			{#each socials as s (s.label)}
+			{#each socials as s, i (s.label)}
 				<a
 					href={s.href}
 					target={s.external ? '_blank' : undefined}
 					rel="noopener noreferrer"
-					class="group inline-flex items-baseline gap-1.5 font-mono text-xs text-(--color-accent) underline decoration-(--color-accent)/40 underline-offset-4 transition-colors hover:decoration-(--color-accent) sm:text-sm"
+					style="animation-delay: {i * 90}ms"
+					class="group social-link inline-flex items-baseline gap-1.5 font-mono text-xs text-(--color-accent) underline decoration-(--color-accent)/40 underline-offset-4 transition-colors hover:decoration-(--color-accent) sm:text-sm {revealClass}"
 				>
 					{s.display}
 					<span
@@ -91,7 +142,7 @@
 				? 'sm:grid-cols-4'
 				: 'sm:grid-cols-3'}"
 		>
-			{#each metrics as m (m.label)}
+			{#each displayMetrics as m (m.label)}
 				<div class="metric-cell min-w-0 border-(--color-rule) p-3 sm:p-4">
 					<p
 						class="font-mono text-base font-semibold text-(--color-text-primary) tabular-nums sm:text-lg"
@@ -123,6 +174,65 @@
 	}
 	@media (prefers-reduced-motion: reduce) {
 		.face-intro {
+			animation: none;
+		}
+	}
+
+	/* Bracket corners: pop in staggered, after the face starts revealing. */
+	@keyframes cornerIn {
+		from {
+			opacity: 0;
+			transform: scale(0.5);
+		}
+		to {
+			opacity: 1;
+			transform: scale(1);
+		}
+	}
+	.corner.pre-reveal {
+		opacity: 0;
+	}
+	.corner.post-reveal {
+		animation: cornerIn 0.45s ease-out forwards;
+	}
+	.corner-tl.post-reveal {
+		animation-delay: 0.05s;
+	}
+	.corner-tr.post-reveal {
+		animation-delay: 0.15s;
+	}
+	.corner-bl.post-reveal {
+		animation-delay: 0.25s;
+	}
+	.corner-br.post-reveal {
+		animation-delay: 0.35s;
+	}
+
+	/* Social links: fade + rise, staggered left-to-right via inline animation-delay. */
+	@keyframes socialIn {
+		from {
+			opacity: 0;
+			transform: translateY(8px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+	.social-link.pre-reveal {
+		opacity: 0;
+	}
+	.social-link.post-reveal {
+		animation: socialIn 0.5s ease-out forwards;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.corner.pre-reveal,
+		.social-link.pre-reveal {
+			opacity: 1;
+		}
+		.corner.post-reveal,
+		.social-link.post-reveal {
 			animation: none;
 		}
 	}
