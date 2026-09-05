@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import BinaryName from './BinaryName.svelte';
 	import BinaryBackground from './BinaryBackground.svelte';
-	import BinaryFace from './BinaryFace.svelte';
+	import GlitchFace from './GlitchFace.svelte';
 
 	interface Props {
 		navigate: (view: string) => void;
@@ -20,16 +20,6 @@
 		return () => { clearTimeout(t1); clearTimeout(t2); };
 	});
 </script>
-
-<style>
-	@keyframes faceIntro {
-		from { clip-path: inset(100% 0 0 0); }
-		to   { clip-path: inset(0 0 0 0); }
-	}
-	.face-intro {
-		animation: faceIntro 1.2s ease-out forwards;
-	}
-</style>
 
 <div class="view-enter scanlines relative grid h-full grid-rows-[auto_1fr_auto] overflow-hidden">
 	<!-- Full-cover binary background -->
@@ -53,16 +43,8 @@
 				<span class="absolute -top-1 -right-1 h-3 w-3 border-t border-r border-(--color-border-hover)"></span>
 				<span class="absolute -bottom-1 -left-1 h-3 w-3 border-b border-l border-(--color-border-hover)"></span>
 				<span class="absolute -bottom-1 -right-1 h-3 w-3 border-b border-r border-(--color-border-hover)"></span>
-				<div class="group/face aspect-square w-full overflow-hidden lg:h-full lg:aspect-auto">
-					<BinaryFace />
-					<img
-						src="/profile.png"
-						alt="Louigie Caminoy"
-						class="absolute inset-0 h-full w-full object-cover
-							{introPhase === 'idle' ? 'opacity-0' : ''}
-							{introPhase === 'animating' ? 'face-intro' : ''}
-							{introPhase === 'done' ? 'opacity-100' : ''}"
-					/>
+				<div class="group/face aspect-square w-full lg:h-full lg:aspect-auto">
+					<GlitchFace phase={introPhase} />
 				</div>
 			</div>
 		</div>

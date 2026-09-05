@@ -192,6 +192,227 @@ body {
 	border-right: 1px solid;
 }
 
+/* ---------------------------------------------------------------------------
+   Nav text glitch. Same vocabulary as the hero portrait — offset colour echoes,
+   displaced slices, hard steps() frames — scaled down to a 420ms hover burst
+   and matched to the 'nav' audio voice in $lib/audio/glitch.
+
+   Global rather than component-scoped so the burst can be driven by the parent
+   link's :hover / :focus-visible. Markup comes from GlitchText.svelte.
+   --------------------------------------------------------------------------- */
+
+.glitch-text {
+	position: relative;
+	display: inline-block;
+	white-space: nowrap;
+}
+
+.gt-core {
+	position: relative;
+	z-index: 2;
+}
+
+.gt-layer {
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	opacity: 0;
+	pointer-events: none;
+}
+
+/* Children carry their own Tailwind text colours (the nav's dim `01` counter),
+   so the echoes have to override them. These rules are unlayered and Tailwind's
+   utilities live in a cascade layer, so no !important is needed. */
+.gt-layer,
+.gt-layer * {
+	color: var(--gt-tint);
+}
+
+.gt-a {
+	--gt-tint: var(--color-accent);
+}
+
+.gt-b {
+	--gt-tint: var(--color-text-primary);
+}
+
+.gt-slice {
+	--gt-tint: var(--color-accent);
+}
+
+/* Top and bottom halves, torn apart in opposite directions. */
+.gt-s1 {
+	clip-path: inset(0 0 52% 0);
+}
+
+.gt-s2 {
+	clip-path: inset(55% 0 0 0);
+}
+
+@keyframes gtEchoA {
+	0% {
+		opacity: 0.9;
+		transform: translate3d(-0.16em, 0.02em, 0);
+	}
+	18% {
+		opacity: 0.45;
+		transform: translate3d(0.12em, -0.03em, 0);
+	}
+	36% {
+		opacity: 0.75;
+		transform: translate3d(-0.05em, 0.01em, 0);
+	}
+	52%,
+	78%,
+	100% {
+		opacity: 0;
+		transform: translate3d(0, 0, 0);
+	}
+	62% {
+		opacity: 0.6;
+		transform: translate3d(0.09em, 0, 0);
+	}
+}
+
+@keyframes gtEchoB {
+	0% {
+		opacity: 0.55;
+		transform: translate3d(0.13em, -0.02em, 0);
+	}
+	20% {
+		opacity: 0.3;
+		transform: translate3d(-0.1em, 0.03em, 0);
+	}
+	38% {
+		opacity: 0.5;
+		transform: translate3d(0.04em, 0, 0);
+	}
+	54%,
+	80%,
+	100% {
+		opacity: 0;
+		transform: translate3d(0, 0, 0);
+	}
+	64% {
+		opacity: 0.35;
+		transform: translate3d(-0.07em, 0, 0);
+	}
+}
+
+@keyframes gtSliceUp {
+	0% {
+		opacity: 1;
+		transform: translate3d(-0.22em, -0.04em, 0);
+	}
+	16% {
+		opacity: 1;
+		transform: translate3d(0.16em, 0, 0);
+	}
+	34% {
+		opacity: 1;
+		transform: translate3d(-0.07em, -0.02em, 0);
+	}
+	48%,
+	76%,
+	100% {
+		opacity: 0;
+		transform: translate3d(0, 0, 0);
+	}
+	60% {
+		opacity: 1;
+		transform: translate3d(0.11em, 0, 0);
+	}
+}
+
+@keyframes gtSliceDown {
+	0% {
+		opacity: 1;
+		transform: translate3d(0.2em, 0.04em, 0);
+	}
+	18% {
+		opacity: 1;
+		transform: translate3d(-0.15em, 0, 0);
+	}
+	36% {
+		opacity: 1;
+		transform: translate3d(0.06em, 0.02em, 0);
+	}
+	50%,
+	76%,
+	100% {
+		opacity: 0;
+		transform: translate3d(0, 0, 0);
+	}
+	62% {
+		opacity: 1;
+		transform: translate3d(-0.1em, 0, 0);
+	}
+}
+
+@keyframes gtCoreKick {
+	0% {
+		transform: translate3d(-0.04em, 0, 0);
+	}
+	16% {
+		transform: translate3d(0.03em, -0.01em, 0);
+	}
+	34% {
+		transform: translate3d(-0.015em, 0.01em, 0);
+	}
+	48%,
+	100% {
+		transform: translate3d(0, 0, 0);
+	}
+	60% {
+		transform: translate3d(0.02em, 0, 0);
+	}
+}
+
+/* One-shot on each hover/focus. Re-entering restarts it, because the selector
+   stops matching in between — no JS reflow trick needed there. `.is-tapped` is
+   the touch path: no hover exists on those devices, so the glitchLink action
+   adds the class for one burst instead. */
+.glitch-link:hover .gt-a,
+.glitch-link:focus-visible .gt-a,
+.glitch-link.is-tapped .gt-a {
+	animation: gtEchoA 0.42s steps(1, end) 1;
+}
+
+.glitch-link:hover .gt-b,
+.glitch-link:focus-visible .gt-b,
+.glitch-link.is-tapped .gt-b {
+	animation: gtEchoB 0.42s steps(1, end) 1;
+}
+
+.glitch-link:hover .gt-s1,
+.glitch-link:focus-visible .gt-s1,
+.glitch-link.is-tapped .gt-s1 {
+	animation: gtSliceUp 0.42s steps(1, end) 1;
+}
+
+.glitch-link:hover .gt-s2,
+.glitch-link:focus-visible .gt-s2,
+.glitch-link.is-tapped .gt-s2 {
+	animation: gtSliceDown 0.42s steps(1, end) 1;
+}
+
+.glitch-link:hover .gt-core,
+.glitch-link:focus-visible .gt-core,
+.glitch-link.is-tapped .gt-core {
+	animation: gtCoreKick 0.42s steps(1, end) 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.glitch-link:hover .gt-layer,
+	.glitch-link:focus-visible .gt-layer,
+	.glitch-link.is-tapped .gt-layer,
+	.glitch-link:hover .gt-core,
+	.glitch-link:focus-visible .gt-core,
+	.glitch-link.is-tapped .gt-core {
+		animation: none;
+	}
+}
+
 /* Lenis smooth scrolling */
 html.lenis,
 html.lenis body {

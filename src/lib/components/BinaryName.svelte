@@ -158,9 +158,8 @@
 	interface CellState {
 		value: string;
 		nextChange: number;
+		/** this cell's steady-state flicker period; the intro scales it down */
 		interval: number;
-		/** decode-lock-in intro: false while this cell still scrambles every frame */
-		revealed: boolean;
 	}
 
 	const line1Cells = new SvelteMap<string, CellState>();
@@ -168,16 +167,22 @@
 
 	function makeCell(): CellState {
 		const interval = 800 + Math.random() * 1800;
-		return { value: randomBin(), nextChange: Math.random() * interval, interval, revealed: false };
+		// Start almost immediately. The per-cell interval desyncs them within a
+		// frame or two, so there is no visible lock-step on the first tick.
+		return { value: randomBin(), nextChange: Math.random() * 60, interval };
 	}
 
-	// Decode lock-in intro: columns sweep left-to-right, each snapping from a
-	// fast scramble into the normal slow flicker once the sweep passes it.
-	// Slow + high-contrast so it actually reads instead of blending into the
-	// steady-state flicker: unresolved columns sit dim, locked columns pop to
-	// full brightness, and a bright scan bar marks the sweep's leading edge.
-	const SWEEP_MS = 2200;
-	const UNRESOLVED_OPACITY = 0.16;
+	/*
+	 * Intro: the steady-state flicker, run fast and eased back to normal speed.
+	 *
+	 * There is no separate reveal state — every cell is at its usual brightness
+	 * from the first frame, and the *only* thing that changes is the tick rate.
+	 * That's what makes it read as the same animation settling down rather than
+	 * as a different effect handing over to it.
+	 */
+	const SETTLE_MS = 2200;
+	/** Interval multiplier at t=0: turns an ~1.7s flicker into ~70ms. */
+	const FAST_SCALE = 0.04;
 
 	for (const lp of layout1.positions) {
 		for (let localCol = 0; localCol < lp.width; localCol++) {
@@ -201,10 +206,10 @@
 		}
 	}
 
-	function tickCell(cell: CellState, time: number) {
+	function tickCell(cell: CellState, time: number, scale: number) {
 		if (time >= cell.nextChange) {
 			cell.value = randomBin();
-			cell.nextChange = time + cell.interval;
+			cell.nextChange = time + cell.interval * scale;
 		}
 	}
 
@@ -229,6 +234,42 @@
 			ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
 		}
 
+		/** One line of the name. `tickScale` shortens every cell's flicker period. */
+		function drawLine(
+			time: number,
+			layout: { positions: LetterPos[]; totalCols: number },
+			cells: SvelteMap<string, CellState>,
+			offX: number,
+			startY: number,
+			cellW: number,
+			cellH: number,
+			base: number,
+			swing: number,
+			textRgb: string,
+			tickScale: number
+		) {
+			for (const lp of layout.positions) {
+				const bitmap = FONT[lp.letter];
+				for (let localCol = 0; localCol < lp.width; localCol++) {
+					const globalCol = lp.startCol + localCol;
+					const x = offX + globalCol * cellW + cellW / 2;
+
+					for (let r = 0; r < ROWS; r++) {
+						if (!bitmap[r][localCol]) continue;
+						const y = startY + r * cellH + cellH / 2;
+						const cell = cells.get(`${globalCol}-${r}`);
+						if (!cell) continue;
+
+						tickCell(cell, time, tickScale);
+
+						const pulse = base + swing * Math.sin(time * 0.004 + globalCol * 0.4 + r * 0.7);
+						ctx!.fillStyle = `rgba(${textRgb}, ${pulse})`;
+						ctx!.fillText(cell.value, x, y);
+					}
+				}
+			}
+		}
+
 		function draw(time: number) {
 			if (introStart === 0) introStart = time;
 
@@ -236,16 +277,11 @@
 
 			const isDark = document.documentElement.classList.contains('dark');
 			const textRgb = isDark ? '255, 255, 255' : '0, 0, 0';
-			const accentRgb = isDark ? '59, 130, 246' : '37, 99, 235';
 			// Light mode needs higher base opacity so black reads strongly on a light bg
 			const line1Base = isDark ? 0.82 : 0.95;
 			const line1Swing = isDark ? 0.12 : 0.05;
 			const line2Base = isDark ? 0.72 : 0.78;
 			const line2Swing = isDark ? 0.1 : 0.06;
-
-			// How far the decode sweep has travelled, 0-1, shared by both lines'
-			// bar so it reads as one continuous pass across the whole name.
-			const sweepFrac = reducedMotion ? 1 : Math.min((time - introStart) / SWEEP_MS, 1);
 
 			// Size cells to fit BOTH axes. Width alone used to win, so a short
 			// container clipped the two-line block instead of scaling it down.
@@ -273,83 +309,38 @@
 			ctx!.textAlign = 'center';
 			ctx!.textBaseline = 'middle';
 
-			// Draw line 1 (LOUIGIE)
-			for (const lp of layout1.positions) {
-				const bitmap = FONT[lp.letter];
-				for (let localCol = 0; localCol < lp.width; localCol++) {
-					const globalCol = lp.startCol + localCol;
-					const x = line1OffX + globalCol * cellW + cellW / 2;
-					for (let r = 0; r < ROWS; r++) {
-						if (!bitmap[r][localCol]) continue;
-						const y = line1StartY + r * cellH + cellH / 2;
-						const cell = line1Cells.get(`${globalCol}-${r}`);
-						if (!cell) continue;
-						const revealAt = introStart + (globalCol / layout1.totalCols) * SWEEP_MS;
-						const locked = reducedMotion || time >= revealAt;
-						if (!locked) {
-							cell.value = randomBin();
-						} else {
-							if (!cell.revealed) {
-								cell.revealed = true;
-								cell.nextChange = time + cell.interval;
-							}
-							tickCell(cell, time);
-						}
-						const pulse =
-							line1Base + line1Swing * Math.sin(time * 0.004 + globalCol * 0.4 + r * 0.7);
-						ctx!.fillStyle = locked
-							? `rgba(${textRgb}, ${pulse})`
-							: `rgba(${textRgb}, ${UNRESOLVED_OPACITY})`;
-						ctx!.fillText(cell.value, x, y);
-					}
-				}
-			}
+			// Intro: the flicker starts ~25x its normal rate and eases back to 1.
+			// Cubic, so it holds the fast scramble and then slows off sharply
+			// rather than drifting down for the whole two seconds.
+			const settle = reducedMotion ? 1 : Math.min((time - introStart) / SETTLE_MS, 1);
+			const tickScale = FAST_SCALE + (1 - FAST_SCALE) * settle ** 3;
 
-			// Sweep bar for line 1 — a bright band riding the reveal frontier
-			if (sweepFrac < 1) {
-				const barX = line1OffX + sweepFrac * layout1.totalCols * cellW;
-				ctx!.fillStyle = `rgba(${accentRgb}, 0.55)`;
-				ctx!.fillRect(barX - cellW * 0.4, line1StartY, cellW * 0.8, ROWS * cellH);
-			}
-
-			// Draw line 2 (CAMINOY) — indented
-			for (const lp of layout2.positions) {
-				const bitmap = FONT[lp.letter];
-				for (let localCol = 0; localCol < lp.width; localCol++) {
-					const globalCol = lp.startCol + localCol;
-					const x = line2OffX + globalCol * cellW + cellW / 2;
-					for (let r = 0; r < ROWS; r++) {
-						if (!bitmap[r][localCol]) continue;
-						const y = line2StartY + r * cellH + cellH / 2;
-						const cell = line2Cells.get(`${globalCol}-${r}`);
-						if (!cell) continue;
-						const revealAt = introStart + (globalCol / layout2.totalCols) * SWEEP_MS;
-						const locked = reducedMotion || time >= revealAt;
-						if (!locked) {
-							cell.value = randomBin();
-						} else {
-							if (!cell.revealed) {
-								cell.revealed = true;
-								cell.nextChange = time + cell.interval;
-							}
-							tickCell(cell, time);
-						}
-						const pulse =
-							line2Base + line2Swing * Math.sin(time * 0.004 + globalCol * 0.4 + r * 0.7);
-						ctx!.fillStyle = locked
-							? `rgba(${textRgb}, ${pulse})`
-							: `rgba(${textRgb}, ${UNRESOLVED_OPACITY})`;
-						ctx!.fillText(cell.value, x, y);
-					}
-				}
-			}
-
-			// Sweep bar for line 2
-			if (sweepFrac < 1) {
-				const barX = line2OffX + sweepFrac * layout2.totalCols * cellW;
-				ctx!.fillStyle = `rgba(${accentRgb}, 0.55)`;
-				ctx!.fillRect(barX - cellW * 0.4, line2StartY, cellW * 0.8, ROWS * cellH);
-			}
+			drawLine(
+				time,
+				layout1,
+				line1Cells,
+				line1OffX,
+				line1StartY,
+				cellW,
+				cellH,
+				line1Base,
+				line1Swing,
+				textRgb,
+				tickScale
+			);
+			drawLine(
+				time,
+				layout2,
+				line2Cells,
+				line2OffX,
+				line2StartY,
+				cellW,
+				cellH,
+				line2Base,
+				line2Swing,
+				textRgb,
+				tickScale
+			);
 
 			animId = requestAnimationFrame(draw);
 		}

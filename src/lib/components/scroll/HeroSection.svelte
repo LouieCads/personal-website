@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import BinaryName from '../BinaryName.svelte';
-	import BinaryFace from '../BinaryFace.svelte';
+	import GlitchFace from '../GlitchFace.svelte';
 	import { heroMetrics, socials } from '$lib/data/portfolio';
 
 	interface Props {
@@ -29,10 +29,6 @@
 			clearTimeout(t2);
 		};
 	});
-
-	const faceClass = $derived(
-		introPhase === 'idle' ? 'opacity-0' : introPhase === 'animating' ? 'face-intro' : 'opacity-100'
-	);
 
 	// header (bracket/corners) + socials fade-and-rise in once the face starts revealing
 	const revealClass = $derived(introPhase === 'idle' ? 'pre-reveal' : 'post-reveal');
@@ -95,14 +91,8 @@
 		<!-- face + name -->
 		<div class="flex flex-col items-center gap-6 lg:flex-row lg:items-center lg:gap-10">
 			<div class="bracket relative w-36 shrink-0 sm:w-48 md:w-56 lg:w-64">
-				<div class="relative aspect-square w-full overflow-hidden">
-					<BinaryFace />
-					<img
-						src="/profile.png"
-						alt="Louigie Caminoy"
-						decoding="async"
-						class="absolute inset-0 h-full w-full object-cover {faceClass}"
-					/>
+				<div class="relative aspect-square w-full">
+					<GlitchFace phase={introPhase} />
 				</div>
 				<span class="corner corner-tl {revealClass}"></span>
 				<span class="corner corner-tr {revealClass}"></span>
@@ -161,23 +151,6 @@
 </section>
 
 <style>
-	@keyframes faceIntro {
-		from {
-			clip-path: inset(100% 0 0 0);
-		}
-		to {
-			clip-path: inset(0 0 0 0);
-		}
-	}
-	.face-intro {
-		animation: faceIntro 1.2s ease-out forwards;
-	}
-	@media (prefers-reduced-motion: reduce) {
-		.face-intro {
-			animation: none;
-		}
-	}
-
 	/* Bracket corners: pop in staggered, after the face starts revealing. */
 	@keyframes cornerIn {
 		from {

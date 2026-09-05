@@ -1,5 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import GlitchText from '$lib/components/GlitchText.svelte';
+	import { glitchLink } from '$lib/actions/glitchLink';
 
 	interface Props {
 		id?: string;
@@ -48,9 +50,11 @@
 				<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- resolved by the caller -->
 				<a
 					{href}
+					use:glitchLink
 					class="group inline-flex shrink-0 items-center gap-2 font-mono text-[9px] tracking-[0.14em] text-(--color-text-secondary) transition-colors hover:text-(--color-accent) sm:text-[11px] sm:tracking-[0.18em]"
 				>
-					{cta}
+					<!-- Only the label glitches; the arrow keeps its own slide. -->
+					<GlitchText>{cta}</GlitchText>
 					<span class="transition-transform group-hover:translate-x-1">→</span>
 				</a>
 			{:else if meta}

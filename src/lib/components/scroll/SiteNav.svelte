@@ -2,6 +2,8 @@
 	import { resolve } from '$app/paths';
 	import { scrollToTop } from '$lib/scroll';
 	import type { SectionId } from '$lib/data/portfolio';
+	import GlitchText from '$lib/components/GlitchText.svelte';
+	import { glitchLink } from '$lib/actions/glitchLink';
 
 	interface Props {
 		active: SectionId | '';
@@ -36,9 +38,10 @@
 		<a
 			href={homeHref}
 			onclick={goHome}
+			use:glitchLink
 			class="shrink-0 font-mono text-[10px] tracking-widest whitespace-nowrap text-(--color-text-secondary) transition-colors hover:text-(--color-text-primary) sm:text-[11px]"
 		>
-			Louigie Caminoy
+			<GlitchText>Louigie Caminoy</GlitchText>
 		</a>
 
 		<div class="ml-auto flex min-w-0 items-center gap-2.5 overflow-x-auto sm:gap-5">
@@ -46,13 +49,16 @@
 				<a
 					href={item.href}
 					aria-current={active === item.id ? 'page' : undefined}
+					use:glitchLink
 					class="relative shrink-0 py-1 font-mono text-[11px] tracking-[0.14em] transition-colors {active ===
 					item.id
 						? 'text-(--color-text-primary)'
 						: 'text-(--color-text-secondary) hover:text-(--color-text-primary)'}"
 				>
-					<span class="text-(--color-text-muted)">{item.number}</span>
-					<span class="ml-1 hidden sm:inline">{item.label}</span>
+					<GlitchText>
+						<span class="text-(--color-text-muted)">{item.number}</span>
+						<span class="ml-1 hidden sm:inline">{item.label}</span>
+					</GlitchText>
 					<span
 						class="absolute -bottom-[13px] left-0 h-[2px] bg-(--color-accent) transition-all duration-300 {active ===
 						item.id

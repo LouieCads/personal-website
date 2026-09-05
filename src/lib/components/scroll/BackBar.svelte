@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import GlitchText from '$lib/components/GlitchText.svelte';
+	import { glitchLink } from '$lib/actions/glitchLink';
 
 	interface Props {
 		/** which home section this page expands */
@@ -17,10 +19,12 @@
 	>
 		<a
 			href="{homeHref}#{anchor}"
+			use:glitchLink
 			class="group inline-flex items-center gap-2.5 font-mono text-[11px] tracking-[0.16em] text-(--color-text-secondary) transition-colors hover:text-(--color-text-primary)"
 		>
+			<!-- Only the label glitches; the arrow keeps its own slide. -->
 			<span class="inline-block transition-transform group-hover:-translate-x-1">&larr;</span>
-			<span>{title}</span>
+			<GlitchText>{title}</GlitchText>
 		</a>
 	</div>
 </div>
