@@ -4,6 +4,21 @@
 	import BinaryFace from '../BinaryFace.svelte';
 	import { heroMetrics, socials } from '$lib/data/portfolio';
 
+	interface Props {
+		/** total GitHub contributions this year, resolved server-side; omitted if the fetch failed */
+		githubContributions?: number;
+	}
+	let { githubContributions }: Props = $props();
+
+	const metrics = $derived(
+		githubContributions == null
+			? heroMetrics
+			: [
+					...heroMetrics,
+					{ value: githubContributions.toLocaleString(), label: 'GitHub Contributions' }
+				]
+	);
+
 	let introPhase = $state<'idle' | 'animating' | 'done'>('idle');
 
 	onMount(() => {
@@ -63,8 +78,12 @@
 		</div>
 
 		<!-- metrics -->
-		<div class="grid grid-cols-3 border border-(--color-border) bg-(--color-surface-alt)/40">
-			{#each heroMetrics as m, i (m.label)}
+		<div
+			class="grid border border-(--color-border) bg-(--color-surface-alt)/40 {metrics.length > 3
+				? 'grid-cols-4'
+				: 'grid-cols-3'}"
+		>
+			{#each metrics as m, i (m.label)}
 				<div class="border-(--color-rule) p-3 sm:p-4 {i > 0 ? 'border-l' : ''}">
 					<p
 						class="font-mono text-base font-semibold text-(--color-text-primary) tabular-nums sm:text-lg"
