@@ -31,7 +31,16 @@
 		articleItems = articles
 	}: Props = $props();
 
-	const latest = $derived(feedItems.slice(0, 3));
+	// top 3 by date, but an ARTICLE always sits in the middle slot when one made the cut
+	const latest = $derived.by(() => {
+		const top = feedItems.slice(0, 3);
+		const articleIdx = top.findIndex((item) => item.kind === 'ARTICLE');
+		if (articleIdx > -1 && articleIdx !== 1) {
+			const [article] = top.splice(articleIdx, 1);
+			top.splice(1, 0, article);
+		}
+		return top;
+	});
 </script>
 
 <!--

@@ -124,7 +124,6 @@ export interface Episode {
 	title: string;
 	blurb: string;
 	date: string;
-	duration: string;
 	/** Paste the episode link here; the card resolves its own preview image. */
 	url: string;
 	/** Filled in on the server when the link advertises a cover. */
@@ -139,8 +138,7 @@ export const episodes: Episode[] = [
 		number: 'EP.03',
 		title: 'Louigie Building With A Reason',
 		blurb: 'Why “make it exist first” beats a perfect plan, and the two places that rule breaks.',
-		date: '2026.08.20',
-		duration: '42 min',
+		date: 'May 26, 2026',
 		url: 'https://www.youtube.com/watch?v=R_7leF_DDng'
 	},
 	{
@@ -148,8 +146,7 @@ export const episodes: Episode[] = [
 		number: 'EP.02',
 		title: 'How We Got Into Tech',
 		blurb: 'The unglamorous review habits that catch more than a paid audit does.',
-		date: '2026.07.30',
-		duration: '38 min',
+		date: 'June 30, 2026',
 		url: 'https://www.youtube.com/watch?v=VkYuxziF-z4'
 	},
 	{
@@ -157,8 +154,7 @@ export const episodes: Episode[] = [
 		number: 'EP.01',
 		title: '"Outside the Bubble" — Building Beyond Your Own Circle',
 		blurb: 'Building systems and self: discipline treated as an engineering practice.',
-		date: '2026.07.02',
-		duration: '31 min',
+		date: 'August 13, 2026',
 		url: 'https://www.youtube.com/watch?v=LbMx4Av1pL8'
 	}
 ];
@@ -178,11 +174,11 @@ export interface Article {
 
 export const articles: Article[] = [
 	{
-		id: 'escrow',
+		id: 'claude',
 		title: 'Claude AI Recovered Lost Bitcoin',
 		blurb:
 			'What actually breaks when you put a disbursement flow on a public ledger, and the three things I would design differently on the next one.',
-		date: '2026.08.14',
+		date: 'June 04, 2026',
 		readTime: '8 min read',
 		tag: 'Blockchain',
 		url: 'https://tutorialsdojo.com/claude-ai-recovered-lost-bitcoin/'
@@ -192,7 +188,7 @@ export const articles: Article[] = [
 	// 	title: 'Offline-first is a product decision',
 	// 	blurb:
 	// 		'Sync is not an infrastructure detail. Deciding what works without a signal decides what the product is.',
-	// 	date: '2026.07.11',
+	// 	date: 'July 11, 2026',
 	// 	readTime: '6 min read',
 	// 	tag: 'Mobile',
 	// 	url: ''
@@ -202,7 +198,7 @@ export const articles: Article[] = [
 	// 	title: 'Running a 6-dev team as a student',
 	// 	blurb:
 	// 		'Scheduling reviews around class, and why written decisions beat standups when nobody shares a timezone.',
-	// 	date: '2026.06.02',
+	// 	date: 'June 02, 2026',
 	// 	readTime: '5 min read',
 	// 	tag: 'Leadership',
 	// 	url: ''
@@ -271,6 +267,12 @@ export const socials = [
 		label: 'Instagram',
 		display: 'Instagram',
 		href: 'https://www.instagram.com/louie.21_/',
+		external: true
+	},
+	{
+		label: 'X',
+		display: 'X',
+		href: 'https://x.com/louigie_21',
 		external: true
 	}
 ];
@@ -480,7 +482,7 @@ export const feed: FeedItem[] = [
 			title: e.title,
 			blurb: e.blurb,
 			date: e.date,
-			meta: `${e.number} - ${e.duration}`,
+			meta: e.number,
 			url: e.url
 		})
 	),

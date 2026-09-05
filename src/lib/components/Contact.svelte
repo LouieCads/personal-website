@@ -95,6 +95,22 @@
 			</a>
 
 			<a
+				href="https://x.com/louigie_21"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="group flex items-center gap-4 border border-(--color-border) bg-(--color-surface-card) p-5 transition-all hover:border-(--color-border-hover)"
+			>
+				<svg class="h-5 w-5 shrink-0 text-(--color-text-muted) transition-colors group-hover:text-(--color-accent)" viewBox="0 0 24 24" fill="currentColor">
+					<path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+				</svg>
+				<div class="flex-1">
+					<span class="mb-1 block font-mono text-[10px] text-(--color-text-muted)">X</span>
+					<span class="text-sm text-(--color-text-primary)">x.com/louigie_21</span>
+				</div>
+				<span class="text-(--color-text-muted) transition-transform group-hover:translate-x-1 group-hover:text-(--color-accent)">&nearr;</span>
+			</a>
+
+			<a
 				href="https://www.facebook.com/louielocktorius21"
 				target="_blank"
 				rel="noopener noreferrer"
