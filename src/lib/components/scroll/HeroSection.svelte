@@ -86,19 +86,20 @@
 
 		<!-- metrics -->
 		<div
-			class="grid border border-(--color-border) bg-(--color-surface-alt)/40 {metrics.length > 3
-				? 'grid-cols-4'
-				: 'grid-cols-3'}"
+			class="metrics-grid grid grid-cols-2 border border-(--color-border) bg-(--color-surface-alt)/40 {metrics.length >
+			3
+				? 'sm:grid-cols-4'
+				: 'sm:grid-cols-3'}"
 		>
-			{#each metrics as m, i (m.label)}
-				<div class="border-(--color-rule) p-3 sm:p-4 {i > 0 ? 'border-l' : ''}">
+			{#each metrics as m (m.label)}
+				<div class="metric-cell min-w-0 border-(--color-rule) p-3 sm:p-4">
 					<p
 						class="font-mono text-base font-semibold text-(--color-text-primary) tabular-nums sm:text-lg"
 					>
 						{m.value}
 					</p>
 					<p
-						class="mt-0.5 font-mono text-[9px] tracking-wider text-(--color-text-muted) sm:text-[10px]"
+						class="mt-0.5 break-words font-mono text-[9px] tracking-wider text-(--color-text-muted) sm:text-[10px]"
 					>
 						{m.label}
 					</p>
@@ -123,6 +124,30 @@
 	@media (prefers-reduced-motion: reduce) {
 		.face-intro {
 			animation: none;
+		}
+	}
+
+	/* Border rule for the metrics grid, matched to its column count per
+	   breakpoint — grid-cols-2 on mobile (2 rows) so long labels like "GitHub
+	   Contributions" get enough width and don't overflow into the next cell;
+	   grid-cols-3/4 from sm up (1 row). A plain "border-left on every cell but
+	   the first" only works for a single row — on 2 columns it put a left
+	   border on the wrapped row's first cell too. */
+	.metric-cell:nth-child(2n) {
+		border-left-width: 1px;
+	}
+	.metric-cell:nth-child(n + 3) {
+		border-top-width: 1px;
+	}
+	@media (min-width: 640px) {
+		.metric-cell:nth-child(2n) {
+			border-left-width: 0;
+		}
+		.metric-cell:nth-child(n + 3) {
+			border-top-width: 0;
+		}
+		.metric-cell:not(:first-child) {
+			border-left-width: 1px;
 		}
 	}
 </style>

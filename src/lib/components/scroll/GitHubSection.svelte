@@ -29,48 +29,55 @@
 			<!-- One grid for labels + calendar, so week columns are true 1fr tracks
 			     that stretch to fill the section width, and day-label / month-header
 			     rows and columns stay pixel-locked to the day cells instead of
-			     drifting apart the way three separately-sized grids would. -->
-			<div
-				class="grid gap-1"
-				style="grid-template-columns: max-content repeat({graph.weeks.length}, minmax(0, 1fr)); grid-template-rows: auto repeat(7, minmax(0, 1fr));"
-				role="img"
-				aria-label="{graph.total} GitHub contributions in the last year"
-			>
-				<span style="grid-row: 1; grid-column: 1"></span>
+			     drifting apart the way three separately-sized grids would.
 
-				<!-- month labels, row 1, auto-placed across the week columns. min-w-0 +
-				     overflow-hidden: a grid item's text otherwise imposes its own
-				     min-content width on the fr tracks it spans, which is what forced
-				     the whole calendar wider than its container on narrow screens. -->
-				{#each graph.months as month, i (i)}
-					<span
-						class="min-w-0 overflow-hidden font-mono text-[10px] text-(--color-text-muted)"
-						style="grid-row: 1; grid-column: span {month.span}">{month.label}</span
-					>
-				{/each}
+			     minmax(0, 1fr) let the columns shrink to nothing on narrow screens
+			     (52+ weeks squeezed into a phone width collapses each cell below a
+			     visible size) — a min cell width plus an overflow-x-auto wrapper
+			     turns that into a horizontal scroll instead of invisible cells. -->
+			<div class="overflow-x-auto">
+				<div
+					class="grid gap-1"
+					style="grid-template-columns: max-content repeat({graph.weeks.length}, minmax(10px, 1fr)); grid-template-rows: auto repeat(7, minmax(0, 1fr));"
+					role="img"
+					aria-label="{graph.total} GitHub contributions in the last year"
+				>
+					<span style="grid-row: 1; grid-column: 1"></span>
 
-				<!-- weekday labels, column 1 -->
-				{#each DAY_LABELS as label, r (r)}
-					<span
-						class="flex items-center font-mono text-[9px] text-(--color-text-muted)"
-						style="grid-row: {r + 2}; grid-column: 1">{label}</span
-					>
-				{/each}
-
-				<!-- contribution cells, oldest week first -->
-				{#each graph.weeks as week, wi (wi)}
-					{#each week.days as day, di (di)}
-						{#if day}
-							<span
-								class="aspect-square w-full min-w-0 rounded-[2px] border border-(--color-border) contrib-level-{day.level}"
-								style="grid-row: {di + 2}; grid-column: {wi + 2}"
-								title="{day.count} contribution{day.count === 1 ? '' : 's'} on {day.date}"
-							></span>
-						{:else}
-							<span style="grid-row: {di + 2}; grid-column: {wi + 2}"></span>
-						{/if}
+					<!-- month labels, row 1, auto-placed across the week columns. min-w-0 +
+					     overflow-hidden: a grid item's text otherwise imposes its own
+					     min-content width on the fr tracks it spans, which is what forced
+					     the whole calendar wider than its container on narrow screens. -->
+					{#each graph.months as month, i (i)}
+						<span
+							class="min-w-0 overflow-hidden font-mono text-[10px] text-(--color-text-muted)"
+							style="grid-row: 1; grid-column: span {month.span}">{month.label}</span
+						>
 					{/each}
-				{/each}
+
+					<!-- weekday labels, column 1 -->
+					{#each DAY_LABELS as label, r (r)}
+						<span
+							class="flex items-center pr-1 font-mono text-[9px] text-(--color-text-muted)"
+							style="grid-row: {r + 2}; grid-column: 1">{label}</span
+						>
+					{/each}
+
+					<!-- contribution cells, oldest week first -->
+					{#each graph.weeks as week, wi (wi)}
+						{#each week.days as day, di (di)}
+							{#if day}
+								<span
+									class="aspect-square w-full min-w-[10px] rounded-[2px] border border-(--color-border) contrib-level-{day.level}"
+									style="grid-row: {di + 2}; grid-column: {wi + 2}"
+									title="{day.count} contribution{day.count === 1 ? '' : 's'} on {day.date}"
+								></span>
+							{:else}
+								<span style="grid-row: {di + 2}; grid-column: {wi + 2}"></span>
+							{/if}
+						{/each}
+					{/each}
+				</div>
 			</div>
 
 			<!-- legend -->
