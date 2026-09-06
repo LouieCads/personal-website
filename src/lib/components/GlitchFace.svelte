@@ -19,13 +19,20 @@
 		alt?: string;
 		/** Play a synthesised stab with each burst. */
 		sound?: boolean;
+		/**
+		 * Fired once the automatic load burst has finished playing out. Skipped
+		 * entirely under reduced motion, since no burst ran. The hero uses this
+		 * to chain its own section-wide glitch onto the end of this one.
+		 */
+		onIntroEnd?: () => void;
 	}
 
 	let {
 		phase = 'done',
 		src = '/profile.png',
 		alt = 'Louigie Caminoy',
-		sound = true
+		sound = true,
+		onIntroEnd
 	}: Props = $props();
 
 	const stackClass = $derived(
@@ -38,6 +45,7 @@
 	let root = $state<HTMLDivElement>();
 	let burstTimer: ReturnType<typeof setTimeout> | undefined;
 	let catchUpTimer: ReturnType<typeof setTimeout> | undefined;
+	let introEndTimer: ReturnType<typeof setTimeout> | undefined;
 	let bursting = false;
 	let burstEndsAt = 0;
 	let firedIntro = false;
@@ -108,6 +116,7 @@
 			offReady?.();
 			clearTimeout(burstTimer);
 			clearTimeout(catchUpTimer);
+			clearTimeout(introEndTimer);
 		};
 	});
 
@@ -127,6 +136,8 @@
 		if (phase !== 'done' || firedIntro) return;
 		firedIntro = true;
 		fire(1);
+		if (prefersReducedMotion()) return;
+		introEndTimer = setTimeout(() => onIntroEnd?.(), BURST_MS);
 	});
 </script>
 
@@ -251,7 +262,7 @@
 	}
 
 	.is-revealing .frame {
-		animation: gfReveal 1.2s ease-out forwards;
+		animation: gfReveal 0.8s ease-out forwards;
 	}
 
 	.is-revealing .shards {
