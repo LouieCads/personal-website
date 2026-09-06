@@ -15,20 +15,27 @@
 		 * reaches 'done'. After that the burst is hover/tap-driven only.
 		 */
 		phase?: 'idle' | 'animating' | 'done';
+		/**
+		 * Bump to fire a burst. Deliberately separate from `phase`: the reveal
+		 * wipe is a first impression and runs once per page load, while the
+		 * glitch marks every entrance, so the two cannot share a trigger.
+		 */
+		burstKey?: number;
 		src?: string;
 		alt?: string;
 		/** Play a synthesised stab with each burst. */
 		sound?: boolean;
 		/**
-		 * Fired once the automatic load burst has finished playing out. Skipped
-		 * entirely under reduced motion, since no burst ran. The hero uses this
-		 * to chain its own section-wide glitch onto the end of this one.
+		 * Fired once an automatic burst has finished playing out. Skipped under
+		 * reduced motion, since no burst ran. The hero uses this to chain its
+		 * own section-wide glitch onto the end of this one.
 		 */
 		onIntroEnd?: () => void;
 	}
 
 	let {
 		phase = 'done',
+		burstKey = 0,
 		src = '/profile.png',
 		alt = 'Louigie Caminoy',
 		sound = true,
@@ -48,7 +55,7 @@
 	let introEndTimer: ReturnType<typeof setTimeout> | undefined;
 	let bursting = false;
 	let burstEndsAt = 0;
-	let firedIntro = false;
+	let lastBurstKey = 0;
 	/** The load burst has been played at least once with audio actually on. */
 	let heardIntro = false;
 
@@ -79,7 +86,7 @@
 	}
 
 	onMount(() => {
-		const disarm = armGlitchAudio();
+		armGlitchAudio();
 		let offReady: (() => void) | undefined;
 
 		if (sound) {
@@ -97,7 +104,7 @@
 				// Audio unlocked before the load burst even ran (a returning
 				// Chrome visitor, or an in-app navigation that carried the
 				// gesture over) — that burst will be audible on its own.
-				if (!firedIntro) return;
+				if (lastBurstKey === 0) return;
 				if (prefersReducedMotion()) return;
 				// Don't fire into the tail of the silent burst the unlocking
 				// click may have just started; queue behind it instead.
@@ -112,7 +119,6 @@
 		}
 
 		return () => {
-			disarm();
 			offReady?.();
 			clearTimeout(burstTimer);
 			clearTimeout(catchUpTimer);
@@ -131,12 +137,15 @@
 		fire(0.95);
 	}
 
-	// The single automatic burst, once the reveal wipe has finished.
+	// The automatic burst, driven by the parent bumping burstKey. 0 is the
+	// initial no-op value, so mounting alone never fires one.
 	$effect(() => {
-		if (phase !== 'done' || firedIntro) return;
-		firedIntro = true;
+		if (burstKey === lastBurstKey) return;
+		lastBurstKey = burstKey;
+		if (burstKey === 0) return;
 		fire(1);
 		if (prefersReducedMotion()) return;
+		clearTimeout(introEndTimer);
 		introEndTimer = setTimeout(() => onIntroEnd?.(), BURST_MS);
 	});
 </script>

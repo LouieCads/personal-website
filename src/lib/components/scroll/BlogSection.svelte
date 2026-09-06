@@ -85,6 +85,7 @@
 	href={preview ? resolve('/blog') : ''}
 	cta="SEE ALL POSTS"
 	flush={!preview}
+	glitch={preview}
 >
 	{#if preview}
 		<!-- one row, three latest across both formats -->

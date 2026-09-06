@@ -19,6 +19,7 @@
 	label="GITHUB"
 	href="https://github.com/{username}"
 	cta={username}
+	glitch
 >
 	{#if graph && graph.weeks.length}
 		<div class="w-full" use:reveal>
@@ -38,7 +39,8 @@
 			<div class="overflow-x-auto">
 				<div
 					class="grid gap-1"
-					style="grid-template-columns: max-content repeat({graph.weeks.length}, minmax(10px, 1fr)); grid-template-rows: auto repeat(7, minmax(0, 1fr));"
+					style="grid-template-columns: max-content repeat({graph.weeks
+						.length}, minmax(10px, 1fr)); grid-template-rows: auto repeat(7, minmax(0, 1fr));"
 					role="img"
 					aria-label="{graph.total} GitHub contributions in the last year"
 				>
@@ -84,7 +86,8 @@
 			<div class="mt-3 flex items-center justify-end gap-1.5 pr-0.5">
 				<span class="font-mono text-[10px] text-(--color-text-muted)">Less</span>
 				{#each [0, 1, 2, 3, 4] as level (level)}
-					<span class="h-3 w-3 shrink-0 rounded-[2px] border border-(--color-border) contrib-level-{level}"
+					<span
+						class="h-3 w-3 shrink-0 rounded-[2px] border border-(--color-border) contrib-level-{level}"
 					></span>
 				{/each}
 				<span class="font-mono text-[10px] text-(--color-text-muted)">More</span>

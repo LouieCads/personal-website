@@ -22,6 +22,7 @@
 	href={preview ? resolve('/about') : ''}
 	cta="READ THE FULL BIO"
 	flush={!preview}
+	glitch={preview}
 >
 	<div class="grid gap-8 md:grid-cols-3 md:gap-10" use:reveal>
 		<!-- bio -->

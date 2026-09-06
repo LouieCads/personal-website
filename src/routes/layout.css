@@ -413,6 +413,401 @@ body {
 	}
 }
 
+/* ---------------------------------------------------------------------
+   Section-wide glitch, shared by the hero and every PageSection. Deliberately
+   the SAME burst as the portrait: the
+   900ms duration and every keyframe percentage below are lifted from
+   GlitchFace, so the two read as one effect firing twice rather than two
+   effects that merely resemble each other.
+
+     0-28%   cluster one  - hard hit, then two clipped echoes
+     28-46%  quiet
+     46-66%  cluster two  - the aftershock
+     66-100% settled
+
+   The portrait layers that need a duplicate of the content — the colour
+   echoes, the chromatic ghosts, the displaced image slices — are dropped
+   here, since a whole section cannot be cloned five times. The same idea is
+   applied to the section itself instead: hard positional jumps and clip-path
+   band cuts that tear slabs of layout out of place for a frame.
+   --------------------------------------------------------------------- */
+
+.sg-halftone,
+.sg-scan,
+.sg-tear {
+	position: absolute;
+	inset: 0;
+	z-index: 20;
+	opacity: 0;
+	pointer-events: none;
+}
+
+/* ---- the section itself: kick + slice cuts --------------------------- */
+
+@keyframes sgKick {
+	0% {
+		transform: translate3d(-9px, 0, 0);
+		clip-path: inset(0 0 0 0);
+		filter: contrast(1.4) saturate(1.45);
+	}
+	7% {
+		transform: translate3d(7px, -3px, 0);
+		clip-path: inset(19% 0 62% 0);
+	}
+	13% {
+		transform: translate3d(-4px, 2px, 0);
+		clip-path: inset(0 0 0 0);
+		filter: contrast(1.15);
+	}
+	20% {
+		transform: translate3d(10px, 0, 0);
+		clip-path: inset(58% 0 11% 0);
+		filter: contrast(1.55);
+	}
+	26%,
+	46%,
+	66%,
+	100% {
+		transform: translate3d(0, 0, 0);
+		clip-path: inset(0 0 0 0);
+		filter: none;
+	}
+	49% {
+		transform: translate3d(6px, 1px, 0);
+		clip-path: inset(40% 0 38% 0);
+		filter: contrast(1.3);
+	}
+	56% {
+		transform: translate3d(-4px, 0, 0);
+		clip-path: inset(0 0 0 0);
+	}
+	61% {
+		transform: translate3d(2px, 0, 0);
+		filter: contrast(1.12);
+	}
+}
+
+.section-glitching {
+	animation: sgKick 0.9s steps(1, end) 1;
+}
+
+/* ---- broken halftone -------------------------------------------------- */
+
+/* The portrait's comic-print dots, broken by the same diagonal band pattern.
+   Unmasked here (there is no silhouette to clip to), so peak opacity comes
+   right down — it covers vastly more area. */
+.sg-halftone {
+	background-image: radial-gradient(var(--color-accent) 30%, transparent 32%);
+	background-size: 4px 4px;
+	-webkit-mask-image: repeating-linear-gradient(
+		62deg,
+		#000 0 14px,
+		transparent 14px 26px,
+		#000 26px 32px,
+		transparent 32px 58px
+	);
+	mask-image: repeating-linear-gradient(
+		62deg,
+		#000 0 14px,
+		transparent 14px 26px,
+		#000 26px 32px,
+		transparent 32px 58px
+	);
+}
+
+@keyframes sgHalftone {
+	0%,
+	56%,
+	100% {
+		opacity: 0;
+		transform: translate3d(0, 0, 0);
+	}
+	2% {
+		opacity: 0.34;
+		transform: translate3d(6px, 0, 0);
+	}
+	10% {
+		opacity: 0.14;
+		transform: translate3d(-8px, 3px, 0);
+	}
+	20% {
+		opacity: 0.28;
+		transform: translate3d(3px, -3px, 0);
+	}
+	28% {
+		opacity: 0;
+	}
+	49% {
+		opacity: 0.22;
+		transform: translate3d(-5px, 0, 0);
+	}
+}
+
+.section-glitching .sg-halftone {
+	animation: sgHalftone 0.9s steps(1, end) 1;
+}
+
+/* ---- scanlines + displacement tear ------------------------------------ */
+
+.sg-scan {
+	background: repeating-linear-gradient(
+		0deg,
+		transparent 0 2px,
+		color-mix(in srgb, var(--color-accent) 22%, transparent) 2px 3px
+	);
+}
+
+@keyframes sgScan {
+	0% {
+		opacity: 1;
+		transform: translate3d(0, -2px, 0);
+	}
+	12% {
+		opacity: 0.5;
+		transform: translate3d(0, 3px, 0);
+	}
+	22% {
+		opacity: 1;
+		transform: translate3d(0, -1px, 0);
+	}
+	32%,
+	46%,
+	66%,
+	100% {
+		opacity: 0;
+		transform: translate3d(0, 0, 0);
+	}
+	49% {
+		opacity: 0.8;
+		transform: translate3d(0, 2px, 0);
+	}
+	58% {
+		opacity: 0.45;
+		transform: translate3d(0, -2px, 0);
+	}
+}
+
+.section-glitching .sg-scan {
+	animation: sgScan 0.9s steps(1, end) 1;
+}
+
+.sg-tear {
+	background: linear-gradient(
+		180deg,
+		transparent 0 46%,
+		color-mix(in srgb, var(--color-accent) 55%, transparent) 46% 48.4%,
+		var(--color-surface) 48.4% 49.6%,
+		color-mix(in srgb, var(--color-text-primary) 40%, transparent) 49.6% 51%,
+		transparent 51% 100%
+	);
+}
+
+@keyframes sgTear {
+	0%,
+	56%,
+	100% {
+		opacity: 0;
+		transform: translate3d(0, -40%, 0);
+	}
+	2% {
+		opacity: 1;
+		transform: translate3d(0, -28%, 0);
+	}
+	9% {
+		opacity: 1;
+		transform: translate3d(0, -4%, 0);
+	}
+	18% {
+		opacity: 1;
+		transform: translate3d(0, 18%, 0);
+	}
+	26% {
+		opacity: 0;
+		transform: translate3d(0, 40%, 0);
+	}
+	49% {
+		opacity: 1;
+		transform: translate3d(0, -12%, 0);
+	}
+}
+
+.section-glitching .sg-tear {
+	animation: sgTear 0.9s steps(1, end) 1;
+}
+
+/* ---- angular shards ---------------------------------------------------- */
+
+.sg-shards {
+	position: absolute;
+	inset: 0;
+	z-index: 21;
+	pointer-events: none;
+}
+
+.sg-shard {
+	position: absolute;
+	display: block;
+	opacity: 0;
+}
+
+.sg-shard-1 {
+	top: 14%;
+	left: 0;
+	width: 22%;
+	height: 6px;
+	background: var(--color-accent);
+	clip-path: polygon(0 0, 100% 34%, 78% 100%, 0 62%);
+}
+
+.sg-shard-2 {
+	top: 33%;
+	right: 0;
+	width: 26%;
+	height: 4px;
+	background: var(--color-text-primary);
+	clip-path: polygon(0 22%, 100% 0, 100% 74%, 14% 100%);
+}
+
+.sg-shard-3 {
+	bottom: 30%;
+	left: 0;
+	width: 24%;
+	height: 3px;
+	background: var(--color-accent);
+	clip-path: polygon(0 0, 100% 40%, 100% 100%, 22% 66%);
+}
+
+.sg-shard-4 {
+	bottom: 12%;
+	right: 4%;
+	width: 18%;
+	height: 7px;
+	background: var(--color-accent-dim);
+	clip-path: polygon(10% 0, 100% 18%, 84% 100%, 0 70%);
+}
+
+.sg-shard-5 {
+	top: 0;
+	right: 22%;
+	width: 3px;
+	height: 16%;
+	background: var(--color-border-hover);
+	clip-path: polygon(40% 0, 100% 8%, 62% 100%, 0 84%);
+}
+
+.sg-shard-6 {
+	bottom: 0;
+	left: 28%;
+	width: 3px;
+	height: 14%;
+	background: var(--color-accent);
+	clip-path: polygon(0 10%, 100% 0, 58% 100%, 20% 88%);
+}
+
+@keyframes sgShardOut {
+	0%,
+	57%,
+	100% {
+		opacity: 0;
+		transform: translate3d(0, 0, 0) scaleX(0.2);
+	}
+	2% {
+		opacity: 1;
+		transform: translate3d(-18%, 0, 0) scaleX(1);
+	}
+	10% {
+		opacity: 0.6;
+		transform: translate3d(-34%, -2%, 0) scaleX(1.25);
+	}
+	20% {
+		opacity: 0;
+		transform: translate3d(-52%, -3%, 0) scaleX(1.4);
+	}
+	49% {
+		opacity: 0.9;
+		transform: translate3d(-26%, 1%, 0) scaleX(1.1);
+	}
+}
+
+@keyframes sgShardOutR {
+	0%,
+	57%,
+	100% {
+		opacity: 0;
+		transform: translate3d(0, 0, 0) scaleX(0.2);
+	}
+	3% {
+		opacity: 1;
+		transform: translate3d(20%, 0, 0) scaleX(1);
+	}
+	11% {
+		opacity: 0.55;
+		transform: translate3d(38%, 2%, 0) scaleX(1.3);
+	}
+	21% {
+		opacity: 0;
+		transform: translate3d(56%, 4%, 0) scaleX(1.45);
+	}
+	51% {
+		opacity: 0.85;
+		transform: translate3d(28%, -1%, 0) scaleX(1.15);
+	}
+}
+
+@keyframes sgShardVert {
+	0%,
+	58%,
+	100% {
+		opacity: 0;
+		transform: translate3d(0, 0, 0) scaleY(0.3);
+	}
+	4% {
+		opacity: 1;
+		transform: translate3d(0, -30%, 0) scaleY(1.1);
+	}
+	12% {
+		opacity: 0.5;
+		transform: translate3d(2%, -52%, 0) scaleY(1.3);
+	}
+	23% {
+		opacity: 0;
+		transform: translate3d(3%, -70%, 0) scaleY(1.4);
+	}
+	52% {
+		opacity: 0.8;
+		transform: translate3d(0, -38%, 0) scaleY(1.2);
+	}
+}
+
+.section-glitching .sg-shard-1 {
+	animation: sgShardOut 0.9s steps(1, end) 1;
+}
+.section-glitching .sg-shard-2 {
+	animation: sgShardOutR 0.86s steps(1, end) 0.04s 1;
+}
+.section-glitching .sg-shard-3 {
+	animation: sgShardOut 0.82s steps(1, end) 0.08s 1;
+}
+.section-glitching .sg-shard-4 {
+	animation: sgShardOutR 0.78s steps(1, end) 0.12s 1;
+}
+.section-glitching .sg-shard-5 {
+	animation: sgShardVert 0.88s steps(1, end) 0.03s 1;
+}
+.section-glitching .sg-shard-6 {
+	animation: sgShardVert 0.8s steps(1, end) 0.1s 1 reverse;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.section-glitching,
+	.section-glitching .sg-halftone,
+	.section-glitching .sg-scan,
+	.section-glitching .sg-tear,
+	.section-glitching .sg-shard {
+		animation: none;
+	}
+}
+
 /* Lenis smooth scrolling */
 html.lenis,
 html.lenis body {

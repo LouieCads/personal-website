@@ -1,7 +1,9 @@
 <script lang="ts">
-	import type { Snippet } from 'svelte';
+	import { onMount, type Snippet } from 'svelte';
 	import GlitchText from '$lib/components/GlitchText.svelte';
 	import { glitchLink } from '$lib/actions/glitchLink';
+	import { onGlitchPulse } from '$lib/glitchPulse';
+	import GlitchLayers from './GlitchLayers.svelte';
 
 	interface Props {
 		id?: string;
@@ -14,6 +16,11 @@
 		cta?: string;
 		/** tighter top padding, used as the first block on a detail page */
 		flush?: boolean;
+		/**
+		 * Join the page-entrance glitch. Only the home scroll page opts in — the
+		 * detail pages reuse these same sections and stay still.
+		 */
+		glitch?: boolean;
 		children: Snippet;
 	}
 
@@ -25,15 +32,52 @@
 		href = '',
 		cta = 'SEE FULL DETAILS',
 		flush = false,
+		glitch = false,
 		children
 	}: Props = $props();
+
+	/** Matches the sgKick keyframe duration in routes/layout.css. */
+	const BURST_MS = 900;
+	let glitching = $state(false);
+
+	onMount(() => {
+		if (!glitch) return;
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+		let timer: ReturnType<typeof setTimeout> | undefined;
+		// No sound here: the hero plays one stab for the whole pulse, so six
+		// sections firing at once stay a single effect rather than a pile-up.
+		const off = onGlitchPulse(() => {
+			glitching = true;
+			clearTimeout(timer);
+			timer = setTimeout(() => (glitching = false), BURST_MS);
+		});
+
+		return () => {
+			off();
+			clearTimeout(timer);
+		};
+	});
 </script>
 
 <!--
   One container, one rhythm. Every section on the site routes through this so
   gutters, header rule and vertical spacing cannot drift apart.
+
+  `relative` is load-bearing: GlitchLayers positions against this section and
+  sectionGlitch transforms and clip-paths it. Deliberately no overflow-hidden —
+  the cards inside lift on hover, and clipping those at the section edge is
+  worse than letting a shard run over.
 -->
-<section {id} class="border-b border-(--color-rule) last:border-b-0">
+<section
+	{id}
+	class="relative border-b border-(--color-rule) last:border-b-0 {glitching
+		? 'section-glitching'
+		: ''}"
+>
+	{#if glitch}
+		<GlitchLayers />
+	{/if}
 	<div
 		class="mx-auto w-full max-w-[1400px] px-5 sm:px-8 md:px-14 lg:px-20 xl:px-24 {flush
 			? 'pt-8 pb-16 sm:pb-20'

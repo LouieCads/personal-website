@@ -20,6 +20,7 @@
 	href={preview ? resolve('/experience') : ''}
 	cta="SEE FULL HISTORY"
 	flush={!preview}
+	glitch={preview}
 >
 	{#if preview}
 		<!-- one line per role: what, where, when -->
@@ -102,5 +103,4 @@
 			{/each}
 		</div>
 	{/if}
-
 </PageSection>

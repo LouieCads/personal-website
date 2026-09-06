@@ -165,13 +165,16 @@ export function preloadGlitchSample(voice: GlitchVoice = 'face'): Promise<void> 
  * This is the page-wide safety net; `playGlitch` also resumes from inside its
  * own gesture so the very first tap is not wasted.
  *
- * Returns a teardown function.
+ * Callers get no teardown, deliberately. These listeners belong to the page,
+ * not to whichever component happened to mount first: they remove themselves
+ * once the context is running, and a component unmounting must not take the
+ * whole page's unlock path with it.
  */
-export function armGlitchAudio(): () => void {
-	if (typeof window === 'undefined') return () => {};
-	// Idempotent: several components call this, and one set of listeners for
-	// the page is enough. Later callers get a no-op teardown.
-	if (armedOnce) return () => {};
+export function armGlitchAudio(): void {
+	if (typeof window === 'undefined') return;
+	// Idempotent — several components call this, and one set of listeners for
+	// the page is enough.
+	if (armedOnce) return;
 	armedOnce = true;
 
 	const detach = () => {
@@ -210,8 +213,6 @@ export function armGlitchAudio(): () => void {
 	window.addEventListener('pointerdown', resume, opts);
 	window.addEventListener('keydown', resume, opts);
 	window.addEventListener('touchstart', resume, opts);
-
-	return detach;
 }
 
 export function setGlitchMuted(next: boolean) {
@@ -234,21 +235,24 @@ export function isGlitchMuted() {
  * @param intensity 0-1 scale on the burst; hover uses a softer value than the
  *                  page-load hit.
  * @param voice     which sample to use.
+ * @returns whether a stab was emitted synchronously. False means audio was
+ *          still locked, so the caller can queue a replay via
+ *          `onGlitchAudioReady` rather than lose the moment entirely.
  */
-export function playGlitch(intensity = 1, voice: GlitchVoice = 'face') {
+export function playGlitch(intensity = 1, voice: GlitchVoice = 'face'): boolean {
 	const c = ensure();
-	if (!c || !master) return;
+	if (!c || !master) return false;
 
 	if (c.state === 'running') {
 		emit(c, intensity, voice);
-		return;
+		return true;
 	}
-	if (c.state !== 'suspended') return;
+	if (c.state !== 'suspended') return false;
 
 	// Only worth attempting from inside a gesture. Where the browser exposes
 	// user activation we check it; elsewhere (Safari, older Firefox) the
 	// property is undefined and we try regardless, which is the old behaviour.
-	if (navigator.userActivation?.isActive === false) return;
+	if (navigator.userActivation?.isActive === false) return false;
 
 	// The first tap after a reload IS the gesture that unlocks audio — but the
 	// element's own handler runs before the window-level unlock listener, and
@@ -265,6 +269,7 @@ export function playGlitch(intensity = 1, voice: GlitchVoice = 'face') {
 			emit(c, intensity, voice);
 		})
 		.catch(() => {});
+	return false;
 }
 
 /** Rate-limit, then dispatch to the sample or the synth fallback. */

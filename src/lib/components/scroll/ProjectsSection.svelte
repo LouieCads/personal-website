@@ -14,7 +14,12 @@
 </script>
 
 <!-- Not every link ships a screenshot; a binary plate stands in until one does. -->
-{#snippet viewport(image: string | undefined, title: string, host: string, position: string = 'center top')}
+{#snippet viewport(
+	image: string | undefined,
+	title: string,
+	host: string,
+	position: string = 'center top'
+)}
 	{#if image}
 		<img
 			src={image}
@@ -42,6 +47,7 @@
 	href={preview ? resolve('/projects') : ''}
 	cta="SEE ALL PROJECTS"
 	flush={!preview}
+	glitch={preview}
 >
 	{#if preview}
 		<!-- a hand of cards, each showing the product as a desktop window -->
@@ -87,7 +93,9 @@
 						>
 							{p.title}
 						</h3>
-						<p class="mt-1.5 line-clamp-2 text-[13px] leading-relaxed text-(--color-text-secondary)">
+						<p
+							class="mt-1.5 line-clamp-2 text-[13px] leading-relaxed text-(--color-text-secondary)"
+						>
 							{p.description}
 						</p>
 					</div>
