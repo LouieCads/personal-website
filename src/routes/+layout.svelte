@@ -3,6 +3,7 @@
 	import { theme } from '$lib/stores/theme';
 	import { setLenis } from '$lib/scroll';
 	import { onMount } from 'svelte';
+	import BracketCursor from '$lib/components/BracketCursor.svelte';
 
 	let { children } = $props();
 
@@ -59,5 +60,7 @@
 		};
 	});
 </script>
+
+<BracketCursor />
 
 {@render children()}

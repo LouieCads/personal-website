@@ -829,3 +829,128 @@ html.lenis body {
 .lenis.lenis-smooth iframe {
 	pointer-events: none;
 }
+
+/* ---------------------------------------------------------------------------
+   Bracket reticle cursor. The hero portrait's corner framing, detached and
+   following the pointer: four 8px L-corners that lock onto whatever is
+   hoverable and relax back to a 28px box when nothing is. Same geometry and
+   the same --color-border-hover as `.bracket .corner`, so hovering a link
+   quotes the treatment already used on the photo.
+
+   Driven by BracketCursor.svelte. The brackets ease toward their target; the
+   centre dot does not, so precision never depends on the animation.
+   --------------------------------------------------------------------------- */
+
+.has-bracket-cursor,
+.has-bracket-cursor * {
+	cursor: none;
+}
+
+.reticle {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 9998;
+	opacity: 0;
+	pointer-events: none;
+	will-change: transform, width, height;
+	transition: opacity 0.18s linear;
+}
+
+.reticle.is-visible {
+	opacity: 1;
+}
+
+.rc-corner {
+	position: absolute;
+	width: 8px;
+	height: 8px;
+	border-color: var(--color-border-hover);
+	transition:
+		border-color 0.18s ease,
+		width 0.18s ease,
+		height 0.18s ease;
+}
+
+/* Offsets mirror `.corner-*`: each L sits 1px outside the box it frames. */
+.rc-tl {
+	top: -1px;
+	left: -1px;
+	border-top: 1px solid;
+	border-left: 1px solid;
+}
+
+.rc-tr {
+	top: -1px;
+	right: -1px;
+	border-top: 1px solid;
+	border-right: 1px solid;
+}
+
+.rc-bl {
+	bottom: -1px;
+	left: -1px;
+	border-bottom: 1px solid;
+	border-left: 1px solid;
+}
+
+.rc-br {
+	bottom: -1px;
+	right: -1px;
+	border-bottom: 1px solid;
+	border-right: 1px solid;
+}
+
+/* Locked on a target: the corners take the accent and grow, which reads as the
+   reticle gripping the element rather than merely overlapping it. */
+.reticle.is-locked .rc-corner {
+	width: 12px;
+	height: 12px;
+	border-color: var(--color-accent);
+}
+
+/* Press pulls the corners in to a tick. */
+.reticle.is-down .rc-corner {
+	width: 5px;
+	height: 5px;
+}
+
+.reticle.is-field {
+	opacity: 0;
+}
+
+/* The exact pointer position. Small, always on, and never eased — the brackets
+   are the flourish, this is the part you actually aim with. */
+.reticle-dot {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 9999;
+	width: 4px;
+	height: 4px;
+	background: var(--color-text-primary);
+	opacity: 0;
+	pointer-events: none;
+	will-change: transform;
+	transition: opacity 0.18s linear;
+}
+
+.reticle-dot.is-visible {
+	opacity: 1;
+}
+
+.reticle-dot.is-field {
+	opacity: 0;
+}
+
+@media (pointer: coarse) {
+	.has-bracket-cursor,
+	.has-bracket-cursor * {
+		cursor: auto;
+	}
+
+	.reticle,
+	.reticle-dot {
+		display: none;
+	}
+}
