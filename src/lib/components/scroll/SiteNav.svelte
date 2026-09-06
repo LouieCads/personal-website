@@ -39,7 +39,7 @@
 			href={homeHref}
 			onclick={goHome}
 			use:glitchLink
-			class="shrink-0 font-mono text-[10px] tracking-widest whitespace-nowrap text-(--color-text-secondary) transition-colors hover:text-(--color-text-primary) sm:text-[11px]"
+			class="glitch-link shrink-0 font-mono text-[10px] tracking-widest whitespace-nowrap text-(--color-text-secondary) transition-colors hover:text-(--color-text-primary) sm:text-[11px]"
 		>
 			<GlitchText>Louigie Caminoy</GlitchText>
 		</a>
@@ -50,7 +50,7 @@
 					href={item.href}
 					aria-current={active === item.id ? 'page' : undefined}
 					use:glitchLink
-					class="relative shrink-0 py-1 font-mono text-[11px] tracking-[0.14em] transition-colors {active ===
+					class="glitch-link relative shrink-0 py-1 font-mono text-[11px] tracking-[0.14em] transition-colors {active ===
 					item.id
 						? 'text-(--color-text-primary)'
 						: 'text-(--color-text-secondary) hover:text-(--color-text-primary)'}"

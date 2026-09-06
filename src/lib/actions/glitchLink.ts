@@ -10,6 +10,10 @@ import { isHoverDevice } from './hoverSound';
  * this action supplies the trigger, GlitchText supplies the layers.
  */
 export function glitchLink(node: HTMLElement, intensity = 0.55) {
+	// Convenience for elements with a static class attribute. If the element's
+	// class is a dynamic expression, put `glitch-link` in the template too:
+	// Svelte rewrites className wholesale on every change, which silently drops
+	// anything added here and leaves the link with sound but no animation.
 	node.classList.add('glitch-link');
 
 	if (typeof window === 'undefined') return;
