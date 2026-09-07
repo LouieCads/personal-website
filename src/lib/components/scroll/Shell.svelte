@@ -6,6 +6,7 @@
 	import BinaryBackground from '../BinaryBackground.svelte';
 	import SiteNav from './SiteNav.svelte';
 	import CLI from '../CLI.svelte';
+	import ScrollGutter from './ScrollGutter.svelte';
 	import { sections, type SectionId } from '$lib/data/portfolio';
 
 	interface Props {
@@ -63,6 +64,8 @@
 	<BinaryBackground />
 </div>
 
+<ScrollGutter />
+
 <div class="relative z-10 min-h-dvh pb-16 sm:pb-18">
 	<SiteNav {active} {home} />
 	<main>
@@ -81,6 +84,8 @@
 	</footer>
 </div>
 
-<div class="fixed inset-x-0 bottom-0 z-50">
+<!-- `data-cli-bar` is how ScrollGutter finds this bar: it stacks the up
+     button on top of it and stows it while the input has focus. -->
+<div class="fixed inset-x-0 bottom-0 z-50" data-cli-bar>
 	<CLI {navigate} />
 </div>

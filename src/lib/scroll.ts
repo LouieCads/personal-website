@@ -30,3 +30,18 @@ export function scrollToId(id: string) {
 	}
 	el.scrollIntoView({ block: 'start' });
 }
+
+/**
+ * Jump to an absolute document offset. Used by the scroll gutter, where the
+ * target comes from a pointer position on the rail rather than from an element.
+ * `immediate` skips the ease so a drag tracks the pointer instead of chasing it.
+ */
+export function scrollToOffset(y: number, immediate = false) {
+	if (instance) {
+		instance.scrollTo(y, { immediate });
+		return;
+	}
+	if (typeof window !== 'undefined') {
+		window.scrollTo({ top: y, behavior: immediate ? 'auto' : 'smooth' });
+	}
+}

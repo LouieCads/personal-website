@@ -3,7 +3,6 @@ import { render, screen, fireEvent } from '@testing-library/svelte';
 import Hero from '$lib/components/Hero.svelte';
 import About from '$lib/components/About.svelte';
 import Projects from '$lib/components/Project.svelte';
-import Contact from '$lib/components/Contact.svelte';
 import CLI from '$lib/components/CLI.svelte';
 
 describe('Hero', () => {
@@ -115,42 +114,6 @@ describe('Projects', () => {
 		expect(iskolarLink).toHaveAttribute('target', '_blank');
 	});
 });
-
-describe('Contact', () => {
-	it('renders section heading', () => {
-		render(Contact);
-		expect(screen.getByText('CONTACT')).toBeInTheDocument();
-	});
-
-	it('renders email link', () => {
-		render(Contact);
-		const emailLink = screen.getByText('louigiecads143@gmail.com').closest('a');
-		expect(emailLink).toHaveAttribute(
-			'href',
-			'https://mail.google.com/mail/u/0/#all?compose=new'
-		);
-	});
-
-	it('renders LinkedIn link', () => {
-		render(Contact);
-		const link = screen.getByText('linkedin.com/in/louie1221').closest('a');
-		expect(link).toHaveAttribute('href', 'https://www.linkedin.com/in/louie1221/');
-		expect(link).toHaveAttribute('target', '_blank');
-	});
-
-	it('renders X link', () => {
-		render(Contact);
-		const link = screen.getByText('x.com/louigie_21').closest('a');
-		expect(link).toHaveAttribute('href', 'https://x.com/louigie_21');
-		expect(link).toHaveAttribute('target', '_blank');
-	});
-
-	it('renders footer copyright', () => {
-		render(Contact);
-		expect(screen.getByText(/Louigie/)).toBeInTheDocument();
-	});
-});
-
 
 describe('CLI', () => {
 	beforeEach(() => {

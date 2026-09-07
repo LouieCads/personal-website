@@ -44,12 +44,359 @@
 	--color-canvas-bg: #050505;
 }
 
+/* The native bar stays hidden: the telemetry gutter below replaces it, and two
+   scroll indicators on one edge read as a bug. */
 * {
 	scrollbar-width: none;
 }
 
 *::-webkit-scrollbar {
 	display: none;
+}
+
+/* ---------------------------------------------------------------------------
+   Telemetry gutter. The scrollbar rebuilt in the site's own vocabulary: a
+   hairline rail down the right edge, an accent fill for distance travelled, a
+   bracket thumb quoting `.bracket .corner` and the reticle, a mono percent
+   readout, and a tick per section that doubles as a map of the page.
+
+   Hiding the native bar removes drag-to-scroll, so this puts it back — the rail
+   takes clicks and drags (see ScrollGutter.svelte) rather than being decoration.
+
+   Driven by ScrollGutter.svelte off the window `scroll` event, not off Lenis:
+   Lenis is lazy-loaded and skipped entirely under reduced motion, but it moves
+   real `scrollY` either way, so the plain event is correct in both cases.
+   --------------------------------------------------------------------------- */
+
+/* Distance from the viewport's right edge to the rail, and how far the rail is
+   held off the top and bottom. Every part of the gutter is measured off these,
+   so one value moves the whole assembly per breakpoint. They sit on :root
+   rather than on .gutter because the up button is a sibling, not a child, and
+   still has to line up with the rail. ScrollGutter.svelte reads the resulting
+   geometry back from the DOM, so these are the only declarations of it. */
+:root {
+	--rail: 20px;
+	--rail-inset: 24px;
+	/* The gutter's ink. Black in light mode, and it inverts with the theme so
+	   the rail stays legible on the near-black dark surface. */
+	--gutter-ink: var(--color-text-primary);
+}
+
+.gutter {
+	position: fixed;
+	top: 0;
+	/* Landscape on a notched phone insets the right edge; without this the rail
+	   would sit under the rounded corner. */
+	right: env(safe-area-inset-right, 0px);
+	bottom: 0;
+	/* Above the sticky nav and the pinned CLI, both z-50: the gutter reports on
+	   the whole page, so nothing on the page should cover it. Still well under
+	   the reticle at 9998. */
+	z-index: 60;
+	width: 44px;
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 0.24s ease;
+}
+
+/* Shown only once there is something to scroll. */
+.gutter.is-active {
+	opacity: 1;
+}
+
+/* The one part that takes input: a narrow column over the rail, so the rest of
+   the gutter never steals clicks from content near the right edge. */
+.gutter-hit {
+	position: absolute;
+	top: 0;
+	right: calc(var(--rail) - 8px);
+	bottom: 0;
+	width: 18px;
+}
+
+/* Only a live rail takes input. A page with nothing to scroll would otherwise
+   leave an invisible strip that swallows clicks on the content beneath it. */
+.gutter.is-active .gutter-hit {
+	pointer-events: auto;
+}
+
+/* Rail and fill share the same 1px column, inset from the viewport edges so the
+   run reads as a measured track rather than a screen border. */
+.gutter-rail,
+.gutter-fill {
+	position: absolute;
+	right: var(--rail);
+	width: 1px;
+}
+
+.gutter-rail {
+	top: var(--rail-inset);
+	bottom: var(--rail-inset);
+	background: var(--color-rule);
+}
+
+.gutter-fill {
+	top: var(--rail-inset);
+	height: 0;
+	background: var(--gutter-ink);
+}
+
+/* Section ticks. Positioned by the component as a percentage of the rail's own
+   run, so they line up with the thumb rather than with the viewport. */
+.gutter-tick {
+	position: absolute;
+	right: calc(var(--rail) - 4px);
+	width: 9px;
+	height: 1px;
+	background: var(--color-border-hover);
+	transition:
+		background-color 0.2s ease,
+		width 0.2s ease;
+}
+
+.gutter-tick.is-active {
+	width: 15px;
+	background: var(--gutter-ink);
+}
+
+/* The thumb: the portrait's four corners at 6px, framing a 14px box on the
+   rail. Same geometry and colours as `.rc-corner`, one step smaller. */
+.gutter-thumb {
+	position: absolute;
+	top: 0;
+	right: calc(var(--rail) - 6px);
+	width: 14px;
+	height: 34px;
+}
+
+.gutter-thumb .gc {
+	position: absolute;
+	width: 6px;
+	height: 6px;
+	border-color: var(--color-border-hover);
+	transition:
+		border-color 0.2s ease,
+		width 0.2s ease,
+		height 0.2s ease;
+}
+
+.gutter-thumb .gc-tl {
+	top: 0;
+	left: 0;
+	border-top: 1px solid;
+	border-left: 1px solid;
+}
+
+.gutter-thumb .gc-tr {
+	top: 0;
+	right: 0;
+	border-top: 1px solid;
+	border-right: 1px solid;
+}
+
+.gutter-thumb .gc-bl {
+	bottom: 0;
+	left: 0;
+	border-bottom: 1px solid;
+	border-left: 1px solid;
+}
+
+.gutter-thumb .gc-br {
+	bottom: 0;
+	right: 0;
+	border-bottom: 1px solid;
+	border-right: 1px solid;
+}
+
+/* Grabbing the rail grips the corners, the same way the reticle locks on. */
+.gutter.is-live .gutter-thumb .gc {
+	width: 9px;
+	height: 9px;
+	border-color: var(--gutter-ink);
+}
+
+/* Percent readout, vertical so it rides the rail instead of reaching into the
+   content. Tracks the thumb; brightens while the page is moving. */
+.gutter-readout {
+	position: absolute;
+	top: 0;
+	right: calc(var(--rail) + 10px);
+	font-family: var(--font-mono);
+	font-size: 9px;
+	line-height: 1;
+	letter-spacing: 0.1em;
+	color: var(--color-text-muted);
+	writing-mode: vertical-rl;
+	transition: color 0.2s ease;
+}
+
+.gutter.is-live .gutter-readout {
+	color: var(--gutter-ink);
+}
+
+/* ---- up button --------------------------------------------------------------
+
+   The gutter's one real control: a bracket-framed chevron that returns to the
+   first section. It sits left of the rail and stacks on top of the pinned CLI,
+   whose measured height ScrollGutter.svelte writes in as `--cli-h`.
+
+   Solid surface rather than brackets alone — it floats over arbitrary content,
+   and the corners on their own do not read against a busy section. The focus
+   ring keeps the accent: it is the one state that must not be mistaken for
+   hover now that the rest of the HUD is monochrome.
+   -------------------------------------------------------------------------- */
+
+.gutter-up {
+	position: fixed;
+	right: calc(var(--rail) + 32px);
+	bottom: calc(var(--cli-h, 56px) + 14px);
+	/* Above the CLI at z-50, level with the gutter it belongs to. */
+	z-index: 60;
+	display: flex;
+	width: 44px;
+	height: 44px;
+	align-items: center;
+	justify-content: center;
+	border: 1px solid var(--color-border);
+	background: var(--color-surface);
+	color: var(--color-text-secondary);
+	opacity: 0;
+	/* `visibility`, not `display`: it animates, and it keeps the button out of
+	   the tab order while it is hidden, which `opacity` alone would not. */
+	visibility: hidden;
+	transition:
+		opacity 0.24s ease,
+		visibility 0.24s,
+		border-color 0.2s ease,
+		color 0.2s ease;
+}
+
+.gutter-up.is-visible {
+	opacity: 1;
+	visibility: visible;
+}
+
+.gutter-up svg {
+	width: 16px;
+	height: 16px;
+}
+
+.gutter-up .corner {
+	position: absolute;
+	width: 6px;
+	height: 6px;
+	border-color: var(--color-border-hover);
+	pointer-events: none;
+	transition:
+		border-color 0.2s ease,
+		width 0.2s ease,
+		height 0.2s ease;
+}
+
+/* Hover grips the corners and lights the chevron, the same move the reticle
+   makes on a target and the thumb makes on a drag. */
+.gutter-up:hover,
+.gutter-up:focus-visible {
+	border-color: var(--color-border-hover);
+	color: var(--gutter-ink);
+}
+
+.gutter-up:hover .corner,
+.gutter-up:focus-visible .corner {
+	width: 9px;
+	height: 9px;
+	border-color: var(--gutter-ink);
+}
+
+.gutter-up:focus-visible {
+	outline: 1px solid var(--color-accent);
+	outline-offset: 3px;
+}
+
+.gutter-up:active .corner {
+	width: 4px;
+	height: 4px;
+}
+
+/* Touch: no hover to lean on, so the button is a touch larger and stays put
+   rather than surfacing only while the page moves, the way the rail does. */
+@media (pointer: coarse) {
+	.gutter-up {
+		width: 48px;
+		height: 48px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.gutter,
+	.gutter-tick,
+	.gutter-thumb .gc,
+	.gutter-readout,
+	.gutter-up,
+	.gutter-up .corner {
+		transition: none;
+	}
+}
+
+/* ---- responsive ------------------------------------------------------------
+
+   ScrollGutter.svelte reads the rail's box and the thumb's height back from
+   the DOM, so the vertical metrics can move freely here; only --rail-inset is
+   worth changing, and only where the viewport is genuinely short.
+
+   Content padding is `px-5 sm:px-8 md:px-14 lg:px-20 xl:px-24`, and nothing in
+   the gutter may cross it. At the default --rail of 20px the widest part is the
+   active tick, reaching 31px — clear of `sm`'s 32px, but not of `px-5`. So the
+   whole assembly tucks in below 640px, and the readout, which reaches 39px,
+   only appears once `lg` gives it 80px to sit in.
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 639px) {
+	:root {
+		--rail: 10px;
+	}
+
+	.gutter {
+		width: 30px;
+	}
+}
+
+@media (max-width: 1023px) {
+	.gutter-readout {
+		display: none;
+	}
+}
+
+/* A phone in landscape is ~375px tall: a 24px inset at each end plus the thumb
+   leaves almost no run to travel, so the rail is given back that margin. */
+@media (max-height: 480px) {
+	:root {
+		--rail-inset: 12px;
+	}
+}
+
+/* ---- touch -----------------------------------------------------------------
+
+   The native bar is hidden site-wide, so touch needs this too — it is the only
+   scroll indicator there. It reads rather than responds: dragging a 18px column
+   on a phone would fight the page's own scroll gesture, so the hit area is
+   dropped and the gutter surfaces only while the page is actually moving, the
+   way a platform overlay bar does.
+   -------------------------------------------------------------------------- */
+
+@media (pointer: coarse) {
+	.gutter-hit,
+	.gutter.is-active .gutter-hit {
+		pointer-events: none;
+	}
+
+	.gutter.is-active {
+		opacity: 0;
+	}
+
+	.gutter.is-active.is-live {
+		opacity: 1;
+	}
 }
 
 ::selection {

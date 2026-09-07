@@ -16,12 +16,13 @@
 		'/home',
 		'/about',
 		'/projects',
-		'/contact',
+		'/experience',
+		'/blog',
 		'/commands',
 		'/github',
 		'/linkedin',
 		'/instagram',
-		'/facebook',
+		'/x',
 		'/email',
 		'/help',
 		'/clear',
@@ -29,15 +30,20 @@
 		'/dark'
 	];
 
+	/* One entry per section that actually exists on the site. `/github` is
+	   deliberately absent: the home page has a github section, but that command
+	   is already taken by the external one that opens the profile. */
 	const navCommands: Record<string, string> = {
 		'/home': 'home',
 		'/about': 'about',
 		'/projects': 'projects',
-		'/contact': 'contact',
+		'/experience': 'experience',
+		'/blog': 'blog',
 		'/commands': 'commands'
 	};
 
-	const MAX_INPUT_LENGTH = 10;
+	/* Long enough for the longest command, `/experience` at 11. */
+	const MAX_INPUT_LENGTH = 12;
 	const RATE_LIMIT_MS = 500;
 	let lastCommandTime = 0;
 
@@ -58,11 +64,15 @@
 		'/github': () => window.open('https://github.com/LouieCads', '_blank'),
 		'/linkedin': () => window.open('https://www.linkedin.com/in/louie1221/', '_blank'),
 		'/instagram': () => window.open('https://www.instagram.com/louie.21_/', '_blank'),
-		'/facebook': () => window.open('https://www.facebook.com/louielocktorius21', '_blank'),
-		'/email': () => navigator.clipboard.writeText(EMAIL).then(() => {
-			showFeedback(`email copied: ${EMAIL}`, 'info');
-			setTimeout(() => window.open('https://mail.google.com/mail/u/0/#all?compose=new', '_blank'), 600);
-		})
+		'/x': () => window.open('https://x.com/louigie_21', '_blank'),
+		'/email': () =>
+			navigator.clipboard.writeText(EMAIL).then(() => {
+				showFeedback(`email copied: ${EMAIL}`, 'info');
+				setTimeout(
+					() => window.open('https://mail.google.com/mail/u/0/#all?compose=new', '_blank'),
+					600
+				);
+			})
 	};
 
 	let showAllCommandsSuggestion = $derived.by(() => {
@@ -178,34 +188,42 @@
 
 <div class="relative z-40 border-t border-(--color-border) bg-(--color-surface)">
 	{#if showAllCommandsSuggestion}
-		<div class="absolute bottom-full left-0 right-0 border-b border-t border-(--color-border) bg-(--color-surface) px-4 py-2 sm:px-8 md:px-16 lg:px-24">
+		<div
+			class="absolute right-0 bottom-full left-0 border-t border-b border-(--color-border) bg-(--color-surface) px-4 py-2 sm:px-8 md:px-16 lg:px-24"
+		>
 			<span class="font-mono text-xs text-(--color-text-secondary)">
-				<b>Navigation:</b> /home /about /projects /contact /commands
+				<b>Navigation:</b> /home /about /projects /experience /blog /commands
 				<span class="mx-2"></span>
-				<b>External:</b> /github /linkedin /instagram /facebook /email
+				<b>External:</b> /github /linkedin /instagram /x /email
 				<span class="mx-2"></span>
 				<b>Theme:</b> /light /dark
 			</span>
 		</div>
 	{:else if suggestion}
-		<div class="absolute bottom-full left-0 right-0 border-b border-t border-(--color-border) bg-(--color-surface) px-4 py-2 sm:px-8 md:px-16 lg:px-24">
+		<div
+			class="absolute right-0 bottom-full left-0 border-t border-b border-(--color-border) bg-(--color-surface) px-4 py-2 sm:px-8 md:px-16 lg:px-24"
+		>
 			<span class="font-mono text-xs text-(--color-text-primary)">
 				{suggestion}
 				<span class="ml-2 text-[10px] opacity-60">TAB to complete</span>
 			</span>
 		</div>
 	{:else if showHelp}
-		<div class="absolute bottom-full left-0 right-0 border-b border-t border-(--color-border) bg-(--color-surface) px-4 py-2 sm:px-8 md:px-16 lg:px-24">
+		<div
+			class="absolute right-0 bottom-full left-0 border-t border-b border-(--color-border) bg-(--color-surface) px-4 py-2 sm:px-8 md:px-16 lg:px-24"
+		>
 			<span class="font-mono text-xs text-(--color-text-secondary)">
-				<b>Navigation:</b> /home /about /projects /contact /commands
+				<b>Navigation:</b> /home /about /projects /experience /blog /commands
 				<span class="mx-2"></span>
-				<b>External:</b> /github /linkedin /instagram /facebook /email
+				<b>External:</b> /github /linkedin /instagram /x /email
 				<span class="mx-2"></span>
 				<b>Theme:</b> /light /dark
 			</span>
 		</div>
 	{:else if feedback}
-		<div class="absolute bottom-full left-0 right-0 border-b border-t border-(--color-border) bg-(--color-surface) px-4 py-2 sm:px-8 md:px-16 lg:px-24">
+		<div
+			class="absolute right-0 bottom-full left-0 border-t border-b border-(--color-border) bg-(--color-surface) px-4 py-2 sm:px-8 md:px-16 lg:px-24"
+		>
 			<span
 				class="font-mono text-xs {feedbackType === 'error'
 					? 'text-red-400/80'
@@ -218,7 +236,9 @@
 
 	<div class="px-4 sm:px-8 md:px-16 lg:px-24">
 		<form onsubmit={handleSubmit} class="flex items-center gap-2 py-3 sm:py-4">
-			<span class="hidden font-mono text-sm text-(--color-text-secondary) sm:inline">type-commands-to-know-me ~</span>
+			<span class="hidden font-mono text-sm text-(--color-text-secondary) sm:inline"
+				>type-commands-to-know-me ~</span
+			>
 			<span class="font-mono text-sm text-(--color-text-secondary) sm:hidden">~</span>
 			<span class="font-mono text-sm text-(--color-text-primary)">$</span>
 			<input
@@ -227,7 +247,7 @@
 				bind:value={input}
 				onkeydown={handleKeydown}
 				placeholder="type /help for commands"
-				class="flex-1 border-none bg-transparent font-mono text-sm text-(--color-text-primary) caret-(--color-text-primary) placeholder-(--color-text-muted) outline-none focus:ring-0"
+				class="flex-1 border-none bg-transparent font-mono text-sm text-(--color-text-primary) placeholder-(--color-text-muted) caret-(--color-text-primary) outline-none focus:ring-0"
 				maxlength={MAX_INPUT_LENGTH}
 				spellcheck="false"
 				autocomplete="off"
@@ -237,8 +257,8 @@
 				type="button"
 				onclick={toggleTheme}
 				class="ml-2 flex shrink-0 cursor-pointer items-center justify-center font-mono text-2xl text-(--color-text-muted) transition-colors hover:text-(--color-text-primary)"
-				aria-label="Toggle theme"
-			>{$theme === 'dark' ? '☀' : '☽'}</button>
+				aria-label="Toggle theme">{$theme === 'dark' ? '☀' : '☽'}</button
+			>
 		</form>
 	</div>
 </div>
