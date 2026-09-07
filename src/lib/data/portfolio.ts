@@ -29,15 +29,18 @@ export const experience: Role[] = [
 		end: null,
 		location: 'Taguig',
 		summary:
-			'Co-founded iSkolar and lead engineering as CTO. Designed a scalable platform supporting 10+ features that keeps new feature work fast to ship, and reworked client-side routing for a 60% performance jump in navigation.',
+			'Co-founded iSkolar and lead engineering as CTO. Designed a scalable platform supporting 10+ features that keeps new feature work fast to ship, reworked client-side routing for a 60% performance jump in navigation, and drove SEO & AEO work to a #1 branded search ranking.',
 		achievements: [
-			'Designed a scalable platform supporting 10+ features, enabling rapid feature integration and growth',
-			'Optimized client-side routing, delivering a 60% performance improvement and faster navigation'
+			'Implemented SEO & AEO strategies, driving 1,000+ organic search clicks and achieving a #1 Google branded-search ranking',
+			'Improved AI-search discoverability, earning Google AI Overview citations',
+			'Optimized client-side routing and application performance, reducing navigation latency and improving page transitions by 60%',
+			'Designed a scalable platform supporting 10+ features, enabling rapid feature integration and growth'
 		],
-		tags: ['React', 'TypeScript', 'Solidity', 'PostgreSQL', 'Docker', 'Microsoft Azure'],
+		tags: ['React', 'TypeScript', 'PostgreSQL', 'Docker', 'Microsoft Azure'],
 		kpis: [
 			{ value: '10+', label: 'features shipped' },
-			{ value: '60%', label: 'perf improvement' }
+			{ value: '60%', label: 'perf improvement' },
+			{ value: '1,000+', label: 'organic clicks' }
 		]
 	},
 	{
