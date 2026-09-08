@@ -324,12 +324,12 @@ export function formatYears(start: string, end: string | null): string {
 
 /** 2-paragraph summary for the scroll page's about preview. */
 export const aboutSummary = [
-	'A software engineering student and technopreneur driven by discipline and curiosity. I build across development, design, and product, with a focus on blockchain and AI.',
+	'A technopreneur and software engineer driven by discipline and curiosity. I build across development, design, and product, with a focus on blockchain and AI.',
 	'I like building things from the ground up, testing what works and improving through iteration - and outside of tech, I stay active, train, compete, and keep enough range to move between different disciplines.'
 ];
 
 export const aboutParagraphs = [
-	'A software engineering student and technopreneur driven by discipline and curiosity. I build across development, design, and product, with a focus on blockchain and AI.',
+	'A technopreneur and software engineer driven by discipline and curiosity. I build across development, design, and product, with a focus on blockchain and AI.',
 	'I like building things from the ground up, whether it’s a product, a system, or an idea worth exploring. Most of my work comes from figuring things out as I go, testing what works, and improving through iteration.',
 	'Outside of tech, I spend my time between training, competing, creating, and exploring new interests. I value staying active, taking on difficult things, and having enough range to move between different disciplines.'
 ];

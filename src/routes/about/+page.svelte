@@ -7,7 +7,7 @@
 
 <SEO
 	title="About | Louigie Caminoy"
-	description="A software engineering student and technopreneur in Metro Manila, building across development, design, and product with a focus on blockchain and AI."
+	description="A technopreneur and software engineer in Metro Manila, building across development, design, and product with a focus on blockchain and AI."
 	path="/about"
 />
 
