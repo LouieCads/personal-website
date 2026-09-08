@@ -446,9 +446,9 @@ export const projects: Project[] = [
 		tagline: 'A software studio site for client work, design to release.',
 		description: 'A software studio taking products from design through to release.',
 		tech: ['React', 'TypeScript', 'Tailwind CSS', 'Vite', 'Motion'],
-		link: 'https://fundr.software/',
-		host: 'fundr.software',
-		image: '/projects/fundr-studios-preview.png'
+		link: 'https://fundrstudio.com/',
+		host: 'fundrstudio.com',
+		image: '/projects/fundr-studio-preview.png'
 	},
 	{
 		index: '06',
