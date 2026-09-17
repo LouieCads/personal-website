@@ -24,6 +24,9 @@ const row = <
 	image: item.image
 });
 
+const byLatest = (a: { date: string }, b: { date: string }) =>
+	new Date(b.date).getTime() - new Date(a.date).getTime();
+
 export const load: PageServerLoad = async () => {
 	const [resolvedEpisodes, resolvedArticles] = await Promise.all([
 		withPreviews(episodes),
@@ -31,7 +34,7 @@ export const load: PageServerLoad = async () => {
 	]);
 
 	return {
-		episodes: resolvedEpisodes.map(row),
-		articles: resolvedArticles.map(row)
+		episodes: resolvedEpisodes.map(row).sort(byLatest),
+		articles: resolvedArticles.map(row).sort(byLatest)
 	};
 };

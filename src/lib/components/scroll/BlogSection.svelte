@@ -32,15 +32,15 @@
 		articleItems = articles
 	}: Props = $props();
 
-	// top 3 by date, but an ARTICLE always sits in the middle slot when one made the cut
+	/** The article featured in the scroll-page preview's middle slot. */
+	const FEATURED_ARTICLE_ID = 'bitpinas-iskolar-launch';
+
+	// top 2 podcasts by date, with the featured article pinned in the middle slot
 	const latest = $derived.by(() => {
-		const top = feedItems.slice(0, 3);
-		const articleIdx = top.findIndex((item) => item.kind === 'ARTICLE');
-		if (articleIdx > -1 && articleIdx !== 1) {
-			const [article] = top.splice(articleIdx, 1);
-			top.splice(1, 0, article);
-		}
-		return top;
+		const podcasts = feedItems.filter((item) => item.kind === 'PODCAST').slice(0, 2);
+		const featured = feedItems.find((item) => item.id === FEATURED_ARTICLE_ID);
+		if (!featured) return feedItems.slice(0, 3);
+		return [podcasts[0], featured, podcasts[1]].filter(Boolean);
 	});
 </script>
 
