@@ -15,7 +15,7 @@
 	}
 	let { title, description, path = '', noindex = false }: Props = $props();
 
-	const SITE_URL = 'https://louigiecaminoy.com';
+	const SITE_URL = 'https://www.louigiecaminoy.com';
 	const ogImage = `${SITE_URL}/og-image.png`;
 	const url = $derived(`${SITE_URL}${path}`);
 </script>
