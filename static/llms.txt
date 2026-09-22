@@ -1,0 +1,25 @@
+# Louigie Caminoy
+
+> Multidisciplinary technopreneur and software engineer based in Metro Manila, Philippines. Co-founder & CTO of iSkolar. Builds across development, design, and product, with a focus on blockchain and AI.
+
+Key facts:
+
+- Currently Co-founder & CTO at iSkolar (scholarship application and management platform, blockchain + AI).
+- Also AI Lead at AWS Learning Club - Heron, mentoring developers on LLMs and AI engineering.
+- Studying BS Computer Science at University of Makati (expected 2027).
+- Focus areas: blockchain development, systems architecture, technical leadership, system design, project management, full stack development, AI engineering.
+- Contact: louigiecads143@gmail.com
+
+## Pages
+
+- [About](https://www.louigiecaminoy.com/about): Background, specialties, and what drives the work.
+- [Projects](https://www.louigiecaminoy.com/projects): iSkolar, inki, Dave Malinao, USMO, fundr. studios, Finsharc — blockchain platforms, mobile apps, and web products.
+- [Experience](https://www.louigiecaminoy.com/experience): Full work history and education, including iSkolar, AWS Learning Club - Heron, Tutorials Dojo, UMak Student Multimedia Organization, and University of Makati.
+- [Blog](https://www.louigiecaminoy.com/blog): Comfort Kills Greatness podcast episodes and articles on blockchain, engineering, and building with discipline.
+
+## Optional
+
+- [GitHub](https://github.com/LouieCads)
+- [LinkedIn](https://www.linkedin.com/in/louie1221/)
+- [X](https://x.com/louigie_21)
+- [Instagram](https://www.instagram.com/louie.21_/)

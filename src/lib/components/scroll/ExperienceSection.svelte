@@ -24,9 +24,9 @@
 >
 	{#if preview}
 		<!-- one line per role: what, where, when -->
-		<div class="flex flex-col border-t border-(--color-rule)">
+		<ul class="flex flex-col border-t border-(--color-rule)">
 			{#each shown as role (role.id)}
-				<div
+				<li
 					class="grid items-baseline gap-x-4 gap-y-1 border-b border-(--color-rule) py-4 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_3.5rem] sm:py-5"
 					use:reveal
 				>
@@ -41,16 +41,16 @@
 					<p
 						class="font-mono text-[10px] tracking-[0.16em] text-(--color-text-muted) sm:text-right sm:text-[11px]"
 					>
-						{startYear(role.start)}
+						<time datetime={role.start}>{startYear(role.start)}</time>
 					</p>
-				</div>
+				</li>
 			{/each}
-		</div>
+		</ul>
 	{:else}
 		<!-- full page: commit-log rail, held in a centred column -->
-		<div class="mx-auto flex w-full max-w-3xl flex-col">
+		<ol class="mx-auto flex w-full max-w-3xl flex-col">
 			{#each shown as role, i (role.id)}
-				<div class="grid grid-cols-[14px_1fr] gap-4 pb-9 last:pb-0" use:reveal>
+				<li class="grid grid-cols-[14px_1fr] gap-4 pb-9 last:pb-0" use:reveal>
 					<div class="relative">
 						<span
 							class="absolute top-1.5 left-[2px] block h-[7px] w-[7px] rounded-full border border-(--color-accent) {role.end ===
@@ -67,7 +67,7 @@
 					<div class="min-w-0">
 						<div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
 							<span class="font-mono text-[10px] tracking-[0.16em] text-(--color-text-muted)">
-								{formatYears(role.start, role.end)}
+								<time datetime={role.start}>{formatYears(role.start, role.end)}</time>
 							</span>
 						</div>
 
@@ -99,8 +99,8 @@
 							{/each}
 						</div>
 					</div>
-				</div>
+				</li>
 			{/each}
-		</div>
+		</ol>
 	{/if}
 </PageSection>

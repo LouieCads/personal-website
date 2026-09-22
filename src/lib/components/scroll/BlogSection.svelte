@@ -89,44 +89,46 @@
 >
 	{#if preview}
 		<!-- one row, three latest across both formats -->
-		<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+		<ul class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
 			{#each latest as item (item.id)}
-				<svelte:element
-					this={item.url ? 'a' : 'div'}
-					href={item.url || undefined}
-					target={item.url ? '_blank' : undefined}
-					rel={item.url ? 'noopener noreferrer' : undefined}
-					class="group flex flex-col border border-(--color-border) bg-(--color-surface-card) transition-colors hover:border-(--color-border-hover) hover:bg-(--color-surface-alt)"
-					use:reveal
-					use:hoverSound
-				>
-					<div class="relative border-b border-(--color-rule)">
-						{@render cover(item.url, item.image, item.title, true)}
-						<span
-							class="absolute top-2 left-2 border border-(--color-border) bg-(--color-surface) px-1.5 py-0.5 font-mono text-[9px] tracking-[0.14em] text-(--color-text-secondary)"
-						>
-							{item.kind}
-						</span>
-					</div>
+				<li class="contents">
+					<svelte:element
+						this={item.url ? 'a' : 'div'}
+						href={item.url || undefined}
+						target={item.url ? '_blank' : undefined}
+						rel={item.url ? 'noopener noreferrer' : undefined}
+						class="group flex flex-col border border-(--color-border) bg-(--color-surface-card) transition-colors hover:border-(--color-border-hover) hover:bg-(--color-surface-alt)"
+						use:reveal
+						use:hoverSound
+					>
+						<div class="relative border-b border-(--color-rule)">
+							{@render cover(item.url, item.image, item.title, true)}
+							<span
+								class="absolute top-2 left-2 border border-(--color-border) bg-(--color-surface) px-1.5 py-0.5 font-mono text-[9px] tracking-[0.14em] text-(--color-text-secondary)"
+							>
+								{item.kind}
+							</span>
+						</div>
 
-					<div class="flex flex-1 flex-col gap-2 p-4">
-						<h3
-							class="text-sm leading-snug font-medium text-balance text-(--color-text-primary) transition-colors group-hover:text-(--color-accent) sm:text-base"
-						>
-							{item.title}
-						</h3>
-						<p class="line-clamp-3 text-[13px] leading-relaxed text-(--color-text-secondary)">
-							{item.blurb}
-						</p>
-						<span
-							class="mt-auto pt-2 text-right font-mono text-[10px] tracking-[0.14em] text-(--color-text-muted)"
-						>
-							{item.date}
-						</span>
-					</div>
-				</svelte:element>
+						<div class="flex flex-1 flex-col gap-2 p-4">
+							<h3
+								class="text-sm leading-snug font-medium text-balance text-(--color-text-primary) transition-colors group-hover:text-(--color-accent) sm:text-base"
+							>
+								{item.title}
+							</h3>
+							<p class="line-clamp-3 text-[13px] leading-relaxed text-(--color-text-secondary)">
+								{item.blurb}
+							</p>
+							<span
+								class="mt-auto pt-2 text-right font-mono text-[10px] tracking-[0.14em] text-(--color-text-muted)"
+							>
+								<time>{item.date}</time>
+							</span>
+						</div>
+					</svelte:element>
+				</li>
 			{/each}
-		</div>
+		</ul>
 	{:else}
 		<!-- full page: the two directory listings -->
 		<div class="grid gap-10 md:grid-cols-2 md:gap-12">
@@ -139,30 +141,36 @@
 						>{episodeItems.length}</span
 					>
 				</div>
-				{#each episodeItems as ep (ep.id)}
-					<svelte:element
-						this={ep.url ? 'a' : 'div'}
-						href={ep.url || undefined}
-						target={ep.url ? '_blank' : undefined}
-						rel={ep.url ? 'noopener noreferrer' : undefined}
-						class="group flex items-center gap-3 border-b border-(--color-rule) py-3 transition-colors hover:bg-(--color-surface-alt)"
-					>
-						<div class="shrink-0 border border-(--color-border)">
-							{@render cover(ep.url, ep.image, ep.title, false)}
-						</div>
-						<div class="min-w-0 flex-1">
-							<p class="truncate text-[13px] text-(--color-text-primary)">{ep.title}</p>
-							<p class="mt-0.5 line-clamp-1 text-[11px] text-(--color-text-secondary)">
-								{ep.blurb}
-							</p>
-						</div>
-						<span class="shrink-0 font-mono text-[10px] text-(--color-text-muted)">{ep.date}</span>
-						<span
-							class="shrink-0 font-mono text-xs text-(--color-accent) transition-transform group-hover:translate-x-1"
-							>▸</span
-						>
-					</svelte:element>
-				{/each}
+				<ul>
+					{#each episodeItems as ep (ep.id)}
+						<li>
+							<svelte:element
+								this={ep.url ? 'a' : 'div'}
+								href={ep.url || undefined}
+								target={ep.url ? '_blank' : undefined}
+								rel={ep.url ? 'noopener noreferrer' : undefined}
+								class="group flex items-center gap-3 border-b border-(--color-rule) py-3 transition-colors hover:bg-(--color-surface-alt)"
+							>
+								<div class="shrink-0 border border-(--color-border)">
+									{@render cover(ep.url, ep.image, ep.title, false)}
+								</div>
+								<div class="min-w-0 flex-1">
+									<p class="truncate text-[13px] text-(--color-text-primary)">{ep.title}</p>
+									<p class="mt-0.5 line-clamp-1 text-[11px] text-(--color-text-secondary)">
+										{ep.blurb}
+									</p>
+								</div>
+								<span class="shrink-0 font-mono text-[10px] text-(--color-text-muted)"
+									><time>{ep.date}</time></span
+								>
+								<span
+									class="shrink-0 font-mono text-xs text-(--color-accent) transition-transform group-hover:translate-x-1"
+									>▸</span
+								>
+							</svelte:element>
+						</li>
+					{/each}
+				</ul>
 			</div>
 
 			<div use:reveal>
@@ -174,28 +182,36 @@
 						>{articleItems.length}</span
 					>
 				</div>
-				{#each articleItems as a (a.id)}
-					<svelte:element
-						this={a.url ? 'a' : 'div'}
-						href={a.url || undefined}
-						target={a.url ? '_blank' : undefined}
-						rel={a.url ? 'noopener noreferrer' : undefined}
-						class="group flex items-center gap-3 border-b border-(--color-rule) py-3 transition-colors hover:bg-(--color-surface-alt)"
-					>
-						<div class="shrink-0 border border-(--color-border)">
-							{@render cover(a.url, a.image, a.title, false)}
-						</div>
-						<div class="min-w-0 flex-1">
-							<p class="truncate text-[13px] text-(--color-text-primary)">{a.title}</p>
-							<p class="mt-0.5 line-clamp-1 text-[11px] text-(--color-text-secondary)">{a.blurb}</p>
-						</div>
-						<span class="shrink-0 font-mono text-[10px] text-(--color-text-muted)">{a.date}</span>
-						<span
-							class="shrink-0 font-mono text-xs text-(--color-accent) transition-transform group-hover:translate-x-1"
-							>▸</span
-						>
-					</svelte:element>
-				{/each}
+				<ul>
+					{#each articleItems as a (a.id)}
+						<li>
+							<svelte:element
+								this={a.url ? 'a' : 'div'}
+								href={a.url || undefined}
+								target={a.url ? '_blank' : undefined}
+								rel={a.url ? 'noopener noreferrer' : undefined}
+								class="group flex items-center gap-3 border-b border-(--color-rule) py-3 transition-colors hover:bg-(--color-surface-alt)"
+							>
+								<div class="shrink-0 border border-(--color-border)">
+									{@render cover(a.url, a.image, a.title, false)}
+								</div>
+								<div class="min-w-0 flex-1">
+									<p class="truncate text-[13px] text-(--color-text-primary)">{a.title}</p>
+									<p class="mt-0.5 line-clamp-1 text-[11px] text-(--color-text-secondary)">
+										{a.blurb}
+									</p>
+								</div>
+								<span class="shrink-0 font-mono text-[10px] text-(--color-text-muted)"
+									><time>{a.date}</time></span
+								>
+								<span
+									class="shrink-0 font-mono text-xs text-(--color-accent) transition-transform group-hover:translate-x-1"
+									>▸</span
+								>
+							</svelte:element>
+						</li>
+					{/each}
+				</ul>
 			</div>
 		</div>
 	{/if}

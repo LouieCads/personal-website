@@ -39,9 +39,9 @@
 
 		<!-- specialties -->
 		<div class="flex flex-col">
-			<div class="flex flex-col gap-2.5">
+			<ul class="flex flex-col gap-2.5">
 				{#each shown as s (s.index)}
-					<div
+					<li
 						class="group border border-(--color-border) bg-(--color-surface-card) p-3 transition-colors hover:border-(--color-border-hover) hover:bg-(--color-surface-alt)"
 					>
 						<div class="flex items-center gap-3">
@@ -51,9 +51,9 @@
 							</h4>
 						</div>
 						<p class="mt-1.5 pl-8 text-xs leading-relaxed text-(--color-text-muted)">{s.detail}</p>
-					</div>
+					</li>
 				{/each}
-			</div>
+			</ul>
 			{#if preview && specialties.length > shown.length}
 				<p class="mt-3 font-mono text-[10px] tracking-[0.16em] text-(--color-text-muted)">
 					+ {specialties.length - shown.length} more

@@ -218,24 +218,29 @@
 		</div>
 
 		<!-- contact links, in place of the old role line -->
-		<div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 lg:justify-start">
+		<ul
+			class="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 lg:justify-start"
+			aria-label="Social links"
+		>
 			{#each socials as s, i (s.label)}
-				<a
-					href={s.href}
-					target={s.external ? '_blank' : undefined}
-					rel="noopener noreferrer"
-					style="animation-delay: {i * 90}ms"
-					class="group social-link inline-flex items-baseline gap-1.5 font-mono text-xs text-(--color-accent) underline decoration-(--color-accent)/40 underline-offset-4 transition-colors hover:decoration-(--color-accent) sm:text-sm {revealClass}"
-				>
-					{s.display}
-					<span
-						class="text-[10px] text-(--color-text-muted) transition-transform group-hover:-translate-y-0.5 group-hover:text-(--color-accent)"
+				<li>
+					<a
+						href={s.href}
+						target={s.external ? '_blank' : undefined}
+						rel="noopener noreferrer"
+						style="animation-delay: {i * 90}ms"
+						class="group social-link inline-flex items-baseline gap-1.5 font-mono text-xs text-(--color-accent) underline decoration-(--color-accent)/40 underline-offset-4 transition-colors hover:decoration-(--color-accent) sm:text-sm {revealClass}"
 					>
-						{s.external ? '↗' : '✉'}
-					</span>
-				</a>
+						{s.display}
+						<span
+							class="text-[10px] text-(--color-text-muted) transition-transform group-hover:-translate-y-0.5 group-hover:text-(--color-accent)"
+						>
+							{s.external ? '↗' : '✉'}
+						</span>
+					</a>
+				</li>
 			{/each}
-		</div>
+		</ul>
 
 		<!-- metrics -->
 		<div
