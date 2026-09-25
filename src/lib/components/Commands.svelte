@@ -25,7 +25,7 @@
 		{
 			cmd: '/linkedin',
 			desc: 'open LinkedIn profile',
-			action: () => window.open('https://www.linkedin.com/in/louie1221/', '_blank')
+			action: () => window.open('https://www.linkedin.com/in/louigiecaminoy', '_blank')
 		},
 		{
 			cmd: '/instagram',

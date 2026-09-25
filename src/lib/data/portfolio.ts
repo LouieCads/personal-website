@@ -284,7 +284,7 @@ export const socials = [
 	{
 		label: 'LinkedIn',
 		display: 'LinkedIn',
-		href: 'https://www.linkedin.com/in/louie1221/',
+		href: 'https://www.linkedin.com/in/louigiecaminoy',
 		external: true
 	},
 	{

@@ -62,7 +62,7 @@
 
 	const externalCommands: Record<string, () => void> = {
 		'/github': () => window.open('https://github.com/LouieCads', '_blank'),
-		'/linkedin': () => window.open('https://www.linkedin.com/in/louie1221/', '_blank'),
+		'/linkedin': () => window.open('https://www.linkedin.com/in/louigiecaminoy', '_blank'),
 		'/instagram': () => window.open('https://www.instagram.com/louie.21_/', '_blank'),
 		'/x': () => window.open('https://x.com/louigie_21', '_blank'),
 		'/email': () =>
