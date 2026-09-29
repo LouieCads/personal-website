@@ -95,6 +95,7 @@
 					<svelte:element
 						this={item.url ? 'a' : 'div'}
 						href={item.url || undefined}
+						data-cursor={item.url ? 'snap' : undefined}
 						target={item.url ? '_blank' : undefined}
 						rel={item.url ? 'noopener noreferrer' : undefined}
 						class="group flex flex-col border border-(--color-border) bg-(--color-surface-card) transition-colors hover:border-(--color-border-hover) hover:bg-(--color-surface-alt)"
@@ -147,6 +148,7 @@
 							<svelte:element
 								this={ep.url ? 'a' : 'div'}
 								href={ep.url || undefined}
+								data-cursor={ep.url ? 'snap' : undefined}
 								target={ep.url ? '_blank' : undefined}
 								rel={ep.url ? 'noopener noreferrer' : undefined}
 								class="group flex items-center gap-3 border-b border-(--color-rule) py-3 transition-colors hover:bg-(--color-surface-alt)"
@@ -188,6 +190,7 @@
 							<svelte:element
 								this={a.url ? 'a' : 'div'}
 								href={a.url || undefined}
+								data-cursor={a.url ? 'snap' : undefined}
 								target={a.url ? '_blank' : undefined}
 								rel={a.url ? 'noopener noreferrer' : undefined}
 								class="group flex items-center gap-3 border-b border-(--color-rule) py-3 transition-colors hover:bg-(--color-surface-alt)"

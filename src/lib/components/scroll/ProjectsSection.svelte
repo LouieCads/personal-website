@@ -56,6 +56,7 @@
 				<li class="contents">
 					<a
 						href={p.link}
+						data-cursor="snap"
 						target="_blank"
 						rel="noopener noreferrer external"
 						class="group flex flex-col border border-(--color-border) bg-(--color-surface-card) transition-all duration-300 hover:-translate-y-1.5 hover:border-(--color-accent)"
@@ -111,6 +112,7 @@
 				<li class="contents">
 					<a
 						href={p.link}
+						data-cursor="snap"
 						target="_blank"
 						rel="noopener noreferrer external"
 						class="group flex flex-col border border-(--color-border) bg-(--color-surface-card) transition-colors hover:border-(--color-border-hover) hover:bg-(--color-surface-alt) sm:flex-row"

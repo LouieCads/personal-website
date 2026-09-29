@@ -10,8 +10,7 @@
 	const IDLE = 28;
 	/** Breathing room left between a locked target and the brackets. */
 	const PAD = 6;
-	/** A target wider or taller than this is treated as scenery, not a control —
-	    a nav bar or a full-width card wrapper should not swallow the reticle. */
+	/** Limit automatic targets. Cards marked data-cursor="snap" opt in at any size. */
 	const MAX_SNAP = 560;
 
 	let box: HTMLDivElement;
@@ -107,7 +106,8 @@
 
 			const hit = el.closest(TARGETS);
 			const r = hit?.getBoundingClientRect();
-			target = r && r.width <= MAX_SNAP && r.height <= MAX_SNAP ? hit : null;
+			const explicit = hit?.matches('[data-cursor="snap"]');
+			target = r && (explicit || (r.width <= MAX_SNAP && r.height <= MAX_SNAP)) ? hit : null;
 			box.classList.toggle('is-locked', !!target);
 		};
 
