@@ -18,6 +18,7 @@
 		'/projects',
 		'/experience',
 		'/blog',
+		'/certifications',
 		'/commands',
 		'/github',
 		'/linkedin',
@@ -39,11 +40,12 @@
 		'/projects': 'projects',
 		'/experience': 'experience',
 		'/blog': 'blog',
+		'/certifications': 'certifications',
 		'/commands': 'commands'
 	};
 
-	/* Long enough for the longest command, `/experience` at 11. */
-	const MAX_INPUT_LENGTH = 12;
+	/* Match the longest registered command, including /certifications. */
+	const MAX_INPUT_LENGTH = Math.max(...allCommands.map((command) => command.length));
 	const RATE_LIMIT_MS = 500;
 	let lastCommandTime = 0;
 

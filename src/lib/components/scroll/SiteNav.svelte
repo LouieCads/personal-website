@@ -16,7 +16,13 @@
 		{ id: 'about' as const, number: '01', label: 'ABOUT', href: resolve('/about') },
 		{ id: 'projects' as const, number: '02', label: 'PROJECTS', href: resolve('/projects') },
 		{ id: 'experience' as const, number: '03', label: 'EXPERIENCE', href: resolve('/experience') },
-		{ id: 'blog' as const, number: '04', label: 'BLOG', href: resolve('/blog') }
+		{ id: 'blog' as const, number: '04', label: 'BLOG', href: resolve('/blog') },
+		{
+			id: 'certifications' as const,
+			number: '05',
+			label: 'CERTIFICATIONS',
+			href: resolve('/certifications')
+		}
 	];
 
 	const homeHref = resolve('/');
@@ -48,6 +54,7 @@
 			{#each items as item (item.id)}
 				<a
 					href={item.href}
+					aria-label={`${item.number} ${item.label}`}
 					aria-current={active === item.id ? 'page' : undefined}
 					use:glitchLink
 					class="glitch-link relative shrink-0 py-1 font-mono text-[11px] tracking-[0.14em] transition-colors {active ===

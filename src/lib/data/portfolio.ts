@@ -178,7 +178,8 @@ export interface Article {
 export const articles: Article[] = [
 	{
 		id: 'bitpinas-iskolar-launch',
-		title: 'These Filipino Students Built an AI and Blockchain-Powered Scholarship Platform to Fix Education Funding',
+		title:
+			'These Filipino Students Built an AI and Blockchain-Powered Scholarship Platform to Fix Education Funding',
 		blurb:
 			'How iSkolar centralizes fragmented scholarship funding with AI and blockchain, and what it took to place Top 10 at Project RISE.',
 		date: 'May 04, 2026',
@@ -188,14 +189,16 @@ export const articles: Article[] = [
 	},
 	{
 		id: 'byc-ventures-iskolar',
-		title: 'BYC Ventures and iSkolar Formalize Collaboration to Advance Verifiable Credential Infrastructure',
+		title:
+			'BYC Ventures and iSkolar Formalize Collaboration to Advance Verifiable Credential Infrastructure',
 		blurb:
 			'iSkolar and BYC Ventures sign a memorandum of agreement to build verifiable digital credentials with cryptographic proof of origin and integrity.',
 		date: 'March 25, 2026',
 		readTime: '4 min read',
 		tag: 'Blockchain',
 		url: 'https://byc.ventures/news/byc-ventures-and-iskolar-formalize-collaboration-to-advance-verifiable-credential-infrastructure',
-		image: 'https://framerusercontent.com/images/5F9xwuzCvorz4puBIEej6x5O0RA.png?width=1920&height=1440'
+		image:
+			'https://framerusercontent.com/images/5F9xwuzCvorz4puBIEej6x5O0RA.png?width=1920&height=1440'
 	},
 	{
 		id: 'claude',
@@ -307,7 +310,8 @@ export const sections = [
 	{ id: 'projects', number: '02', label: 'PROJECTS' },
 	{ id: 'experience', number: '03', label: 'EXPERIENCE' },
 	{ id: 'blog', number: '04', label: 'BLOG' },
-	{ id: 'github', number: '05', label: 'GITHUB' }
+	{ id: 'certifications', number: '05', label: 'CERTIFICATIONS' },
+	{ id: 'github', number: '06', label: 'GITHUB' }
 ] as const;
 
 export type SectionId = (typeof sections)[number]['id'];
