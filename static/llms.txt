@@ -13,7 +13,7 @@ Key facts:
 ## Pages
 
 - [About](https://www.louigiecaminoy.com/about): Background, specialties, and what drives the work.
-- [Projects](https://www.louigiecaminoy.com/projects): iSkolar, inki, Dave Malinao, USMO, fundr. studios, Finsharc — blockchain platforms, mobile apps, and web products.
+- [Projects](https://www.louigiecaminoy.com/projects): iSkolar, Academy, Configains, Fundr Studio, USMO, Finsharc — blockchain platforms, mobile apps, and web products.
 - [Experience](https://www.louigiecaminoy.com/experience): Full work history and education, including iSkolar, AWS Learning Club - Heron, Tutorials Dojo, UMak Student Multimedia Organization, and University of Makati.
 - [Blog](https://www.louigiecaminoy.com/blog): Comfort Kills Greatness podcast episodes and articles on blockchain, engineering, and building with discipline.
 

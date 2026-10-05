@@ -12,7 +12,7 @@
 			tech: ['TypeScript', 'Solidity', 'Hardhat', 'React', 'Tailwind CSS', 'Express.js', 'PostgreSQL', 'Vitest', 'Docker', 'bun'],
 			link: 'https://iskolar.io',
 			index: '01',
-			image: '/projects/iskolar-preview.png'
+			image: '/projects/iskolar-preview.webp'
 		},
 		{
 			title: 'Finsharc',
@@ -21,7 +21,7 @@
 			tech: ["TypeScript", "React Native", "Expo", "NativeWind", "Zustand", "Vitest", "ML Kit", "pnpm"],
 			link: 'https://www.finsharc.com',
 			index: '02',
-			image: '/projects/finsharc-preview.png'
+			image: '/projects/finsharc-preview.webp'
 		},
 		{
 			title: 'USMO',
@@ -30,7 +30,7 @@
 			tech: ['Hostinger Website Builder', 'HTML', 'CSS', 'JavaScript'],
 			link: 'https://connect.usmo.org.ph',
 			index: '03',
-			image: '/projects/usmo-preview.png'
+			image: '/projects/usmo-preview.webp'
 		}
 	];
 </script>

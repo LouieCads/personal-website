@@ -10,7 +10,10 @@
 	}
 	let { preview = false }: Props = $props();
 
-	const shown = $derived(preview ? projects.slice(0, 3) : projects);
+	const previewHosts = new Set(['iskolar.io', 'academy.iskolar.io', 'configains.fundrstudio.com']);
+	const shown = $derived(
+		preview ? projects.filter((project) => previewHosts.has(project.host)) : projects
+	);
 </script>
 
 <!-- Not every link ships a screenshot; a binary plate stands in until one does. -->

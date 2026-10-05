@@ -430,29 +430,40 @@ export const projects: Project[] = [
 	},
 	{
 		index: '02',
-		title: 'inki',
-		tagline: 'A social book tracker.',
+		title: 'Academy',
+		tagline: 'Student work built to be seen and funded.',
 		description:
-			'A reading companion where readers log what they are reading and follow what the people around them read.',
-		tech: ['React Native', 'Expo', 'TypeScript', 'Expo Router', 'SQLite'],
-		link: 'https://apps.apple.com/us/app/inki-social-book-tracker/id6776695671',
-		host: 'apps.apple.com',
-		image: '/projects/inki-preview.webp',
-		imagePosition: 'center top'
+			'A platform where students showcase built projects and starting theses, seek grants, and connect with investors interested in student work.',
+		tech: ['Web App', 'Student Projects', 'Grants'],
+		link: 'https://academy.iskolar.io/',
+		host: 'academy.iskolar.io',
+		image: '/projects/academy-preview.webp',
+		imagePosition: '10% 0%'
 	},
 	{
 		index: '03',
-		title: 'Dave Malinao',
-		tagline: 'A home chef’s portfolio of dishes, stories and process.',
+		title: 'Configains',
+		tagline: 'Strength and confidence for real life.',
 		description:
-			'A culinary portfolio for a home chef and food creator, built around signature dishes, kitchen stories and a philosophy of slow, honest cooking.',
-		tech: ['Svelte', 'SvelteKit', 'TypeScript', 'Tailwind CSS', 'Vite'],
-		link: 'https://davemalinao.netlify.app/',
-		host: 'davemalinao.netlify.app',
-		image: '/projects/dave-malinao-preview.webp'
+			'A fitness coaching website presenting practical training, flexible nutrition, and personal guidance from founder and coach Cash Fuerte.',
+		tech: ['Website', 'Fitness Coaching', 'Nutrition'],
+		link: 'https://configains.fundrstudio.com/',
+		host: 'configains.fundrstudio.com',
+		image: '/projects/condigains-preview.webp',
+		imagePosition: '30% 0%'
 	},
 	{
 		index: '04',
+		title: 'Fundr Studio',
+		tagline: 'A software studio site for client work, design to release.',
+		description: 'A software studio taking products from design through to release.',
+		tech: ['React', 'TypeScript', 'Tailwind CSS', 'Vite', 'Motion'],
+		link: 'https://fundrstudio.com/',
+		host: 'fundrstudio.com',
+		image: '/projects/fundr-studio-preview.webp'
+	},
+	{
+		index: '05',
 		title: 'USMO',
 		tagline: 'One front door for a student organization.',
 		description:
@@ -464,16 +475,6 @@ export const projects: Project[] = [
 		imagePosition: 'left top',
 		year: '2024',
 		role: 'Web lead'
-	},
-	{
-		index: '05',
-		title: 'fundr. studios',
-		tagline: 'A software studio site for client work, design to release.',
-		description: 'A software studio taking products from design through to release.',
-		tech: ['React', 'TypeScript', 'Tailwind CSS', 'Vite', 'Motion'],
-		link: 'https://fundrstudio.com/',
-		host: 'fundrstudio.com',
-		image: '/projects/fundr-studio-preview.png'
 	},
 	{
 		index: '06',
