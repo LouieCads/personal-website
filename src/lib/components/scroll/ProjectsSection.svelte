@@ -10,15 +10,21 @@
 	}
 	let { preview = false }: Props = $props();
 
-	const previewHosts = new Set(['iskolar.io', 'academy.iskolar.io', 'configains.fundrstudio.com']);
+	// Four tiles fill one row of the grid on the home page.
+	const previewHosts = new Set([
+		'iskolar.io',
+		'academy.iskolar.io',
+		'configains.fundrstudio.com',
+		'fundrstudio.com'
+	]);
 	const shown = $derived(
 		preview ? projects.filter((project) => previewHosts.has(project.host)) : projects
 	);
 
-	// A plain box with no fill: the page shows straight through. Hover is carried by the
+	// A square-ish tile with no fill: the page shows straight through. Hover is carried by the
 	// border and the corner marks, never by a background colour.
 	const box =
-		'group relative flex flex-col gap-6 border border-(--color-border) p-6 transition-all duration-300 hover:-translate-y-1.5 hover:border-(--color-accent) lg:p-7';
+		'group relative flex flex-col gap-6 border border-(--color-border) p-5 transition-all duration-300 hover:-translate-y-1.5 hover:border-(--color-accent) sm:min-h-64 xl:p-6';
 
 	// L-shaped marks on each corner; they grow and turn accent on hover.
 	const corners = [
@@ -101,7 +107,7 @@
 	flush={!preview}
 	glitch={preview}
 >
-	<ul class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+	<ul class="grid auto-rows-fr grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
 		{#each shown as p (p.title)}
 			<li class="contents">
 				{#if preview}
