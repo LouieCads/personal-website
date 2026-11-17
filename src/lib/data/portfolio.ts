@@ -272,7 +272,7 @@ export function isVideoLink(url: string): boolean {
 }
 
 export const heroMetrics = [
-	{ value: '6', label: 'Live Projects' },
+	{ value: '5', label: 'Live Projects' },
 	{ value: '3', label: 'Years Building' },
 	{ value: '20+', label: 'Technologies' }
 ];
@@ -389,105 +389,57 @@ export const specialties = [
 ];
 
 export interface Project {
-	index: string;
 	title: string;
-	tagline: string;
 	description: string;
-	tech: string[];
 	link: string;
-	/** drop a screenshot in static/projects and point here; omit for a plate */
-	image?: string;
-	/** object-position for the crop; default 'center top' suits browser/desktop shots */
-	imagePosition?: string;
+	/** drop a logo in static/projects/logos and point here; omit for a monogram tile */
+	logo?: string;
 	year?: string;
 	role?: string;
-	/** shown in the card's window chrome */
+	/** shown under the project name */
 	host: string;
 }
 
 export const projects: Project[] = [
 	{
-		index: '01',
 		title: 'iSkolar',
-		tagline: 'Scholarships, applied for and awarded on-chain.',
-		description:
-			'A scholarship application and management platform connecting university students with scholarship providers, streamlining the application and selection process.',
-		tech: [
-			'React',
-			'TypeScript',
-			'Vite',
-			'Tailwind CSS',
-			'TanStack Router',
-			'React Query',
-			'Gemini AI',
-			'Microsoft Azure'
-		],
+		description: 'Connects students with scholarship providers and simplifies applications.',
 		link: 'https://iskolar.io',
 		host: 'iskolar.io',
-		image: '/projects/iskolar-preview.webp',
+		logo: '/projects/logos/iskolar.webp',
 		year: '2024',
 		role: 'CTO - Architecture & contracts'
 	},
 	{
-		index: '02',
 		title: 'Academy',
-		tagline: 'Student work built to be seen and funded.',
-		description:
-			'A platform where students showcase built projects and starting theses, seek grants, and connect with investors interested in student work.',
-		tech: ['Web App', 'Student Projects', 'Grants'],
+		description: 'Where students showcase projects and theses, and find grants and investors.',
 		link: 'https://academy.iskolar.io/',
 		host: 'academy.iskolar.io',
-		image: '/projects/academy-preview.webp',
-		imagePosition: '10% 0%'
+		logo: '/projects/logos/academy.webp'
 	},
 	{
-		index: '03',
 		title: 'Configains',
-		tagline: 'Strength and confidence for real life.',
 		description:
-			'A fitness coaching website presenting practical training, flexible nutrition, and personal guidance from founder and coach Cash Fuerte.',
-		tech: ['Website', 'Fitness Coaching', 'Nutrition'],
+			'Fitness coaching with practical training, flexible nutrition, and personal guidance.',
 		link: 'https://configains.fundrstudio.com/',
 		host: 'configains.fundrstudio.com',
-		image: '/projects/condigains-preview.webp',
-		imagePosition: '30% 0%'
+		logo: '/projects/logos/configains.webp'
 	},
 	{
-		index: '04',
 		title: 'Fundr Studio',
-		tagline: 'A software studio site for client work, design to release.',
-		description: 'A software studio taking products from design through to release.',
-		tech: ['React', 'TypeScript', 'Tailwind CSS', 'Vite', 'Motion'],
+		description: 'A software studio taking products from design to release.',
 		link: 'https://fundrstudio.com/',
 		host: 'fundrstudio.com',
-		image: '/projects/fundr-studio-preview.webp'
+		logo: '/projects/logos/fundr-studio.svg'
 	},
 	{
-		index: '05',
 		title: 'USMO',
-		tagline: 'One front door for a student organization.',
-		description:
-			'A centralized landing page for UMak Student Multimedia Organization showcasing projects, initiatives, and social platforms for improved accessibility and engagement.',
-		tech: ['Hostinger Website Builder', 'HTML', 'CSS', 'JavaScript'],
+		description: 'Landing page for the UMak Student Multimedia Organization.',
 		link: 'https://connect.usmo.org.ph',
 		host: 'connect.usmo.org.ph',
-		image: '/projects/usmo-preview.webp',
-		imagePosition: 'left top',
+		logo: '/projects/logos/usmo.webp',
 		year: '2024',
 		role: 'Web lead'
-	},
-	{
-		index: '06',
-		title: 'Finsharc',
-		tagline: 'A finance copilot that works with no signal.',
-		description:
-			'An intelligent mobile finance copilot that helps understand and act on personal and business finances with clarity and control, built offline first and designed to keep users oriented and in command.',
-		tech: ['React Native', 'Expo', 'TypeScript', 'NativeWind', 'Zustand', 'Llama'],
-		link: 'https://www.finsharc.com',
-		host: 'finsharc.com',
-		image: '/projects/finsharc-preview.webp',
-		year: '2025',
-		role: 'Founder - Mobile lead'
 	}
 ];
 

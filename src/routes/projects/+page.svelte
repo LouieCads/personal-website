@@ -7,7 +7,7 @@
 
 <SEO
 	title="Projects | Louigie Caminoy"
-	description="Selected projects spanning blockchain platforms, mobile apps, and web products — from iSkolar to Finsharc."
+	description="Selected projects spanning scholarship platforms, coaching, and web products — from iSkolar to USMO."
 	path="/projects"
 />
 
