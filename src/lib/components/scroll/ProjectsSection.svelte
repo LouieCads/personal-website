@@ -24,7 +24,7 @@
 	// A square-ish tile with no fill: the page shows straight through. Hover is carried by the
 	// border and the corner marks, never by a background colour.
 	const box =
-		'group relative flex flex-col gap-6 border border-(--color-border) p-5 transition-all duration-300 hover:-translate-y-1.5 hover:border-(--color-accent) sm:min-h-64 xl:p-6';
+		'group relative flex flex-col items-center gap-6 border border-(--color-border) p-5 transition-all duration-300 hover:-translate-y-1.5 hover:border-(--color-accent) sm:min-h-64 xl:p-6 text-center';
 
 	// L-shaped marks on each corner; they grow and turn accent on hover.
 	const corners = [
@@ -78,13 +78,12 @@
 		></span>
 	{/each}
 
-	<div class="flex items-start justify-between gap-4">
-		{@render mark(p.logo, p.title, 'size-20')}
-		<span
-			class="font-mono text-base text-(--color-text-muted) transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-(--color-accent)"
-			aria-hidden="true">↗</span
-		>
-	</div>
+	<span
+		class="absolute top-4 right-4 font-mono text-base text-(--color-text-muted) transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-(--color-accent) xl:top-5 xl:right-5"
+		aria-hidden="true">↗</span
+	>
+
+	{@render mark(p.logo, p.title, 'size-20')}
 
 	<div>
 		<h3

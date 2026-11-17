@@ -272,7 +272,7 @@ export function isVideoLink(url: string): boolean {
 }
 
 export const heroMetrics = [
-	{ value: '5', label: 'Live Projects' },
+	{ value: '6', label: 'Live Projects' },
 	{ value: '3', label: 'Years Building' },
 	{ value: '20+', label: 'Technologies' }
 ];
@@ -416,6 +416,13 @@ export const projects: Project[] = [
 		link: 'https://academy.iskolar.io/',
 		host: 'academy.iskolar.io',
 		logo: '/projects/logos/academy.webp'
+	},
+	{
+		title: 'Vocation',
+		description: 'Internships and OJT listings for Filipino students, with 1-on-1 career coaching.',
+		link: 'https://vocation.iskolar.io',
+		host: 'vocation.iskolar.io',
+		logo: '/projects/logos/vocation.webp'
 	},
 	{
 		title: 'Configains',
