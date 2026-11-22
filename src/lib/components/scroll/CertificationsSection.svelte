@@ -17,6 +17,7 @@
 	cta="SEE ALL CERTIFICATIONS"
 	meta={items.length ? `${items.length} CREDENTIALS` : ''}
 	glitch={preview}
+	flush={!preview}
 >
 	{#if !preview && items.length}
 		<p class="intro">Certifications and completed training.</p>

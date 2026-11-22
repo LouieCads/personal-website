@@ -147,6 +147,21 @@ export const recognitions: Recognition[] = [
 	}
 ];
 
+/** "2026-11" → "November 2026", for prose and structured data. */
+export function formatMonthLong(iso: string): string {
+	const [y, m] = iso.split('-').map(Number);
+	return new Date(Date.UTC(y, m - 1, 1)).toLocaleString('en-US', {
+		month: 'long',
+		year: 'numeric',
+		timeZone: 'UTC'
+	});
+}
+
+/** "Champion" plus any special awards: "1st Runner-Up and Most Disruptive Innovation". */
+export function fullAward(r: Recognition): string {
+	return [r.award, ...(r.alsoAwarded ?? [])].join(' and ');
+}
+
 /** "2026-11" → "NOV 2026" */
 export function formatMonth(iso: string): string {
 	const [y, m] = iso.split('-').map(Number);

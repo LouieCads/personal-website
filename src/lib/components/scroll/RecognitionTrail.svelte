@@ -91,11 +91,10 @@
 
 	// ---- Wide layout: one low-poly mountain, trail from camp to summit ----
 
-	/** Marker size: the pin's tip sits exactly on its stop. */
+	/** Marker width: the pin (72px tall) sits with its tip exactly on its stop. */
 	const PIN_W = 56;
-	const PIN_H = 72;
 	const GAP = 12;
-	const SUMMIT_Y = 112;
+	const SUMMIT_Y = 100;
 
 	/** Pines on the flat outer edges, clear of the labels. [x, z, height px] */
 	const TREES = [
@@ -132,9 +131,14 @@
 		{ top: 0.4, w: 150, dur: 60, delay: -38, rest: 80 },
 		{ top: 0.62, w: 124, dur: 72, delay: -8, rest: 6 }
 	];
-	const SKY: Cloud[] = [
-		{ top: 0.04, w: 64, dur: 46, delay: -12, rest: 52 },
-		{ top: 0.3, w: 84, dur: 38, delay: -30, rest: 4 }
+	/** Narrow layout: tops are in px (rendered with a height of 1). */
+	const SKY_BACK: Cloud[] = [
+		{ top: 36, w: 72, dur: 52, delay: -12, rest: 62 },
+		{ top: 320, w: 60, dur: 66, delay: -44, rest: 72 }
+	];
+	const SKY_FRONT: Cloud[] = [
+		{ top: 170, w: 100, dur: 40, delay: -24, rest: 64 },
+		{ top: 560, w: 88, dur: 48, delay: -6, rest: 76 }
 	];
 
 	/**
@@ -201,45 +205,62 @@
 		return { H, terrain, stops, trail, trees, camp, labelW };
 	});
 
-	// ---- Narrow layout: a small summit up top, the trail runs down the list ----
+	// ---- Narrow layout: a tall mountain; the trail zigzags up its face ----
 
-	const ROW = 120;
-	const LANE = PIN_W / 2;
-	const HEAD_W = 220;
-	const HEAD_H = 120;
-	const HEAD = HEAD_H + 8;
-	const FOOT = 56;
+	/** Vertical distance between stops: a pin plus up to three lines of label. */
+	const STEP = 132;
+	/** The summit stop's y, leaving room for its pin above. */
+	const TOP = 100;
+	/** Below the oldest stop: camp, trees and the slab's edge. */
+	const BASE = 104;
+	/** The narrowest a label is allowed to get. */
+	const MIN_LABEL = 150;
 
 	const tall = $derived.by(() => {
+		const W = width;
 		const n = items.length;
-		const H = HEAD + ROW * n + FOOT;
-		const hw = Math.min(HEAD_W, width);
+		const H = TOP + Math.max(0, n - 1) * STEP + BASE;
+
+		// The trail swings between a left and a right lane. Every label reads to
+		// the right of its pin, so the right lane ends where a label still fits.
+		const xL = 34;
+		const xR = Math.max(xL + 64, Math.min(W * 0.45, W - (PIN_W / 2 + GAP + MIN_LABEL)));
+		const peakX = (xL + xR) / 2;
 		const terrain = buildTerrain({
-			width: hw,
-			height: HEAD_H,
-			summitY: 28,
-			baseY: HEAD_H - 20,
-			depth: 18,
-			thickness: 10,
-			cols: 10,
-			rows: 5
+			width: W,
+			height: H,
+			summitY: TOP,
+			baseY: H - 36,
+			depth: 44,
+			thickness: 16,
+			cols: 12,
+			rows: 10,
+			centerX: peakX,
+			spread: (W - peakX) / (0.8 * W)
 		});
-		const peak = terrain.project(SUMMIT.x, SUMMIT.z, 1);
 
-		// Down the mountain from the summit to its front-left corner, which
-		// sits over the lane, then straight down through every pin.
-		const foot = { x: (LANE - hw / 2) / terrain.scaleX(0), z: 0.02 };
-		const slope = walk(terrain, [{ ...SUMMIT }, { x: foot.x * 0.45, z: 0.32 }, foot]);
-		const tip = (i: number) => HEAD + ROW * i + (ROW + PIN_H) / 2;
-		const pts: Point[] = [{ x: LANE, y: HEAD_H + 2 }];
-		for (let i = 0; i < n; i++) {
-			pts.push({ x: LANE + (i % 2 ? 10 : -10), y: tip(i) - ROW / 2 });
-			pts.push({ x: LANE, y: tip(i) });
-		}
-		pts.push({ x: LANE, y: H - 18 });
-		const down = smooth(pts);
+		// Newest at the summit; each older stop a step lower, alternating lanes,
+		// the swing widening as the mountain does.
+		const half = (xR - xL) / 2;
+		const stops = items.map((item, i) => {
+			const t = n > 1 ? i / (n - 1) : 0;
+			const side = i === 0 ? 0 : i % 2 ? -1 : 1;
+			const x = peakX + side * half * (0.45 + 0.55 * t);
+			const y = TOP + i * STEP;
+			return { item, i, x, y, pinW: W - x + PIN_W / 2 };
+		});
 
-		return { H, terrain, peak, slope, down, camp: tent(LANE, H - 12, 0.8) };
+		// Camp sits just past the oldest stop; the trail climbs from there.
+		const campAt = { x: Math.min(W - 36, xR + 56), y: H - 34 };
+		const trail = smooth([campAt, ...[...stops].reverse().map(({ x, y }) => ({ x, y }))]);
+		const trees = [
+			[16, H - 40, 30],
+			[38, H - 34, 24],
+			[W - 18, H - 44, 32],
+			[W - 64, H - 38, 22]
+		].map(([x, y, h]) => pine(x, y, h));
+
+		return { H, terrain, stops, trail, trees, camp: tent(campAt.x, campAt.y, 0.85) };
 	});
 
 	// ---- Detail dialog ----
@@ -395,22 +416,31 @@
 		</ol>
 	</div>
 
-	<!-- Narrow: a small summit, then the same trail straight down -->
+	<!-- Narrow: a tall mountain, the trail zigzags up its face -->
 	<div class="track" style:height="{tall.H}px">
-		<div class="sky" style:height="{HEAD_H}px">{@render clouds(SKY, HEAD_H)}</div>
+		{@render clouds(SKY_BACK, 1)}
 		<svg class="land" width="100%" height={tall.H} aria-hidden="true">
 			{@render slab(tall.terrain)}
-			<path class="flag-pole" d="M{f(tall.peak.x)} {f(tall.peak.y)} v-20" />
-			<path class="flag" d="M{f(tall.peak.x)} {f(tall.peak.y - 20)} l13 4.5 l-13 4.5 Z" />
+			{#each tall.trees as tree, k (k)}
+				<path class="tree-lit" d={tree.lit} />
+				<path class="tree-dark" d={tree.dark} />
+			{/each}
 			<path class="tent-lit" d={tall.camp.lit} />
 			<path class="tent-dark" d={tall.camp.dark} />
 			<path class="tent-door" d={tall.camp.door} />
-			{@render trailPath(tall.slope, `${uid}-slope`)}
-			{@render trailPath(tall.down, `${uid}-down`)}
+			{@render trailPath(tall.trail, `${uid}-tall`)}
 		</svg>
-		<ol style:padding-top="{HEAD}px">
-			{#each items as item, i (item.id)}
-				<li class="row" style:height="{ROW}px" style:--order={i}>
+		{@render clouds(SKY_FRONT, 1)}
+		<ol>
+			{#each tall.stops as { item, i, x, y, pinW } (item.id)}
+				<li
+					class="stop"
+					style:left="{x}px"
+					style:top="{y}px"
+					style:--order={items.length - 1 - i}
+					style:--pin-w="{pinW}px"
+				>
+					<span class="dot" aria-hidden="true"></span>
 					<button type="button" class="pin" aria-haspopup="dialog" onclick={(e) => show(i, e)}>
 						{@render marker(item)}
 						{@render summary(item)}
@@ -588,12 +618,6 @@
 		inset: 0;
 		overflow: hidden;
 		pointer-events: none;
-	}
-	.sky {
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
 	}
 	.cloud {
 		position: absolute;
@@ -839,13 +863,16 @@
 	.track {
 		position: relative;
 	}
-	.row {
-		display: flex;
-		align-items: center;
-	}
+	/* Every label reads to the right; it gets whatever width is left. */
 	.track .pin {
-		width: 100%;
-		gap: 18px;
+		position: absolute;
+		top: -72px;
+		left: -28px;
+		width: var(--pin-w);
+	}
+	.track .event {
+		-webkit-line-clamp: 3;
+		line-clamp: 3;
 	}
 
 	@container (min-width: 760px) {
@@ -858,16 +885,14 @@
 	}
 
 	/* ---- Entrance: the trail walks in, pins drop in hiking order ---- */
-	.stop,
-	.row {
+	.stop {
 		opacity: 0;
 		transform: translateY(-8px);
 		transition:
 			opacity 0.45s ease calc(0.3s + var(--order) * 0.22s),
 			transform 0.45s cubic-bezier(0.22, 1, 0.36, 1) calc(0.3s + var(--order) * 0.22s);
 	}
-	:global(.hike.is-visible) .stop,
-	:global(.hike.is-visible) .row {
+	:global(.hike.is-visible) .stop {
 		opacity: 1;
 		transform: none;
 	}
@@ -1061,13 +1086,11 @@
 			transition: none;
 		}
 		.stop,
-		.row,
 		.marker,
 		.marker path {
 			transition: none;
 		}
-		.stop,
-		.row {
+		.stop {
 			opacity: 1;
 			transform: none;
 		}
