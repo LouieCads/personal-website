@@ -12,6 +12,14 @@ export interface Recognition {
 	project?: string;
 	/** Public page for the recognition. */
 	url?: string;
+	/** Who ran the event. Shown under the logo on the roadmap. */
+	organizer: string;
+	/** Organizer's logo, shown on the roadmap pin. Initials stand in when missing. */
+	logo?: string;
+	/** The logo is white-on-transparent and needs a dark disc behind it. */
+	logoOnDark?: boolean;
+	/** Photo or artwork shown in the detail view. */
+	image?: { src: string; alt: string; width: number; height: number };
 }
 
 /** Top placements get the accent treatment on the card. */
@@ -23,6 +31,8 @@ export function isWin(award: string): boolean {
 export const recognitions: Recognition[] = [
 	{
 		id: 'tiktok-shop-sea-2026',
+		organizer: 'TikTok Shop',
+		logo: '/recognitions/logos/tiktok.webp',
 		event: 'TikTok Shop SEA Case Challenge 2026 (Philippines)',
 		award: 'Champion',
 		venue: 'ByteDance Office, BGC Taguig',
@@ -33,16 +43,26 @@ export const recognitions: Recognition[] = [
 	},
 	{
 		id: 'stellar-ph100-2026',
+		organizer: 'StellarPH',
+		logo: '/recognitions/logos/stellarph.webp',
+		image: {
+			src: '/ph100-2026.png',
+			alt: 'StellarPH PH100 2026 honoree Louigie Caminoy, Co-founder and CTO of Iskolar',
+			width: 1731,
+			height: 909
+		},
 		event: 'Stellar PH100 2026',
 		award: 'Honoree',
 		venue: 'McKinley Hill',
 		date: '2026-11',
 		description:
-			'Recognized among the Philippines’ Top 100 brightest young minds under 30 for startup contributions.',
+			'Recognized among the Philippines’ Top 100 brightest young minds under 30 for startup contributions. The annual StellarPH list celebrates talent across design, engineering, marketing, academia, media, and more.',
 		url: 'https://stellarph.io/programs/ph100/2026'
 	},
 	{
 		id: 'it-skills-olympics-2026',
+		organizer: 'University of Makati',
+		logo: '/recognitions/logos/umak.webp',
 		event: 'IT Skills Olympics',
 		award: '2nd Runner-Up',
 		venue: 'University of Makati',
@@ -52,6 +72,8 @@ export const recognitions: Recognition[] = [
 	},
 	{
 		id: 'infotech-2026',
+		organizer: 'University of Makati',
+		logo: '/recognitions/logos/umak.webp',
 		event: 'INFOTECH 2026',
 		award: 'Champion',
 		venue: 'University of Makati',
@@ -62,6 +84,9 @@ export const recognitions: Recognition[] = [
 	},
 	{
 		id: 'pcci-asenso-360-2026',
+		organizer: 'PCCI Makati',
+		logo: '/recognitions/logos/pcci.svg',
+		logoOnDark: true,
 		event: 'PCCI - Makati Asenso 360 MSME Day',
 		award: 'Champion',
 		venue: 'University of Makati',
@@ -72,6 +97,8 @@ export const recognitions: Recognition[] = [
 	},
 	{
 		id: 'dost-spark-a-change-2026',
+		organizer: 'DOST',
+		logo: '/recognitions/logos/dost.svg',
 		event: 'DOST Spark-A-Change Challenge 2.0',
 		award: 'Top 12 Finalist',
 		venue: 'Gateway Mall',
@@ -82,6 +109,7 @@ export const recognitions: Recognition[] = [
 	},
 	{
 		id: 'project-rise-2026',
+		organizer: 'Project RISE',
 		event: 'Project RISE',
 		award: 'Top 10 Finalist',
 		venue: 'Makati Diamond Residences',
@@ -92,6 +120,8 @@ export const recognitions: Recognition[] = [
 	},
 	{
 		id: 'ccis-hackathon-7',
+		organizer: 'UMak CCIS',
+		logo: '/recognitions/logos/umak.webp',
 		event: '7th CCIS Hackathon',
 		award: '1st Runner-Up & Most Disruptive Innovation',
 		venue: 'University of Makati',

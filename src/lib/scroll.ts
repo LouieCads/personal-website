@@ -11,6 +11,17 @@ export function setLenis(next: Lenis | null) {
 	instance = next;
 }
 
+/**
+ * Freeze page scrolling while a modal is open. Lenis listens to the wheel on
+ * the window, so it has to be stopped too, not just the document's overflow.
+ */
+export function lockScroll(locked: boolean) {
+	if (typeof document === 'undefined') return;
+	document.documentElement.style.overflow = locked ? 'hidden' : '';
+	if (locked) instance?.stop();
+	else instance?.start();
+}
+
 export function scrollToTop() {
 	if (instance) {
 		instance.scrollTo(0);
