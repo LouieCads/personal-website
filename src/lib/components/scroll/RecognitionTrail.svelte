@@ -2,16 +2,18 @@
 	import { base } from '$app/paths';
 	import { reveal } from '$lib/actions/reveal';
 	import { lockScroll } from '$lib/scroll';
-	import { isWin, formatMonth, type Recognition } from '$lib/data/recognitions';
+	import { formatMonth, type Recognition } from '$lib/data/recognitions';
+	import { buildTerrain, pine, tent, SUMMIT, CLOUD, type Point } from '$lib/terrain';
 
 	/**
 	 * Recognitions as a hiking route. The trail leaves camp at the foot of the
 	 * mountain with the oldest award and switchbacks up to the summit, where the
 	 * newest one sits, so the page still reads newest first from the top down.
-	 * The mountain is drawn in the site's own greys (theme text mixed into the
-	 * surface) so it follows light and dark mode; only the trail takes the accent.
+	 * The mountain is a minimalist low-poly diorama (see $lib/terrain): static
+	 * SVG facets shaded in the site's own greys, so it follows light and dark
+	 * mode and costs nothing per frame. Only the trail takes the accent.
 	 *
-	 * A stop shows the essentials; selecting one opens the full story in a dialog.
+	 * A stop shows only the award and event; selecting one opens the full story in a dialog.
 	 */
 	interface Props {
 		items: Recognition[];
@@ -19,11 +21,6 @@
 	let { items }: Props = $props();
 
 	const uid = $props.id();
-
-	interface Point {
-		x: number;
-		y: number;
-	}
 
 	/** Smooth curve through every point (Catmull-Rom, as cubic Béziers). */
 	function smooth(pts: Point[]): string {
@@ -41,46 +38,117 @@
 		return d;
 	}
 
-	/** Straight-edged outline, closed along the bottom: faceted, low-poly ridges. */
-	function ridge(pts: Point[], floor: number): string {
-		const line = pts.map((p, i) => `${i ? 'L' : 'M'}${f(p.x)} ${f(p.y)}`).join(' ');
-		const last = pts[pts.length - 1];
-		return `${line} L${f(last.x)} ${f(floor)} L${f(pts[0].x)} ${f(floor)} Z`;
-	}
-
 	function f(n: number) {
 		return n.toFixed(1);
 	}
 
-	/** A pine: three stacked tiers and a stub of trunk, standing on (x, y). */
-	function pine(x: number, y: number, h: number): string {
-		let d = `M${f(x - 1.5)} ${f(y)} h3 v${f(-h * 0.18)} h-3 Z`;
-		for (let j = 0; j < 3; j++) {
-			const top = y - h + j * h * 0.24;
-			const bottom = top + h * 0.46;
-			const w = h * (0.2 + j * 0.08);
-			d += ` M${f(x)} ${f(top)} L${f(x + w)} ${f(bottom)} L${f(x - w)} ${f(bottom)} Z`;
+	type Terrain = ReturnType<typeof buildTerrain>;
+
+	/**
+	 * Walk between world-space waypoints the way a switchback does: altitude
+	 * rises steadily from one stop to the next, and for each step across the
+	 * slope the depth is solved so the ground there is exactly that high. The
+	 * trail hugs the front of the mountain like a contour line instead of
+	 * riding up over the ridge between two flanks.
+	 */
+	function walk(terrain: Terrain, waypoints: { x: number; z: number }[]): string {
+		const { heightAt } = terrain;
+		const onSlope = (x: number, target: number, fallback: number) => {
+			// On flat ground, skirt the foot of the slope rather than climb it.
+			const flat = target < 0.02;
+			target = Math.max(target, 0.01);
+			// A height this column of the mountain never reaches: walk straight.
+			if (heightAt(x, SUMMIT.z) < target) return fallback;
+			let lo = 0;
+			let hi = SUMMIT.z;
+			for (let n = 0; n < 14; n++) {
+				const mid = (lo + hi) / 2;
+				if (heightAt(x, mid) > target) hi = mid;
+				else lo = mid;
+			}
+			const z = (lo + hi) / 2;
+			return flat ? Math.min(z, fallback) : z;
+		};
+		const pts: Point[] = [];
+		const STEPS = 16;
+		for (let w = 0; w < waypoints.length - 1; w++) {
+			const a = waypoints[w];
+			const b = waypoints[w + 1];
+			const ha = heightAt(a.x, a.z);
+			const hb = heightAt(b.x, b.z);
+			for (let s = 0; s < STEPS; s++) {
+				const t = s / STEPS;
+				const x = a.x + (b.x - a.x) * t;
+				const h = ha + (hb - ha) * t;
+				const z = onSlope(x, h, a.z + (b.z - a.z) * t);
+				pts.push(terrain.project(x, z, heightAt(x, z)));
+			}
 		}
-		return d;
+		const last = waypoints[waypoints.length - 1];
+		pts.push(terrain.project(last.x, last.z, heightAt(last.x, last.z)));
+		return smooth(pts);
 	}
 
-	/** A ridge tent, pegged at (x, y). Drawn as lines, like the rest of the site. */
-	function tent(x: number, y: number): string {
-		return (
-			`M${f(x - 20)} ${f(y)} L${f(x)} ${f(y - 22)} L${f(x + 20)} ${f(y)} Z ` +
-			`M${f(x)} ${f(y - 22)} L${f(x - 5)} ${f(y)} M${f(x)} ${f(y - 22)} L${f(x + 5)} ${f(y)} ` +
-			`M${f(x - 26)} ${f(y)} H${f(x + 26)}`
-		);
-	}
-
-	// ---- Wide layout: one mountain, trail from camp to summit ----
+	// ---- Wide layout: one low-poly mountain, trail from camp to summit ----
 
 	/** Marker size: the pin's tip sits exactly on its stop. */
 	const PIN_W = 56;
 	const PIN_H = 72;
 	const GAP = 12;
-	const LABEL_W = 190;
-	const PEAK_Y = 104;
+	const SUMMIT_Y = 112;
+
+	/** Pines on the flat outer edges, clear of the labels. [x, z, height px] */
+	const TREES = [
+		[-0.95, 0.42, 30],
+		[-0.9, 0.3, 38],
+		[-0.97, 0.18, 34],
+		[-0.91, 0.08, 42],
+		[0.93, 0.46, 30],
+		[0.96, 0.32, 36],
+		[0.92, 0.2, 40],
+		[0.97, 0.07, 34]
+	];
+	/** Front right, past the first stop, so the opening leg never doubles back. */
+	const CAMP = { x: 0.84, z: 0.035 };
+
+	/**
+	 * Drifting clouds. `top` is a share of the scene height, `rest` is where a
+	 * cloud waits (in container widths) when motion is reduced. Back clouds are
+	 * small and slow and pass behind the mountain; front ones are larger and
+	 * faster and pass in front of it, which is what sells the depth.
+	 */
+	interface Cloud {
+		top: number;
+		w: number;
+		dur: number;
+		delay: number;
+		rest: number;
+	}
+	const BACK: Cloud[] = [
+		{ top: 0.16, w: 96, dur: 90, delay: -20, rest: 14 },
+		{ top: 0.3, w: 76, dur: 110, delay: -75, rest: 66 }
+	];
+	const FRONT: Cloud[] = [
+		{ top: 0.4, w: 150, dur: 60, delay: -38, rest: 80 },
+		{ top: 0.62, w: 124, dur: 72, delay: -8, rest: 6 }
+	];
+	const SKY: Cloud[] = [
+		{ top: 0.04, w: 64, dur: 46, delay: -12, rest: 52 },
+		{ top: 0.3, w: 84, dur: 38, delay: -30, rest: 4 }
+	];
+
+	/**
+	 * Run the drift only while the section is on screen, so a page with the
+	 * clouds scrolled away costs nothing.
+	 */
+	function inView(node: HTMLElement) {
+		if (typeof IntersectionObserver === 'undefined') return;
+		const io = new IntersectionObserver(([entry]) =>
+			node.classList.toggle('in-view', !!entry?.isIntersecting)
+		);
+		io.observe(node);
+		return { destroy: () => io.disconnect() };
+	}
 
 	/** SSR has no width to measure; this is close to the widest content box. */
 	let width = $state(1200);
@@ -89,145 +157,89 @@
 		const W = width;
 		const n = items.length;
 		const H = Math.max(460, 170 + n * 92);
-		const px = W / 2;
-		const baseL = H * 0.82;
-		const baseR = H * 0.74;
-		const span = H - PEAK_Y;
-		const at = (u: number, v: number) => ({ x: u * W, y: PEAK_Y + v * span });
+		const labelW = W < 1000 ? 150 : 190;
+		const terrain = buildTerrain({
+			width: W,
+			height: H,
+			summitY: SUMMIT_Y,
+			baseY: H - 58,
+			depth: H * 0.16,
+			thickness: 34,
+			cols: 16,
+			rows: 10
+		});
 
-		// Far range, mid hills and the main peak, back to front.
-		const far = ridge(
-			[
-				at(0, 0.3),
-				at(0.07, 0.18),
-				at(0.15, 0.26),
-				at(0.24, 0.1),
-				at(0.33, 0.22),
-				at(0.42, 0.15),
-				at(0.5, 0.3),
-				at(0.6, 0.2),
-				at(0.7, 0.07),
-				at(0.79, 0.2),
-				at(0.88, 0.11),
-				at(1, 0.24)
-			],
-			H
-		);
-		const mid = ridge(
-			[
-				at(0, 0.6),
-				at(0.08, 0.5),
-				at(0.18, 0.58),
-				at(0.27, 0.66),
-				at(0.36, 0.72),
-				at(0.64, 0.74),
-				at(0.74, 0.6),
-				at(0.84, 0.52),
-				at(0.93, 0.6),
-				at(1, 0.55)
-			],
-			H
-		);
-
-		const peak = { x: px, y: PEAK_Y };
-		// [distance down the ridge, sideways nudge, vertical nudge] — the nudges
-		// break the straight flanks into facets and give the right side a shoulder.
-		const leftRidge = [
-			[0.14, 0.012, 0],
-			[0.3, -0.008, 0.02],
-			[0.46, 0.014, -0.02],
-			[0.62, -0.006, 0.01],
-			[0.8, 0.01, -0.01],
-			[1, 0, 0]
-		].map(([s, dx, dy]) => ({
-			x: px * (1 - s) + dx * W,
-			y: PEAK_Y + s * (baseL - PEAK_Y) + dy * span
-		}));
-		const rightRidge = [
-			[0.1, 0, 0],
-			[0.2, 0.02, -0.05],
-			[0.32, 0, 0.02],
-			[0.5, 0.012, -0.03],
-			[0.7, -0.01, 0.02],
-			[1, 0, 0]
-		].map(([s, dx, dy]) => ({
-			x: px + s * (W - px) + dx * W,
-			y: PEAK_Y + s * (baseR - PEAK_Y) + dy * span
-		}));
-		const main = ridge([...[...leftRidge].reverse(), peak, ...rightRidge], H);
-		// The shaded face: the whole right flank, split from the lit side by a
-		// crease that runs from the summit down to the foot.
-		const shade = `M${f(px)} ${f(PEAK_Y)} ${rightRidge
-			.map((p) => `L${f(p.x)} ${f(p.y)}`)
-			.join(
-				' '
-			)} L${f(W)} ${f(H)} L${f(px + W * 0.06)} ${f(H)} L${f(px + W * 0.04)} ${f(H * 0.6)} Z`;
-
-		const groundY = H * 0.93;
-		const ground = smooth([
-			{ x: 0, y: H * 0.9 },
-			{ x: W * 0.25, y: H * 0.925 },
-			{ x: W * 0.5, y: H * 0.9 },
-			{ x: W * 0.75, y: H * 0.935 },
-			{ x: W, y: H * 0.91 }
-		]);
-		const groundFill = `${ground} L${W} ${H} L0 ${H} Z`;
-
-		const trees = [
-			[0.015, 46],
-			[0.04, 60],
-			[0.07, 40],
-			[0.1, 54],
-			[0.14, 36],
-			[0.8, 38],
-			[0.835, 56],
-			[0.865, 44],
-			[0.9, 62],
-			[0.935, 42],
-			[0.97, 52]
-		]
-			.map(([u, h]) => pine(u * W, groundY, h))
-			.join(' ');
-
-		// Stops: k counts up from camp, so k = 0 is the oldest award.
-		const bottom = H - 72;
-		const reach = W / 2 - (PIN_W / 2 + GAP + LABEL_W + 8);
+		// Stops: k counts up from camp, so k = 0 is the oldest award. Each sits
+		// on the slope, alternating sides, narrowing toward the summit.
+		const reach = W / 2 - (PIN_W / 2 + GAP + labelW + 8);
 		const stops = items.map((item, i) => {
 			const k = n - 1 - i;
 			const t = n > 1 ? k / (n - 1) : 1;
-			const y = bottom - t * (bottom - PEAK_Y);
-			if (i === 0) return { item, i, x: px, y, left: (n - 2) % 2 === 0 };
-			const left = k % 2 === 1;
-			const flank = (px * (y - PEAK_Y)) / (baseL - PEAK_Y);
-			const amp = Math.max(80, Math.min(reach, flank * 0.78));
-			return { item, i, x: px + (left ? -amp : amp), y, left };
+			const z = 0.1 + t * (SUMMIT.z - 0.1);
+			let wx = SUMMIT.x;
+			let left = (n - 2) % 2 === 0;
+			if (i > 0) {
+				left = k % 2 === 1;
+				const maxX = Math.min(0.62, reach / terrain.scaleX(z));
+				wx = (left ? -1 : 1) * Math.max(0.1, maxX * Math.pow(1 - t, 0.9));
+			}
+			const { x, y } = terrain.project(wx, z, terrain.heightAt(wx, z));
+			return { item, i, x, y, left, wx, z };
 		});
 
 		// Trail runs camp → summit so it draws in as a climb.
-		const camp = { x: px, y: H - 30 };
-		const climb = [...stops].reverse().map(({ x, y }) => ({ x, y }));
-		const trail = smooth([camp, ...climb]);
+		const route = [CAMP, ...[...stops].reverse().map(({ wx, z }) => ({ x: wx, z }))];
+		const trail = walk(terrain, route);
 
-		return { H, far, mid, main, shade, groundFill, ground, trees, stops, trail, camp };
+		const trees = TREES.map(([x, z, h]) => {
+			const p = terrain.project(x, z, terrain.heightAt(x, z));
+			return pine(p.x, p.y, h);
+		});
+		const campAt = terrain.project(CAMP.x, CAMP.z);
+		const camp = tent(campAt.x, campAt.y + 2, 1);
+
+		return { H, terrain, stops, trail, trees, camp, labelW };
 	});
 
-	// ---- Narrow layout: the trail runs straight down from the summit ----
+	// ---- Narrow layout: a small summit up top, the trail runs down the list ----
 
 	const ROW = 120;
 	const LANE = PIN_W / 2;
-	const HEAD = 84;
+	const HEAD_W = 220;
+	const HEAD_H = 120;
+	const HEAD = HEAD_H + 8;
 	const FOOT = 56;
 
 	const tall = $derived.by(() => {
-		const H = HEAD + ROW * items.length + FOOT;
+		const n = items.length;
+		const H = HEAD + ROW * n + FOOT;
+		const hw = Math.min(HEAD_W, width);
+		const terrain = buildTerrain({
+			width: hw,
+			height: HEAD_H,
+			summitY: 28,
+			baseY: HEAD_H - 20,
+			depth: 18,
+			thickness: 10,
+			cols: 10,
+			rows: 5
+		});
+		const peak = terrain.project(SUMMIT.x, SUMMIT.z, 1);
+
+		// Down the mountain from the summit to its front-left corner, which
+		// sits over the lane, then straight down through every pin.
+		const foot = { x: (LANE - hw / 2) / terrain.scaleX(0), z: 0.02 };
+		const slope = walk(terrain, [{ ...SUMMIT }, { x: foot.x * 0.45, z: 0.32 }, foot]);
 		const tip = (i: number) => HEAD + ROW * i + (ROW + PIN_H) / 2;
-		const pts: Point[] = [{ x: LANE, y: H - 18 }];
-		for (let i = items.length - 1; i >= 0; i--) {
-			pts.push({ x: LANE, y: tip(i) });
+		const pts: Point[] = [{ x: LANE, y: HEAD_H + 2 }];
+		for (let i = 0; i < n; i++) {
 			pts.push({ x: LANE + (i % 2 ? 10 : -10), y: tip(i) - ROW / 2 });
+			pts.push({ x: LANE, y: tip(i) });
 		}
-		pts.push({ x: LANE, y: 26 });
-		return { H, trail: smooth(pts), tent: tent(LANE, H - 14) };
+		pts.push({ x: LANE, y: H - 18 });
+		const down = smooth(pts);
+
+		return { H, terrain, peak, slope, down, camp: tent(LANE, H - 12, 0.8) };
 	});
 
 	// ---- Detail dialog ----
@@ -281,7 +293,12 @@
 </script>
 
 {#snippet disc(item: Recognition, size: 'sm' | 'lg' = 'sm')}
-	<span class="disc {size}" class:on-dark={item.logoOnDark}>
+	<span
+		class="disc {size}"
+		class:on-dark={item.logoOnDark}
+		class:wide={item.logoWide}
+		class:fill={item.logoFill}
+	>
 		{#if item.logo}
 			<img src={asset(item.logo)} alt={size === 'lg' ? `${item.organizer} logo` : ''} />
 		{:else}
@@ -299,14 +316,10 @@
 	</span>
 {/snippet}
 
-{#snippet summary(item: Recognition, i: number)}
+{#snippet summary(item: Recognition)}
 	<span class="summary">
-		<span class="tag">
-			<span class="num">{pad(i + 1)}</span>
-			<span class="award" class:win={isWin(item.award)}>{item.award}</span>
-		</span>
+		<span class="award">{item.award}</span>
 		<span class="event">{item.event}</span>
-		<time class="when" datetime={item.date}>{formatMonth(item.date)}</time>
 	</span>
 {/snippet}
 
@@ -319,20 +332,50 @@
 	<path class="trail" {d} mask="url(#{id})" />
 {/snippet}
 
-<div class="hike" bind:clientWidth={width} use:reveal>
-	<!-- Wide: one mountain, camp to summit -->
-	<div class="scene" style:height="{wide.H}px">
+{#snippet clouds(list: Cloud[], height: number)}
+	<div class="clouds" aria-hidden="true">
+		{#each list as c, k (k)}
+			<svg
+				class="cloud"
+				viewBox="0 0 120 56"
+				style:top="{c.top * height}px"
+				style:width="{c.w}px"
+				style:--dur="{c.dur}s"
+				style:--delay="{c.delay}s"
+				style:--rest="{c.rest}cqw"
+			>
+				{#each CLOUD as facet, j (j)}
+					<path class="puff c{facet.tone}" d={facet.d} />
+				{/each}
+			</svg>
+		{/each}
+	</div>
+{/snippet}
+
+{#snippet slab(terrain: Terrain)}
+	<path class="slab" d={terrain.skirt} />
+	{#each terrain.facets as facet, k (k)}
+		<path class="facet t{facet.tone}" d={facet.d} />
+	{/each}
+	<path class="rim" d={terrain.rim} />
+{/snippet}
+
+<div class="hike" bind:clientWidth={width} use:reveal use:inView>
+	<!-- Wide: one low-poly mountain, camp to summit -->
+	<div class="scene" style:height="{wide.H}px" style:--label-w="{wide.labelW}px">
+		{@render clouds(BACK, wide.H)}
 		<svg class="land" width="100%" height={wide.H} aria-hidden="true">
-			<path class="far" d={wide.far} />
-			<path class="mid" d={wide.mid} />
-			<path class="main" d={wide.main} />
-			<path class="shade" d={wide.shade} />
-			<path class="trees" d={wide.trees} />
-			<path class="ground" d={wide.groundFill} />
-			<path class="ground-line" d={wide.ground} />
-			<path class="camp" d={tent(wide.camp.x, wide.camp.y)} />
+			{@render slab(wide.terrain)}
+			{#each wide.trees as tree, k (k)}
+				<path class="tree-lit" d={tree.lit} />
+				<path class="tree-dark" d={tree.dark} />
+			{/each}
+			<path class="tent-lit" d={wide.camp.lit} />
+			<path class="tent-dark" d={wide.camp.dark} />
+			<path class="tent-door" d={wide.camp.door} />
 			{@render trailPath(wide.trail, `${uid}-wide`)}
 		</svg>
+		{@render clouds(FRONT, wide.H)}
 		<ol>
 			{#each wide.stops as { item, i, x, y, left } (item.id)}
 				<li
@@ -345,30 +388,32 @@
 					<span class="dot" aria-hidden="true"></span>
 					<button type="button" class="pin" aria-haspopup="dialog" onclick={(e) => show(i, e)}>
 						{@render marker(item)}
-						{@render summary(item, i)}
+						{@render summary(item)}
 					</button>
 				</li>
 			{/each}
 		</ol>
 	</div>
 
-	<!-- Narrow: the same trail, summit at the top -->
+	<!-- Narrow: a small summit, then the same trail straight down -->
 	<div class="track" style:height="{tall.H}px">
+		<div class="sky" style:height="{HEAD_H}px">{@render clouds(SKY, HEAD_H)}</div>
 		<svg class="land" width="100%" height={tall.H} aria-hidden="true">
-			<path class="far" d="M0 84 L18 52 L34 64 L58 30 L84 58 L108 44 L140 84 Z" />
-			<path class="main" d="M-8 84 L{LANE} 22 L46 40 L60 34 L92 84 Z" />
-			<path class="shade" d="M{LANE} 22 L46 40 L38 84 Z" />
-			<path class="flag-pole" d="M{LANE} 22 V4" />
-			<path class="flag" d="M{LANE} 4 L{LANE + 14} 8.5 L{LANE} 13 Z" />
-			<path class="camp" d={tall.tent} />
-			{@render trailPath(tall.trail, `${uid}-tall`)}
+			{@render slab(tall.terrain)}
+			<path class="flag-pole" d="M{f(tall.peak.x)} {f(tall.peak.y)} v-20" />
+			<path class="flag" d="M{f(tall.peak.x)} {f(tall.peak.y - 20)} l13 4.5 l-13 4.5 Z" />
+			<path class="tent-lit" d={tall.camp.lit} />
+			<path class="tent-dark" d={tall.camp.dark} />
+			<path class="tent-door" d={tall.camp.door} />
+			{@render trailPath(tall.slope, `${uid}-slope`)}
+			{@render trailPath(tall.down, `${uid}-down`)}
 		</svg>
 		<ol style:padding-top="{HEAD}px">
 			{#each items as item, i (item.id)}
-				<li class="row" style:height="{ROW}px" style:--order={items.length - 1 - i}>
+				<li class="row" style:height="{ROW}px" style:--order={i}>
 					<button type="button" class="pin" aria-haspopup="dialog" onclick={(e) => show(i, e)}>
 						{@render marker(item)}
-						{@render summary(item, i)}
+						{@render summary(item)}
 					</button>
 				</li>
 			{/each}
@@ -399,7 +444,12 @@
 			<div class="sheet-head">
 				{@render disc(open, 'lg')}
 				<div>
-					<p class="award" class:win={isWin(open.award)}>{open.award}</p>
+					<p class="awards">
+						<span class="award">{open.award}</span>
+						{#each open.alsoAwarded ?? [] as extra (extra)}
+							<span class="award">{extra}</span>
+						{/each}
+					</p>
 					<h3 id="rec-sheet-title">{open.event}</h3>
 					<p class="by">{open.organizer}</p>
 				</div>
@@ -461,7 +511,7 @@
 		container-type: inline-size;
 	}
 
-	/* ---- Landscape: theme ink mixed into the surface, back layers lightest ---- */
+	/* ---- Landscape: low-poly facets in theme ink, lit (t0) to shaded (t6) ---- */
 	.land {
 		position: absolute;
 		top: 0;
@@ -469,39 +519,58 @@
 		overflow: visible;
 		pointer-events: none;
 	}
-	.land path {
+	/* Each facet is stroked in its own fill so neighbours meet without seams. */
+	.facet {
+		fill: var(--tone);
+		stroke: var(--tone);
+		stroke-width: 0.75;
 		stroke-linejoin: round;
 	}
-	.far {
-		fill: color-mix(in srgb, var(--color-text-primary) 5%, var(--color-surface));
-		stroke: var(--color-border);
-		stroke-width: 1;
+	.t0 {
+		--tone: color-mix(in srgb, var(--color-text-primary) 4%, var(--color-surface));
 	}
-	.mid {
-		fill: color-mix(in srgb, var(--color-text-primary) 9%, var(--color-surface));
-		stroke: var(--color-border);
-		stroke-width: 1;
+	.t1 {
+		--tone: color-mix(in srgb, var(--color-text-primary) 7%, var(--color-surface));
 	}
-	.main {
-		fill: color-mix(in srgb, var(--color-text-primary) 13%, var(--color-surface));
-		stroke: var(--color-border-hover);
-		stroke-width: 1;
+	.t2 {
+		--tone: color-mix(in srgb, var(--color-text-primary) 10%, var(--color-surface));
 	}
-	.shade {
-		fill: color-mix(in srgb, var(--color-text-primary) 18%, var(--color-surface));
+	.t3 {
+		--tone: color-mix(in srgb, var(--color-text-primary) 14%, var(--color-surface));
 	}
-	.trees {
-		fill: color-mix(in srgb, var(--color-text-primary) 28%, var(--color-surface));
+	.t4 {
+		--tone: color-mix(in srgb, var(--color-text-primary) 18%, var(--color-surface));
 	}
-	.ground {
-		fill: color-mix(in srgb, var(--color-text-primary) 15%, var(--color-surface));
+	.t5 {
+		--tone: color-mix(in srgb, var(--color-text-primary) 23%, var(--color-surface));
 	}
-	.ground-line {
+	.t6 {
+		--tone: color-mix(in srgb, var(--color-text-primary) 29%, var(--color-surface));
+	}
+	/* the diorama's cut front face */
+	.slab {
+		fill: color-mix(in srgb, var(--color-text-primary) 30%, var(--color-surface));
+	}
+	.rim {
 		fill: none;
 		stroke: var(--color-border-hover);
 		stroke-width: 1;
 	}
-	.camp,
+	.tree-lit {
+		fill: color-mix(in srgb, var(--color-text-primary) 24%, var(--color-surface));
+	}
+	.tree-dark {
+		fill: color-mix(in srgb, var(--color-text-primary) 38%, var(--color-surface));
+	}
+	.tent-lit {
+		fill: color-mix(in srgb, var(--color-text-primary) 16%, var(--color-surface));
+	}
+	.tent-dark {
+		fill: color-mix(in srgb, var(--color-text-primary) 30%, var(--color-surface));
+	}
+	.tent-door {
+		fill: color-mix(in srgb, var(--color-text-primary) 55%, var(--color-surface));
+	}
 	.flag-pole {
 		fill: none;
 		stroke: var(--color-text-secondary);
@@ -510,6 +579,79 @@
 	}
 	.flag {
 		fill: var(--color-accent);
+	}
+
+	/* ---- Clouds: faceted puffs drifting across, transform-only so they stay
+	   on the compositor; paused whenever the section is off screen ---- */
+	.clouds {
+		position: absolute;
+		inset: 0;
+		overflow: hidden;
+		pointer-events: none;
+	}
+	.sky {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+	}
+	.cloud {
+		position: absolute;
+		left: 0;
+		height: auto;
+		overflow: visible;
+		will-change: transform;
+		animation: drift var(--dur) linear var(--delay) infinite;
+		animation-play-state: paused;
+	}
+	:global(.hike.in-view) .cloud {
+		animation-play-state: running;
+	}
+	/* On a near-black page, mixing in ink lifts a tone toward white, so the
+	   lit side has to carry the most ink for the cloud to read the right way up. */
+	:global(.dark) .c0 {
+		--tone: color-mix(in srgb, var(--color-text-primary) 30%, var(--color-surface));
+	}
+	:global(.dark) .c1 {
+		--tone: color-mix(in srgb, var(--color-text-primary) 25%, var(--color-surface));
+	}
+	:global(.dark) .c2 {
+		--tone: color-mix(in srgb, var(--color-text-primary) 20%, var(--color-surface));
+	}
+	:global(.dark) .c3 {
+		--tone: color-mix(in srgb, var(--color-text-primary) 15%, var(--color-surface));
+	}
+	:global(.dark) .c4 {
+		--tone: color-mix(in srgb, var(--color-text-primary) 10%, var(--color-surface));
+	}
+	@keyframes drift {
+		from {
+			transform: translateX(-100%);
+		}
+		to {
+			transform: translateX(100cqw);
+		}
+	}
+	.puff {
+		fill: var(--tone);
+		stroke: var(--tone);
+		stroke-width: 0.6;
+		stroke-linejoin: round;
+	}
+	.c0 {
+		--tone: color-mix(in srgb, var(--color-text-primary) 2%, var(--color-surface));
+	}
+	.c1 {
+		--tone: color-mix(in srgb, var(--color-text-primary) 6%, var(--color-surface));
+	}
+	.c2 {
+		--tone: color-mix(in srgb, var(--color-text-primary) 11%, var(--color-surface));
+	}
+	.c3 {
+		--tone: color-mix(in srgb, var(--color-text-primary) 16%, var(--color-surface));
+	}
+	.c4 {
+		--tone: color-mix(in srgb, var(--color-text-primary) 23%, var(--color-surface));
 	}
 	.trail {
 		fill: none;
@@ -611,6 +753,16 @@
 		height: 74%;
 		object-fit: contain;
 	}
+	/* a wordmark inside a circle: wide and short still clears the rim */
+	.disc.wide img {
+		width: 92%;
+		height: 92%;
+	}
+	.disc.fill img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
 	.initials {
 		font: 14px var(--font-mono);
 		color: #111;
@@ -622,23 +774,12 @@
 		gap: 4px;
 		padding-top: 6px;
 	}
-	.tag {
-		display: flex;
-		align-items: center;
-		gap: 8px;
-	}
-	.num {
-		font: 11px var(--font-mono);
-		color: var(--color-accent);
-	}
+	/* Every placement reads the same: no colour ranking, just firmer type. */
 	.award {
-		font: 10px/1.4 var(--font-mono);
+		font: 600 11px/1.4 var(--font-mono);
 		letter-spacing: 0.12em;
 		text-transform: uppercase;
-		color: var(--color-text-secondary);
-	}
-	.award.win {
-		color: var(--color-accent);
+		color: var(--color-text-primary);
 	}
 	.event {
 		display: -webkit-box;
@@ -657,11 +798,6 @@
 		text-decoration: underline;
 		text-decoration-color: var(--color-accent);
 		text-underline-offset: 3px;
-	}
-	.when {
-		font: 10px var(--font-mono);
-		letter-spacing: 0.08em;
-		color: var(--color-text-muted);
 	}
 
 	/* ---- Wide layout ---- */
@@ -689,7 +825,7 @@
 		position: absolute;
 		top: -72px;
 		left: -28px;
-		width: calc(56px + 12px + 190px);
+		width: calc(56px + 12px + var(--label-w, 190px));
 	}
 	/* Pins on the left flank read outward: label first, marker on the trail. */
 	.stop.left .pin {
@@ -697,9 +833,6 @@
 		right: -28px;
 		flex-direction: row-reverse;
 		text-align: right;
-	}
-	.stop.left .tag {
-		flex-direction: row-reverse;
 	}
 
 	/* ---- Narrow layout ---- */
@@ -715,7 +848,7 @@
 		gap: 18px;
 	}
 
-	@container (min-width: 860px) {
+	@container (min-width: 760px) {
 		.scene {
 			display: block;
 		}
@@ -818,13 +951,15 @@
 			0 0 0 5px var(--color-surface),
 			0 0 0 6px var(--color-border);
 	}
+	.awards {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px;
+	}
 	.sheet-head .award {
 		display: inline-block;
 		padding: 3px 8px;
-		border: 1px solid var(--color-border);
-	}
-	.sheet-head .award.win {
-		border-color: var(--color-accent);
+		border: 1px solid var(--color-text-primary);
 	}
 	.sheet-head h3 {
 		margin: 10px 0 4px;
@@ -917,6 +1052,10 @@
 	}
 
 	@media (prefers-reduced-motion: reduce) {
+		.cloud {
+			animation: none;
+			transform: translateX(var(--rest));
+		}
 		.trail-reveal {
 			stroke-dashoffset: 0;
 			transition: none;

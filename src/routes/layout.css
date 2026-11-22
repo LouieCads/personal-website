@@ -1266,6 +1266,23 @@ html.lenis body {
 	opacity: 0;
 }
 
+/* Both parts are manual popovers so they can sit in the top layer above an
+   open modal dialog (see BracketCursor.svelte). Undo the browser's popover
+   box: it centres the element with inset/margin and gives it a border,
+   padding and a Canvas background. */
+.reticle[popover],
+.reticle-dot[popover] {
+	inset: 0 auto auto 0;
+	margin: 0;
+	border: 0;
+	padding: 0;
+	overflow: visible;
+}
+
+.reticle[popover] {
+	background: transparent;
+}
+
 /* The exact pointer position. Small, always on, and never eased — the brackets
    are the flourish, this is the part you actually aim with. */
 .reticle-dot {

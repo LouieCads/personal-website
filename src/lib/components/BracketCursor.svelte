@@ -121,6 +121,24 @@
 			dot.classList.remove('is-visible');
 		};
 
+		// A modal <dialog> renders in the browser's top layer, above every
+		// z-index, so the reticle would vanish behind its backdrop while the
+		// native cursor stays hidden. Keep the reticle in the top layer too, and
+		// re-raise it whenever a dialog opens: the top layer stacks by insertion
+		// order, so the last one shown sits in front.
+		const layers = [box, dot].filter((el) => typeof el.showPopover === 'function');
+		const raise = () => {
+			for (const el of layers) {
+				if (el.matches(':popover-open')) el.hidePopover();
+				el.showPopover();
+			}
+		};
+		raise();
+		const dialogs = new MutationObserver((records) => {
+			if (records.some((r) => (r.target as Element).matches?.('dialog[open]'))) raise();
+		});
+		dialogs.observe(document.body, { subtree: true, attributeFilter: ['open'] });
+
 		window.addEventListener('pointermove', onMove, { passive: true });
 		window.addEventListener('pointerover', onOver, { passive: true });
 		window.addEventListener('pointerdown', onDown, { passive: true });
@@ -130,6 +148,8 @@
 
 		return () => {
 			cancelAnimationFrame(frame);
+			dialogs.disconnect();
+			for (const el of layers) if (el.matches(':popover-open')) el.hidePopover();
 			root.classList.remove('has-bracket-cursor');
 			window.removeEventListener('pointermove', onMove);
 			window.removeEventListener('pointerover', onOver);
@@ -141,10 +161,10 @@
 	});
 </script>
 
-<div bind:this={box} class="reticle" aria-hidden="true">
+<div bind:this={box} class="reticle" popover="manual" aria-hidden="true">
 	<span class="rc-corner rc-tl"></span>
 	<span class="rc-corner rc-tr"></span>
 	<span class="rc-corner rc-bl"></span>
 	<span class="rc-corner rc-br"></span>
 </div>
-<div bind:this={dot} class="reticle-dot" aria-hidden="true"></div>
+<div bind:this={dot} class="reticle-dot" popover="manual" aria-hidden="true"></div>

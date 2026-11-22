@@ -4,6 +4,8 @@ export interface Recognition {
 	event: string;
 	/** Placement or title received, e.g. "Champion". */
 	award: string;
+	/** Special awards won at the same event. Shown only in the detail view. */
+	alsoAwarded?: string[];
 	venue: string;
 	/** ISO month: YYYY-MM. */
 	date: string;
@@ -18,13 +20,12 @@ export interface Recognition {
 	logo?: string;
 	/** The logo is white-on-transparent and needs a dark disc behind it. */
 	logoOnDark?: boolean;
+	/** The logo is a wide wordmark; let it span the disc instead of sitting inset. */
+	logoWide?: boolean;
+	/** The logo is already a round badge; let it fill the disc edge to edge. */
+	logoFill?: boolean;
 	/** Photo or artwork shown in the detail view. */
 	image?: { src: string; alt: string; width: number; height: number };
-}
-
-/** Top placements get the accent treatment on the card. */
-export function isWin(award: string): boolean {
-	return /champion|honoree/i.test(award);
 }
 
 // Newest first. Content comes from the CV.
@@ -33,13 +34,15 @@ export const recognitions: Recognition[] = [
 		id: 'tiktok-shop-sea-2026',
 		organizer: 'TikTok Shop',
 		logo: '/recognitions/logos/tiktok.webp',
-		event: 'TikTok Shop SEA Case Challenge 2026 (Philippines)',
+		logoFill: true,
+		event: 'TikTok Shop Regional Case Challenge 2026',
 		award: 'Champion',
 		venue: 'ByteDance Office, BGC Taguig',
 		date: '2026-11',
 		project: 'Kapitbahay Hub Lite',
 		description:
-			'Presented Kapitbahay Hub Lite, a sari-sari store pickup and prepayment model that cuts failed Cash on Delivery orders, as part of a 4-member team and won the Philippine leg of the case challenge.'
+			'Presented Kapitbahay Hub Lite, a sari-sari store pickup and prepayment model that cuts failed Cash on Delivery orders, as part of a 4-member team and won the Philippine leg of the case challenge.',
+		url: 'https://bytedance.feishuapp.cn/app/app_17ddqg44fxc'
 	},
 	{
 		id: 'stellar-ph100-2026',
@@ -62,7 +65,7 @@ export const recognitions: Recognition[] = [
 	{
 		id: 'it-skills-olympics-2026',
 		organizer: 'University of Makati',
-		logo: '/recognitions/logos/umak.webp',
+		logo: '/recognitions/logos/it-skills-olympics.webp',
 		event: 'IT Skills Olympics',
 		award: '2nd Runner-Up',
 		venue: 'University of Makati',
@@ -72,9 +75,11 @@ export const recognitions: Recognition[] = [
 	},
 	{
 		id: 'infotech-2026',
-		organizer: 'University of Makati',
-		logo: '/recognitions/logos/umak.webp',
-		event: 'INFOTECH 2026',
+		organizer: 'UMak CCIS',
+		logo: '/recognitions/logos/infotechnolympics.webp',
+		logoOnDark: true,
+		logoWide: true,
+		event: 'INFOTECHNOLYMPICS 2026',
 		award: 'Champion',
 		venue: 'University of Makati',
 		date: '2026-10',
@@ -109,7 +114,8 @@ export const recognitions: Recognition[] = [
 	},
 	{
 		id: 'project-rise-2026',
-		organizer: 'Project RISE',
+		organizer: 'University of Makati',
+		logo: '/recognitions/logos/umak.webp',
 		event: 'Project RISE',
 		award: 'Top 10 Finalist',
 		venue: 'Makati Diamond Residences',
@@ -123,7 +129,8 @@ export const recognitions: Recognition[] = [
 		organizer: 'UMak CCIS',
 		logo: '/recognitions/logos/umak.webp',
 		event: '7th CCIS Hackathon',
-		award: '1st Runner-Up & Most Disruptive Innovation',
+		award: '1st Runner-Up',
+		alsoAwarded: ['Most Disruptive Innovation'],
 		venue: 'University of Makati',
 		date: '2025-05',
 		project: 'Faculty Repository System',

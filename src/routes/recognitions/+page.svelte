@@ -7,7 +7,7 @@
 
 <SEO
 	title="Recognitions | Louigie Caminoy"
-	description="Awards and honors: TikTok Shop SEA Case Challenge champion, Stellar PH100 2026 honoree, INFOTECH 2026 champion, and more."
+	description="Awards and honors: TikTok Shop SEA Case Challenge champion, Stellar PH100 2026 honoree, INFOTECHNOLYMPICS 2026 champion, and more."
 	path="/recognitions"
 />
 <Shell section="recognitions">

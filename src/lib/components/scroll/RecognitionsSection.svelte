@@ -11,7 +11,6 @@
 	let { preview = false }: Props = $props();
 
 	const visible = $derived(preview ? recognitions.slice(0, 3) : recognitions);
-	const wins = recognitions.filter((r) => /champion/i.test(r.award)).length;
 </script>
 
 <PageSection
@@ -20,7 +19,6 @@
 	label="RECOGNITIONS"
 	href={preview ? resolve('/recognitions') : ''}
 	cta="SEE ALL RECOGNITIONS"
-	meta={`${recognitions.length} AWARDS · ${wins} WINS`}
 	glitch={preview}
 >
 	{#if !preview}
