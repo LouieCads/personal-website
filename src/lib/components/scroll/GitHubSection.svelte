@@ -15,7 +15,7 @@
 
 <PageSection
 	id="github"
-	number="06"
+	number="07"
 	label="GITHUB"
 	href="https://github.com/{username}"
 	cta={username}

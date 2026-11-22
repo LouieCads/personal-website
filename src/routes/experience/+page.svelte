@@ -7,7 +7,7 @@
 
 <SEO
 	title="Experience | Louigie Caminoy"
-	description="Work history and education: CTO at iSkolar, AI Lead at AWS Learning Club - Heron, and software engineering at University of Makati."
+	description="Work history and education: CTO at iSkolar, Project Manager at Academy, AI Lead at AWS Learning Club - Heron, and Software Engineer Intern at Tutorials Dojo."
 	path="/experience"
 />
 

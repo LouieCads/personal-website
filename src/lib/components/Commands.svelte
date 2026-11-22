@@ -13,6 +13,7 @@
 		{ cmd: '/experience', desc: 'navigate to experience page' },
 		{ cmd: '/blog', desc: 'navigate to blog page' },
 		{ cmd: '/certifications', desc: 'navigate to certifications' },
+		{ cmd: '/recognitions', desc: 'navigate to recognitions' },
 		{ cmd: '/commands', desc: 'view all commands page' },
 		{ cmd: '/help', desc: 'list available commands' }
 	];
@@ -61,7 +62,7 @@
 		>
 			&larr; HOME
 		</button>
-		<span class="font-mono text-2xl text-(--color-accent)">07</span>
+		<span class="font-mono text-2xl text-(--color-accent)">08</span>
 		<span class="font-mono text-sm tracking-wider text-(--color-text-primary)">COMMANDS</span>
 		<span class="h-px flex-1 bg-(--color-border)"></span>
 	</div>

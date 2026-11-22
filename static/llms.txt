@@ -5,16 +5,20 @@
 Key facts:
 
 - Currently Co-founder & CTO at iSkolar (scholarship application and management platform, blockchain + AI).
-- Also AI Lead at AWS Learning Club - Heron, mentoring developers on LLMs and AI engineering.
+- Also Project Manager & UI/UX Designer at Academy, and AI Lead at AWS Learning Club - Heron.
+- Software Engineer Intern at Tutorials Dojo (May-Aug 2026): co-developed Finsharc (#1 AU App Store) and Inki (#1 PH, #5 AU).
+- Recognitions: TikTok Shop SEA Case Challenge 2026 (Philippines) Champion, Stellar PH100 2026 Honoree, INFOTECH 2026 Champion, PCCI Makati Asenso 360 MSME Day Champion, IT Skills Olympics 2nd Runner-Up.
 - Studying BS Computer Science at University of Makati (expected 2027).
 - Focus areas: blockchain development, systems architecture, technical leadership, system design, project management, full stack development, AI engineering.
-- Contact: louigiecads143@gmail.com
+- Contact: louigiecaminoy@gmail.com
 
 ## Pages
 
 - [About](https://www.louigiecaminoy.com/about): Background, specialties, and what drives the work.
 - [Projects](https://www.louigiecaminoy.com/projects): iSkolar, Academy, Vocation, Configains, Fundr Studio, USMO — scholarship platforms, coaching, and web products.
-- [Experience](https://www.louigiecaminoy.com/experience): Full work history and education, including iSkolar, AWS Learning Club - Heron, Tutorials Dojo, UMak Student Multimedia Organization, and University of Makati.
+- [Experience](https://www.louigiecaminoy.com/experience): Full work history and education, including iSkolar, Academy, AWS Learning Club - Heron, Tutorials Dojo, UMak Student Multimedia Organization, and University of Makati.
+- [Certifications](https://www.louigiecaminoy.com/certifications): DataCamp AI Engineer for Developers Associate, Certiport IT Specialist - Databases, Bitget Blockchain4Youth, and more.
+- [Recognitions](https://www.louigiecaminoy.com/recognitions): Competition wins, finalist placements, and honors.
 - [Blog](https://www.louigiecaminoy.com/blog): Comfort Kills Greatness podcast episodes and articles on blockchain, engineering, and building with discipline.
 
 ## Optional

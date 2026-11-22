@@ -29,18 +29,39 @@ export const experience: Role[] = [
 		end: null,
 		location: 'Taguig',
 		summary:
-			'Co-founded iSkolar and lead engineering as CTO. Designed a scalable platform supporting 10+ features that keeps new feature work fast to ship, reworked client-side routing for a 60% performance jump in navigation, and drove SEO & AEO work to a #1 branded search ranking.',
+			'Co-founded iSkolar and lead engineering as CTO. Drove SEO & AEO work to #1 Google rankings and AI Overview citations, built a multilingual AI chatbot at about $0.0002 per question, and helped fund 10 scholarships for student beneficiaries through partnerships.',
 		achievements: [
-			'Implemented SEO & AEO strategies, driving 1,000+ organic search clicks and achieving a #1 Google branded-search ranking',
-			'Improved AI-search discoverability, earning Google AI Overview citations',
+			'Implemented SEO & AEO strategies, driving 1,000+ organic search clicks, #1 Google rankings, and Google AI Overview citations',
+			'Provided 10 scholarship funds to student beneficiaries through partnerships',
+			'Developed a multilingual AI chatbot for English and Philippine languages at about $0.0002 per question, using prompt caching, rate limiting, and a responsive 3D interface',
 			'Optimized client-side routing and application performance, reducing navigation latency and improving page transitions by 60%',
 			'Designed a scalable platform supporting 10+ features, enabling rapid feature integration and growth'
 		],
-		tags: ['React', 'TypeScript', 'PostgreSQL', 'Docker', 'Microsoft Azure'],
+		tags: ['React', 'TypeScript', 'PostgreSQL', 'Docker', 'Microsoft Azure', 'Anthropic'],
 		kpis: [
-			{ value: '10+', label: 'features shipped' },
-			{ value: '60%', label: 'perf improvement' },
-			{ value: '1,000+', label: 'organic clicks' }
+			{ value: '1,000+', label: 'organic clicks' },
+			{ value: '10', label: 'scholarships funded' },
+			{ value: '$0.0002', label: 'per AI question' }
+		]
+	},
+	{
+		id: 'academy',
+		role: 'Project Manager & UI/UX Designer',
+		company: 'Academy',
+		kind: 'work',
+		start: '2026-01',
+		end: null,
+		location: 'Taguig',
+		summary:
+			'Runs agile delivery for Academy, a platform where students showcase projects and theses and find grants and investors, and designed its landing page and core product interface.',
+		achievements: [
+			'Led agile delivery using sprints, backlog grooming, and retrospectives in Trello',
+			'Designed the landing page and core product interface, focusing on clear navigation and a uniform, filterable project card'
+		],
+		tags: ['Agile', 'Trello', 'Figma', 'UI/UX'],
+		kpis: [
+			{ value: 'Agile', label: 'sprint delivery' },
+			{ value: 'UI/UX', label: 'product design' }
 		]
 	},
 	{
@@ -68,14 +89,15 @@ export const experience: Role[] = [
 		role: 'Software Engineer Intern',
 		company: 'Tutorials Dojo',
 		kind: 'work',
-		start: '2026-01',
-		end: '2026-04',
+		start: '2026-05',
+		end: '2026-08',
 		location: 'Taguig',
 		summary:
-			'Software engineering internship building consumer mobile apps end to end. Co-developed Finsharc, a finance-tracking app, and Inki, a social book-tracking app.',
+			'Software engineering internship building consumer mobile apps end to end. Co-developed Finsharc, a finance-tracking app, and Inki, a social book-tracking app, and published an article on how Claude AI recovered lost Bitcoin.',
 		achievements: [
 			'Co-developed Finsharc, a finance-tracking app that reached #1 on the Australian App Store',
-			'Co-developed Inki, a social book-tracking app that reached #1 on the Philippine App Store'
+			'Co-developed Inki, a social book-tracking app that reached #1 on the Philippine App Store and #5 in Australia',
+			'Published an article on how Claude AI recovered lost Bitcoin'
 		],
 		tags: ['React Native', 'Expo', 'TypeScript', 'SQLite'],
 		kpis: [
@@ -89,13 +111,13 @@ export const experience: Role[] = [
 		company: 'UMak Student Multimedia Organization',
 		kind: 'work',
 		start: '2025-01',
-		end: '2026-02',
+		end: '2026-01',
 		location: 'Taguig',
 		summary:
 			'Designed the organization’s official landing page and published news across social media to grow digital presence, reach, and engagement.',
 		achievements: [
-			'Designed the official landing page and published news across social media to improve digital presence, reach, and engagement',
-			'Managed and published accurate, relevant website news content aligned with university standards'
+			'Designed the organization’s official landing page and digital presence',
+			'Managed and published website and social media content and articles'
 		],
 		tags: ['HTML', 'CSS', 'JavaScript'],
 		kpis: [
@@ -118,6 +140,20 @@ export const experience: Role[] = [
 		],
 		tags: ['Computer Science', 'Software Engineering'],
 		kpis: [{ value: '2027', label: 'expected' }]
+	},
+	{
+		id: 'umak-hs',
+		role: 'TVL - Computer Programming',
+		company: 'Higher School of University of Makati',
+		kind: 'education',
+		start: '2021-06',
+		end: '2023-04',
+		location: 'Makati City',
+		summary:
+			'Senior high school on the Technical-Vocational-Livelihood track, specializing in computer programming.',
+		achievements: ['Graduated With High Honors', 'Consistent Dean’s Lister'],
+		tags: ['Computer Programming'],
+		kpis: [{ value: 'High Honors', label: 'graduated' }]
 	}
 ];
 
@@ -280,8 +316,8 @@ export const heroMetrics = [
 export const socials = [
 	{
 		label: 'Email',
-		display: 'louigiecads143@gmail.com',
-		href: 'mailto:louigiecads143@gmail.com',
+		display: 'louigiecaminoy@gmail.com',
+		href: 'mailto:louigiecaminoy@gmail.com',
 		external: false
 	},
 	{
@@ -311,7 +347,8 @@ export const sections = [
 	{ id: 'experience', number: '03', label: 'EXPERIENCE' },
 	{ id: 'blog', number: '04', label: 'BLOG' },
 	{ id: 'certifications', number: '05', label: 'CERTIFICATIONS' },
-	{ id: 'github', number: '06', label: 'GITHUB' }
+	{ id: 'recognitions', number: '06', label: 'RECOGNITIONS' },
+	{ id: 'github', number: '07', label: 'GITHUB' }
 ] as const;
 
 export type SectionId = (typeof sections)[number]['id'];

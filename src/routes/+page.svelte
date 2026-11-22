@@ -7,6 +7,7 @@
 	import ExperienceSection from '$lib/components/scroll/ExperienceSection.svelte';
 	import BlogSection from '$lib/components/scroll/BlogSection.svelte';
 	import CertificationsSection from '$lib/components/scroll/CertificationsSection.svelte';
+	import RecognitionsSection from '$lib/components/scroll/RecognitionsSection.svelte';
 	import GitHubSection from '$lib/components/scroll/GitHubSection.svelte';
 
 	let { data } = $props();
@@ -28,5 +29,6 @@
 	<ExperienceSection preview />
 	<BlogSection preview feedItems={data.feed} />
 	<CertificationsSection preview />
+	<RecognitionsSection preview />
 	<GitHubSection graph={data.github} />
 </Shell>

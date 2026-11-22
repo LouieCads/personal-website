@@ -22,6 +22,12 @@
 			number: '05',
 			label: 'CERTIFICATIONS',
 			href: resolve('/certifications')
+		},
+		{
+			id: 'recognitions' as const,
+			number: '06',
+			label: 'RECOGNITIONS',
+			href: resolve('/recognitions')
 		}
 	];
 

@@ -175,7 +175,7 @@ describe('CLI', () => {
 		const input = screen.getByPlaceholderText(/help/i);
 		await fireEvent.input(input, { target: { value: '/email' } });
 		await fireEvent.submit(input.closest('form')!);
-		expect(writeText).toHaveBeenCalledWith('louigiecads143@gmail.com');
+		expect(writeText).toHaveBeenCalledWith('louigiecaminoy@gmail.com');
 	});
 
 	it('shows help text for /help command', async () => {

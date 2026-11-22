@@ -19,6 +19,7 @@
 		'/experience',
 		'/blog',
 		'/certifications',
+		'/recognitions',
 		'/commands',
 		'/github',
 		'/linkedin',
@@ -41,6 +42,7 @@
 		'/experience': 'experience',
 		'/blog': 'blog',
 		'/certifications': 'certifications',
+		'/recognitions': 'recognitions',
 		'/commands': 'commands'
 	};
 
@@ -60,7 +62,7 @@
 			.slice(0, MAX_INPUT_LENGTH);
 	}
 
-	const EMAIL = 'louigiecads143@gmail.com';
+	const EMAIL = 'louigiecaminoy@gmail.com';
 
 	const externalCommands: Record<string, () => void> = {
 		'/github': () => window.open('https://github.com/LouieCads', '_blank'),
@@ -194,7 +196,8 @@
 			class="absolute right-0 bottom-full left-0 border-t border-b border-(--color-border) bg-(--color-surface) px-4 py-2 sm:px-8 md:px-16 lg:px-24"
 		>
 			<span class="font-mono text-xs text-(--color-text-secondary)">
-				<b>Navigation:</b> /home /about /projects /experience /blog /commands
+				<b>Navigation:</b> /home /about /projects /experience /blog /certifications /recognitions
+				/commands
 				<span class="mx-2"></span>
 				<b>External:</b> /github /linkedin /instagram /x /email
 				<span class="mx-2"></span>
@@ -215,7 +218,8 @@
 			class="absolute right-0 bottom-full left-0 border-t border-b border-(--color-border) bg-(--color-surface) px-4 py-2 sm:px-8 md:px-16 lg:px-24"
 		>
 			<span class="font-mono text-xs text-(--color-text-secondary)">
-				<b>Navigation:</b> /home /about /projects /experience /blog /commands
+				<b>Navigation:</b> /home /about /projects /experience /blog /certifications /recognitions
+				/commands
 				<span class="mx-2"></span>
 				<b>External:</b> /github /linkedin /instagram /x /email
 				<span class="mx-2"></span>

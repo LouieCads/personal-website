@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import PageSection from './PageSection.svelte';
-	import Recognition from './Recognition.svelte';
 	import { reveal } from '$lib/actions/reveal';
 	import { specialties, aboutParagraphs, aboutSummary } from '$lib/data/portfolio';
 
@@ -62,5 +61,4 @@
 			{/if}
 		</div>
 	</div>
-	<Recognition {preview} />
 </PageSection>
