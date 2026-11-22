@@ -85,7 +85,14 @@ export const recognitions: Recognition[] = [
 		date: '2026-10',
 		project: 'Animo',
 		description:
-			'Presented Animo, a palay marketplace and advisory app focused on efficiency and transparency, and won against 15 participating teams.'
+			'Presented Animo, a palay marketplace and advisory app focused on efficiency and transparency, and won against 15 participating teams.',
+		url: 'https://www.facebook.com/share/p/1EpCh6qqWQ/',
+		image: {
+			src: '/recognitions/infotechnolympics-2026.webp',
+			alt: "INFOTECH'26 Android App Development, Productivity category: team Black Elite, Champion",
+			width: 1200,
+			height: 1200
+		}
 	},
 	{
 		id: 'pcci-asenso-360-2026',
@@ -110,7 +117,8 @@ export const recognitions: Recognition[] = [
 		date: '2026-06',
 		project: 'iSkolar',
 		description:
-			'Presented iSkolar as part of a 5-member team and placed in the Top 12 out of 25 teams.'
+			'Presented iSkolar as part of a 5-member team and placed in the Top 12 out of 25 teams.',
+		url: 'https://www.facebook.com/share/p/1Ca1bUqHQY/'
 	},
 	{
 		id: 'project-rise-2026',
