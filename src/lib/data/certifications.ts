@@ -31,17 +31,6 @@ const entries: Certification[] = [
 		image: '/certificates/AI Engineer for Developers Associate.png'
 	},
 	{
-		id: 'coddy-ai-prompts',
-		title: 'AI Prompts Fundamentals',
-		issuer: 'Coddy',
-		issued: '2026-07',
-		categories: ['Artificial Intelligence'],
-		credentialId: 'vPOrMw-prompts-gO3Q1x',
-		url: 'https://coddy.tech/certifications/vPOrMw-prompts-gO3Q1x',
-		logo: '/certificates/logos/coddy.webp',
-		image: '/certificates/AI Prompt Fundamentals.png'
-	},
-	{
 		id: 'qcsp-quantum-blockchain-2025',
 		title: 'Quantum Computing and Blockchain Lecture Series 2025',
 		issuer: 'Quantum Computing Society of the Philippines',

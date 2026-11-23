@@ -97,15 +97,22 @@ export const recognitions: Recognition[] = [
 	{
 		id: 'pcci-asenso-360-2026',
 		organizer: 'PCCI Makati',
-		logo: '/recognitions/logos/pcci.svg',
-		logoOnDark: true,
+		logo: '/recognitions/logos/pcci-makati.webp',
+		logoFill: true,
 		event: 'PCCI - Makati Asenso 360 MSME Day',
 		award: 'Champion',
 		venue: 'University of Makati',
 		date: '2026-07',
 		project: 'iSkolar',
 		description:
-			'Presented iSkolar, a scholarship platform focused on efficiency and transparency, as part of a 3-member team and won against 10 participating teams.'
+			'Presented iSkolar, a scholarship platform focused on efficiency and transparency, as part of a 3-member team and won against 10 participating teams.',
+		url: 'https://www.facebook.com/share/p/1ARKBxLUjq/',
+		image: {
+			src: '/recognitions/pcci-asenso-360-2026.webp',
+			alt: 'The iSkolar team presenting on stage at the PCCI - Makati Asenso 360 MSME Day',
+			width: 1600,
+			height: 1066
+		}
 	},
 	{
 		id: 'dost-spark-a-change-2026',

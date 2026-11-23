@@ -26,11 +26,6 @@
 		<div class="cert-grid">
 			{#each visible as item (item.id)}
 				<article class="cert-card medal-host">
-					<!-- crossed ribbon: the medal hangs from the rail above it -->
-					<svg class="ribbon" viewBox="0 0 80 64" aria-hidden="true">
-						<path d="M10 0 H24 L46 64 H34 Z" />
-						<path d="M70 0 H56 L34 64 H46 Z" />
-					</svg>
 					{#if item.image}
 						<a
 							class="medal-link"
@@ -68,13 +63,8 @@
 		grid-template-columns: repeat(3, minmax(0, 1fr));
 		gap: 56px 20px;
 	}
-	/*
-	 * No box: each credential hangs from a hairline rail with end ticks, like
-	 * a medal on a display bar. Hover sweeps the rail and ribbon to accent.
-	 */
+	/* No box: each credential is an award medal with its ribbons, then its name. */
 	.cert-card {
-		--line: var(--color-border);
-		position: relative;
 		display: flex;
 		min-width: 0;
 		flex-direction: column;
@@ -82,51 +72,11 @@
 		padding: 0 16px;
 		text-align: center;
 		overflow-wrap: anywhere;
-		background:
-			linear-gradient(var(--line), var(--line)) top / 100% 1px no-repeat,
-			linear-gradient(var(--line), var(--line)) left top / 1px 7px no-repeat,
-			linear-gradient(var(--line), var(--line)) right top / 1px 7px no-repeat;
 	}
-	.cert-card::after {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 1px;
-		background: var(--color-accent);
-		transform: scaleX(0);
-		transition: transform 0.4s ease;
-	}
-	.cert-card:hover::after,
-	.cert-card:focus-within::after {
-		transform: scaleX(1);
-	}
-	.ribbon {
-		display: block;
-		width: 80px;
-		height: 64px;
-		color: var(--color-text-muted);
-		transition: color 0.3s;
-	}
-	.ribbon path {
-		fill: currentColor;
-		fill-opacity: 0.08;
-		stroke: currentColor;
-		stroke-width: 1;
-		stroke-linejoin: round;
-		vector-effect: non-scaling-stroke;
-	}
-	.cert-card:hover .ribbon,
-	.cert-card:focus-within .ribbon {
-		color: var(--color-accent);
-	}
-	/* pull the medal up so the ribbon tucks behind its rim */
 	.medal-link {
-		position: relative;
 		display: block;
-		margin: -30px 0 24px;
-		border-radius: 50%;
+		margin: 0 0 20px;
+		border-radius: 12px;
 	}
 	.issuer {
 		font: 10px var(--font-mono);
@@ -181,12 +131,6 @@
 	@media (max-width: 639px) {
 		.cert-grid {
 			grid-template-columns: minmax(0, 1fr);
-		}
-	}
-	@media (prefers-reduced-motion: reduce) {
-		.cert-card::after,
-		.ribbon {
-			transition: none;
 		}
 	}
 </style>
