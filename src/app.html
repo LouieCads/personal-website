@@ -4,7 +4,7 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="author" content="Louigie Caminoy" />
-		<meta name="keywords" content="Louigie Caminoy, Technopreneur, CTO, Full Stack Developer, Software Engineer, Project Manager, Blockchain Developer, Athlete, Systems Architect, University of Makati" />
+		<meta name="keywords" content="Louigie Caminoy, Technopreneur, AI Engineer, CTO, iSkolar, Software Engineer, Blockchain, Full Stack Developer, AWS Learning Club Heron, Tutorials Dojo, TikTok Shop Regional Case Challenge Champion, Stellar PH100, University of Makati" />
 
 		<!-- Site-wide Open Graph / Twitter defaults; per-page title, description,
 		     canonical and url come from the SEO component in each route. -->
@@ -17,28 +17,87 @@
 		<script type="application/ld+json">
 		{
 			"@context": "https://schema.org",
-			"@type": "Person",
-			"name": "Louigie Caminoy",
-			"url": "https://www.louigiecaminoy.com",
-			"image": "https://www.louigiecaminoy.com/og-image.png",
-			"jobTitle": "CTO",
-			"description": "I'm Louigie Caminoy, a multidisciplinary technopreneur in Metro Manila. I build blockchain systems, scalable infrastructure, and products that ship.",
-			"email": "louigiecaminoy@gmail.com",
-			"alumniOf": {
-				"@type": "Organization",
-				"name": "University of Makati"
-			},
-			"worksFor": {
-				"@type": "Organization",
-				"name": "iSkolar",
-				"url": "https://iskolar.io"
-			},
-			"knowsAbout": ["Blockchain Development", "Systems Architecture", "Technical Leadership", "System Design", "Project Management", "Full Stack Development", "AI Engineering"],
-			"sameAs": [
-				"https://github.com/LouieCads",
-				"https://www.linkedin.com/in/louigiecaminoy",
-				"https://www.facebook.com/louielocktorius21",
-				"https://www.instagram.com/louie.21_/"
+			"@graph": [
+				{
+					"@type": "Person",
+					"@id": "https://www.louigiecaminoy.com/#person",
+					"name": "Louigie Caminoy",
+					"url": "https://www.louigiecaminoy.com",
+					"image": "https://www.louigiecaminoy.com/og-image.png",
+					"jobTitle": "Co-Founder and Chief Technology Officer",
+					"description": "Louigie Caminoy is a multidisciplinary technopreneur and AI Engineer in Metro Manila with a strong interest in AI and Blockchain. Co-Founder and CTO of iSkolar, AI Lead of AWS Learning Club - Heron, and a Computer Science student at the University of Makati.",
+					"email": "louigiecaminoy@gmail.com",
+					"nationality": { "@type": "Country", "name": "Philippines" },
+					"homeLocation": { "@type": "Place", "name": "Metro Manila, Philippines" },
+					"alumniOf": {
+						"@type": "CollegeOrUniversity",
+						"name": "University of Makati",
+						"sameAs": "https://umak.edu.ph"
+					},
+					"worksFor": [
+						{ "@type": "Organization", "name": "iSkolar", "url": "https://iskolar.io" },
+						{ "@type": "Organization", "name": "Academy", "url": "https://academy.iskolar.io" }
+					],
+					"memberOf": { "@type": "Organization", "name": "AWS Learning Club - Heron" },
+					"hasOccupation": [
+						{ "@type": "Occupation", "name": "Chief Technology Officer" },
+						{ "@type": "Occupation", "name": "AI Engineer" }
+					],
+					"hasCredential": [
+						{
+							"@type": "EducationalOccupationalCredential",
+							"name": "AI Engineer for Developers Associate",
+							"credentialCategory": "certification",
+							"recognizedBy": { "@type": "Organization", "name": "DataCamp" },
+							"url": "https://www.datacamp.com/certificate/AIEDA0013223515559"
+						},
+						{
+							"@type": "EducationalOccupationalCredential",
+							"name": "Information Technology Specialist - Databases",
+							"credentialCategory": "certification",
+							"recognizedBy": { "@type": "Organization", "name": "Certiport" }
+						},
+						{
+							"@type": "EducationalOccupationalCredential",
+							"name": "Blockchain4Youth",
+							"credentialCategory": "certificate",
+							"recognizedBy": { "@type": "Organization", "name": "Bitget" }
+						},
+						{
+							"@type": "EducationalOccupationalCredential",
+							"name": "Quantum Computing and Blockchain Lecture Series 2025",
+							"credentialCategory": "certificate",
+							"recognizedBy": { "@type": "Organization", "name": "Quantum Computing Society of the Philippines" },
+							"url": "https://verified.sertifier.com/en/verify/80947744189638/"
+						}
+					],
+					"award": [
+						"Champion, TikTok Shop Regional Case Challenge 2026",
+						"Honoree, Stellar PH100 2026",
+						"2nd Runner-Up, IT Skills Olympics 2026",
+						"Champion, InfoTechnOlympics 2026",
+						"Champion, PCCI - Makati Asenso 360 MSME Day 2026",
+						"Top 12 Finalist, DOST Spark-A-Change Challenge 2.0 2026",
+						"Top 10 Finalist, Project RISE 2026",
+						"1st Runner-Up and Most Disruptive Innovation, 7th CCIS Hackathon 2025"
+					],
+					"knowsAbout": ["Artificial Intelligence", "AI Engineering", "Large Language Models", "Blockchain Development", "Systems Architecture", "Technical Leadership", "System Design", "Project Management", "Full Stack Development", "Mobile App Development"],
+					"sameAs": [
+						"https://github.com/LouieCads",
+						"https://www.linkedin.com/in/louigiecaminoy",
+						"https://www.facebook.com/louielocktorius21",
+						"https://www.instagram.com/louie.21_/",
+						"https://x.com/louigie_21"
+					]
+				},
+				{
+					"@type": "WebSite",
+					"@id": "https://www.louigiecaminoy.com/#website",
+					"url": "https://www.louigiecaminoy.com",
+					"name": "Louigie Caminoy",
+					"inLanguage": "en",
+					"publisher": { "@id": "https://www.louigiecaminoy.com/#person" }
+				}
 			]
 		}
 		</script>

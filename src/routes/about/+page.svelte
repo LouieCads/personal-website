@@ -7,7 +7,7 @@
 
 <SEO
 	title="About | Louigie Caminoy"
-	description="A technopreneur and software engineer in Metro Manila, building across development, design, and product with a focus on blockchain and AI."
+	description="Louigie Caminoy is a multidisciplinary technopreneur and AI Engineer interested in AI and Blockchain. Co-Founder and CTO of iSkolar, AI Lead of AWS Learning Club - Heron, and a BS Computer Science student at the University of Makati."
 	path="/about"
 />
 

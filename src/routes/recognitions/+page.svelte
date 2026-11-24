@@ -21,6 +21,7 @@
 		name: 'Recognitions | Louigie Caminoy',
 		mainEntity: {
 			'@type': 'Person',
+			'@id': `${SITE_URL}/#person`,
 			name: 'Louigie Caminoy',
 			url: SITE_URL,
 			award: recognitions.map(
@@ -61,7 +62,7 @@
 
 <SEO
 	title="Recognitions | Louigie Caminoy"
-	description="Awards and honors of Louigie Caminoy: TikTok Shop Regional Case Challenge 2026 champion, Stellar PH100 2026 honoree, INFOTECHNOLYMPICS 2026 champion, PCCI Makati Asenso 360 MSME Day champion, and more."
+	description="Awards and honors of Louigie Caminoy: TikTok Shop Regional Case Challenge 2026 champion, Stellar PH100 2026 honoree, InfoTechnOlympics 2026 champion, PCCI Makati Asenso 360 MSME Day champion, IT Skills Olympics 2nd runner-up, and DOST and Project RISE finalist."
 	path="/recognitions"
 />
 <svelte:head>

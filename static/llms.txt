@@ -1,15 +1,18 @@
 # Louigie Caminoy
 
-> Multidisciplinary technopreneur and software engineer based in Metro Manila, Philippines. Co-founder & CTO of iSkolar. Builds across development, design, and product, with a focus on blockchain and AI.
+> Multidisciplinary technopreneur and AI Engineer based in Metro Manila, Philippines, with a strong interest in AI and Blockchain. Co-founder & CTO of iSkolar, AI Lead of AWS Learning Club - Heron, and BS Computer Science student at the University of Makati.
+
+Bionote: Louigie Caminoy is a multidisciplinary technopreneur and AI Engineer with a strong interest in AI and Blockchain. As Co-Founder and Chief Technology Officer of iSkolar, he oversees product development and technical strategy. He gained industry experience at Tutorials Dojo, contributing to mobile applications that reached #1 on the App Store, and serves as AI Lead of AWS Learning Club - Heron. He believes the future belongs to those who build it.
 
 Key facts:
 
 - Currently Co-founder & CTO at iSkolar (scholarship application and management platform, blockchain + AI).
 - Also Project Manager & UI/UX Designer at Academy, and AI Lead at AWS Learning Club - Heron.
 - Software Engineer Intern at Tutorials Dojo (May-Aug 2026): co-developed Finsharc (#1 AU App Store) and Inki (#1 PH, #5 AU).
-- Recognitions: TikTok Shop Regional Case Challenge 2026 Champion, Stellar PH100 2026 Honoree, INFOTECHNOLYMPICS 2026 Champion, PCCI Makati Asenso 360 MSME Day Champion, IT Skills Olympics 2nd Runner-Up.
+- Recognitions: TikTok Shop Regional Case Challenge 2026 Champion, Stellar PH100 2026 Honoree, InfoTechnOlympics 2026 Champion, PCCI Makati Asenso 360 MSME Day Champion, IT Skills Olympics 2nd Runner-Up, DOST Spark-A-Change Challenge 2.0 Top 12 Finalist, Project RISE Top 10 Finalist, 7th CCIS Hackathon 1st Runner-Up.
+- Certifications: DataCamp AI Engineer for Developers Associate, Certiport IT Specialist - Databases, Bitget Blockchain4Youth, Quantum Computing and Blockchain Lecture Series 2025.
 - Studying BS Computer Science at University of Makati (expected 2027).
-- Focus areas: blockchain development, systems architecture, technical leadership, system design, project management, full stack development, AI engineering.
+- Focus areas: AI engineering, blockchain development, systems architecture, technical leadership, system design, project management, full stack development.
 - Contact: louigiecaminoy@gmail.com
 
 ## Recognitions
@@ -19,24 +22,44 @@ Newest first. Full details: https://www.louigiecaminoy.com/recognitions
 - Champion, TikTok Shop Regional Case Challenge 2026 (TikTok Shop; ByteDance Office, BGC Taguig; November 2026). Presented Kapitbahay Hub Lite, a sari-sari store pickup and prepayment model that cuts failed Cash on Delivery orders, as part of a 4-member team and won the Philippine leg of the case challenge.
 - Honoree, Stellar PH100 2026 (StellarPH; McKinley Hill; November 2026). Named among the Philippines' Top 100 brightest young minds under 30 for startup contributions.
 - 2nd Runner-Up, IT Skills Olympics (University of Makati; November 2026). Presented Animo against 20+ Philippine universities.
-- Champion, INFOTECHNOLYMPICS 2026 (UMak College of Computing and Information Sciences; University of Makati; October 2026). Presented Animo, a palay marketplace and advisory app focused on efficiency and transparency, and won against 15 participating teams.
+- Champion, InfoTechnOlympics 2026 (UMak College of Computing and Information Sciences; University of Makati; October 2026). Presented Animo, a palay marketplace and advisory app focused on efficiency and transparency, and won against 15 participating teams.
 - Champion, PCCI - Makati Asenso 360 MSME Day (PCCI Makati; University of Makati; July 2026). Presented iSkolar, a scholarship platform focused on efficiency and transparency, as part of a 3-member team and won against 10 participating teams.
 - Top 12 Finalist, DOST Spark-A-Change Challenge 2.0 (DOST; Gateway Mall; June 2026). Presented iSkolar as part of a 5-member team, placing in the Top 12 of 25 teams.
 - Top 10 Finalist, Project RISE (University of Makati; Makati Diamond Residences; April 2026). Presented iSkolar and was selected as one of the Top 10 teams from 50 participants.
 - 1st Runner-Up and Most Disruptive Innovation, 7th CCIS Hackathon (UMak CCIS; University of Makati; May 2025). Presented Faculty Repository System, a file storage system addressing privacy and file organization using blockchain technology.
 
+## Certifications
+
+Newest first. Full details: https://www.louigiecaminoy.com/certifications
+
+- Information Technology Specialist - Databases (Certiport; issued November 2026, expires November 2031; credential ID rXUc-uSrC; verify at https://verify.certiport.com).
+- AI Engineer for Developers Associate (DataCamp; issued September 2026, expires September 2028; credential ID AIEDA0013223515559; https://www.datacamp.com/certificate/AIEDA0013223515559).
+- Blockchain4Youth (Bitget; issued September 2026; credential ID B4Y-2026-010078). Completed the Blockchain4Youth Learning Hub Program, covering foundational blockchain and Web3.
+- Quantum Computing and Blockchain Lecture Series 2025 (Quantum Computing Society of the Philippines with the DataProtect-SIERRA Project of DOST-ASTI; July 2025; credential ID 80947744189638; https://verified.sertifier.com/en/verify/80947744189638/).
+
+## Projects
+
+Full details: https://www.louigiecaminoy.com/projects
+
+- [iSkolar](https://iskolar.io): connects students with scholarship providers and simplifies applications.
+- [Academy](https://academy.iskolar.io/): where students showcase projects and theses, and find grants and investors.
+- [Vocation](https://vocation.iskolar.io): internships and OJT listings for Filipino students, with 1-on-1 career coaching.
+- [Configains](https://configains.fundrstudio.com/): fitness coaching with practical training, flexible nutrition, and personal guidance.
+- [Fundr Studio](https://fundrstudio.com/): a software studio taking products from design to release.
+- [USMO](https://connect.usmo.org.ph): landing page for the UMak Student Multimedia Organization.
+
 ## Pages
 
-- [About](https://www.louigiecaminoy.com/about): Background, specialties, and what drives the work.
+- [About](https://www.louigiecaminoy.com/about): Bionote, specialties, and what drives the work.
 - [Projects](https://www.louigiecaminoy.com/projects): iSkolar, Academy, Vocation, Configains, Fundr Studio, USMO — scholarship platforms, coaching, and web products.
 - [Experience](https://www.louigiecaminoy.com/experience): Full work history and education, including iSkolar, Academy, AWS Learning Club - Heron, Tutorials Dojo, UMak Student Multimedia Organization, and University of Makati.
-- [Certifications](https://www.louigiecaminoy.com/certifications): DataCamp AI Engineer for Developers Associate, Certiport IT Specialist - Databases, Bitget Blockchain4Youth, and more.
-- [Recognitions](https://www.louigiecaminoy.com/recognitions): Competition wins, finalist placements, and honors.
+- [Certifications](https://www.louigiecaminoy.com/certifications): DataCamp AI Engineer for Developers Associate, Certiport IT Specialist - Databases, Bitget Blockchain4Youth, and the Quantum Computing and Blockchain Lecture Series 2025.
+- [Recognitions](https://www.louigiecaminoy.com/recognitions): Eight competition wins, finalist placements, and honors, 2025 to 2026.
 - [Blog](https://www.louigiecaminoy.com/blog): Comfort Kills Greatness podcast episodes and articles on blockchain, engineering, and building with discipline.
 
 ## Optional
 
 - [GitHub](https://github.com/LouieCads)
-- [LinkedIn](https://www.linkedin.com/in/louie1221/)
+- [LinkedIn](https://www.linkedin.com/in/louigiecaminoy)
 - [X](https://x.com/louigie_21)
 - [Instagram](https://www.instagram.com/louie.21_/)

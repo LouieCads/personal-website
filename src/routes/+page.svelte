@@ -14,8 +14,8 @@
 </script>
 
 <SEO
-	title="Louigie Caminoy - Multidisciplinary Technopreneur"
-	description="Developer and product builder focused on systems, architecture, and execution."
+	title="Louigie Caminoy - Technopreneur & AI Engineer"
+	description="Louigie Caminoy is a technopreneur and AI Engineer, Co-Founder and CTO of iSkolar and AI Lead of AWS Learning Club - Heron. Winner of the TikTok Shop Regional Case Challenge 2026."
 />
 
 <!--

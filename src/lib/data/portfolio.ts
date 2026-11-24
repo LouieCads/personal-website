@@ -384,17 +384,14 @@ export function formatYears(start: string, end: string | null): string {
 	return year(start) === to ? year(start) : `${year(start)} → ${to}`;
 }
 
-/** 2-paragraph summary for the scroll page's about preview. */
-export const aboutSummary = [
-	'A technopreneur and software engineer driven by discipline and curiosity. I build across development, design, and product, with a focus on blockchain and AI.',
-	'I like building things from the ground up, testing what works and improving through iteration - and outside of tech, I stay active, train, compete, and keep enough range to move between different disciplines.'
+/** The bionote, in the first person. Shared by the home preview and the About page. */
+export const aboutParagraphs = [
+	'I’m a multidisciplinary technopreneur and AI Engineer with a strong interest in AI and Blockchain. As Co-Founder and Chief Technology Officer of iSkolar, I oversee product development and technical strategy. I also gained industry experience as a Software Engineer at Tutorials Dojo, contributing to mobile applications that reached #1 on the App Store.',
+	'I’m currently pursuing a BS in Computer Science at the University of Makati, and I serve as the AI Lead of AWS Learning Club – Heron. Committed to continuous learning, I strive to transform ambitious ideas into practical solutions while inspiring the next generation of builders. I believe the future belongs to those who build it.'
 ];
 
-export const aboutParagraphs = [
-	'A technopreneur and software engineer driven by discipline and curiosity. I build across development, design, and product, with a focus on blockchain and AI.',
-	'I like building things from the ground up, whether it’s a product, a system, or an idea worth exploring. Most of my work comes from figuring things out as I go, testing what works, and improving through iteration.',
-	'Outside of tech, I spend my time between training, competing, creating, and exploring new interests. I value staying active, taking on difficult things, and having enough range to move between different disciplines.'
-];
+/** 2-paragraph summary for the scroll page's about preview. */
+export const aboutSummary = aboutParagraphs;
 
 export const aboutStats = [
 	{ value: 'Full Stack', label: 'Core Skillset' },
