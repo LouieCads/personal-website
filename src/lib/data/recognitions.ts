@@ -79,6 +79,7 @@ export const recognitions: Recognition[] = [
 		award: 'Honoree',
 		venue: 'McKinley Hill',
 		date: '2026-11',
+		project: 'iSkolar',
 		description:
 			'Named to the PH100 2026 as Co-Founder and CTO of iSkolar. StellarPH’s annual PH100 spotlights the 100 brightest minds under 30 in the Filipino startup ecosystem, across design, engineering, marketing, academia, media, and more.',
 		url: 'https://stellarph.io/programs/ph100/2026'
