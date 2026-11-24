@@ -2,8 +2,18 @@
 	import { base } from '$app/paths';
 	import { reveal } from '$lib/actions/reveal';
 	import { lockScroll } from '$lib/scroll';
-	import { formatMonth, type Recognition } from '$lib/data/recognitions';
-	import { buildTerrain, pine, tent, SUMMIT, CLOUD, type Point } from '$lib/terrain';
+	import { formatMonthLong, type Recognition } from '$lib/data/recognitions';
+	import {
+		buildTerrain,
+		pine,
+		tent,
+		ridge,
+		contours,
+		SUMMIT,
+		SHEET_PEAK_H,
+		CLOUD,
+		type Point
+	} from '$lib/terrain';
 
 	/**
 	 * Recognitions as a hiking route. The trail leaves camp at the foot of the
@@ -291,10 +301,32 @@
 		opener?.focus({ preventScroll: true });
 	}
 
-	/** A click that lands on the dialog itself, not its sheet, is the backdrop. */
+	/**
+	 * A click that lands on the dialog itself, or on the open sky above the
+	 * ridge (marked data-backdrop), is the backdrop.
+	 */
 	function onDialogClick(event: MouseEvent) {
-		if (event.target === dialog) dialog?.close();
+		const target = event.target as Element | null;
+		if (target === dialog || target?.hasAttribute?.('data-backdrop')) dialog?.close();
 	}
+
+	// ---- Sheet: a summit-shaped card ----
+
+	/** Header height: sky for the flag, the ridge, and its foot. */
+	let viewportH = $state(900);
+	/** Short screens (a laptop with browser chrome) get a lower ridge and tighter spacing. */
+	const compact = $derived(viewportH < 760);
+	const PEAK_H = $derived(compact ? 116 : SHEET_PEAK_H);
+	/** Contour map drawing box; it is scaled to cover whatever the frame is. */
+	const TOPO_W = 640;
+	const TOPO_H = 400;
+
+	let sheetW = $state(640);
+	const peak = $derived(ridge(Math.max(280, sheetW), PEAK_H));
+	/** Flag pole height: what the sky above the summit allows. */
+	const FLAG = $derived(Math.min(26, peak.summit.y - 3));
+
+	const topo = $derived(current === null ? null : contours(TOPO_W, TOPO_H, current + 1));
 
 	function onDialogKey(event: KeyboardEvent) {
 		if (event.key === 'ArrowRight') step(1);
@@ -451,6 +483,8 @@
 	</div>
 </div>
 
+<svelte:window bind:innerHeight={viewportH} />
+
 <dialog
 	bind:this={dialog}
 	class="sheet"
@@ -461,19 +495,49 @@
 	onkeydown={onDialogKey}
 >
 	{#if open && current !== null}
-		<div class="sheet-inner">
-			<header class="sheet-bar">
-				<span class="count">{pad(current + 1)} / {pad(items.length)}</span>
-				<span class="rule" aria-hidden="true"></span>
-				<button type="button" class="close" onclick={() => dialog?.close()}>
-					<span aria-hidden="true">[ ESC ]</span>
-					<span class="sr-only">Close</span>
-				</button>
+		<!--
+		  Every stop fills the same skeleton, top to bottom: summit header,
+		  plaque, a three-waypoint trail log, story, a fixed photo frame, and a
+		  footer. Missing fields keep their slot (a dash, a contour map, an empty
+		  link cell) so the sheet never reflows between stops.
+		-->
+		<div class="sheet-inner" class:compact bind:clientWidth={sheetW} style:--peak-h="{PEAK_H}px">
+			<header class="peak" data-backdrop>
+				<svg
+					class="ridge"
+					width="100%"
+					height={PEAK_H}
+					viewBox="0 0 {Math.max(280, sheetW)} {PEAK_H}"
+					aria-hidden="true"
+					data-backdrop
+				>
+					<defs>
+						<linearGradient id="{uid}-foot" x1="0" y1="0" x2="0" y2="1">
+							<stop offset="0" class="foot-stop" stop-opacity="0" />
+							<stop offset="1" class="foot-stop" stop-opacity="1" />
+						</linearGradient>
+					</defs>
+					{#each peak.facets as facet, k (k)}
+						<path class="facet t{facet.tone}" d={facet.d} />
+					{/each}
+					<!-- the foot melts into the body, so there is no seam -->
+					<rect x="0" y={PEAK_H - 44} width="100%" height="44" fill="url(#{uid}-foot)" />
+					<path class="ridge-line" d={peak.outline} />
+					<path class="flag-pole" d="M{peak.summit.x} {peak.summit.y}V{peak.summit.y - FLAG}" />
+					<path class="flag" d="M{peak.summit.x} {peak.summit.y - FLAG}l15 5.5l-15 5.5z" />
+				</svg>
+				<div class="sheet-bar">
+					<span class="count">{pad(current + 1)} / {pad(items.length)}</span>
+					<button type="button" class="close" onclick={() => dialog?.close()}>
+						<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13" /></svg>
+						<span class="sr-only">Close</span>
+					</button>
+				</div>
+				<div class="summit-disc">{@render disc(open, 'lg')}</div>
 			</header>
 
-			<div class="sheet-head">
-				{@render disc(open, 'lg')}
-				<div>
+			<div class="sheet-body">
+				<div class="plaque">
 					<p class="awards">
 						<span class="award">{open.award}</span>
 						{#each open.alsoAwarded ?? [] as extra (extra)}
@@ -483,52 +547,81 @@
 					<h3 id="rec-sheet-title">{open.event}</h3>
 					<p class="by">{open.organizer}</p>
 				</div>
-			</div>
 
-			<dl class="facts">
-				<div>
-					<dt>Date</dt>
-					<dd><time datetime={open.date}>{formatMonth(open.date)}</time></dd>
-				</div>
-				<div>
-					<dt>Venue</dt>
-					<dd>{open.venue}</dd>
-				</div>
-				{#if open.project}
-					<div>
-						<dt>Project</dt>
-						<dd>{open.project}</dd>
+				<div class="story">
+					<div class="notes">
+						<dl class="log">
+							<div class="date">
+								<dt>Date</dt>
+								<dd><time datetime={open.date}>{formatMonthLong(open.date)}</time></dd>
+							</div>
+							<div class="venue">
+								<dt>Venue</dt>
+								<dd>{open.venue}</dd>
+							</div>
+							<div class="project">
+								<dt>Project</dt>
+								<dd class:none={!open.project}>
+									{#if open.project}{open.project}{:else}<span aria-hidden="true">—</span><span
+											class="sr-only">None</span
+										>{/if}
+								</dd>
+							</div>
+						</dl>
+
+						<p class="desc">{open.description}</p>
 					</div>
-				{/if}
-			</dl>
 
-			<p class="desc">{open.description}</p>
-
-			{#if open.image}
-				<figure class="art">
-					<img
-						src={asset(open.image.src)}
-						alt={open.image.alt}
-						width={open.image.width}
-						height={open.image.height}
-						loading="lazy"
-						decoding="async"
-					/>
-				</figure>
-			{/if}
-
-			{#if open.url}
-				<a class="out" href={open.url} target="_blank" rel="noopener noreferrer"
-					>VIEW ON {host(open.url).toUpperCase()} <span aria-hidden="true">↗</span></a
-				>
-			{/if}
+					<figure
+						class="art"
+						class:natural={open.image?.keepRatio}
+						style:--ratio={open.image ? open.image.width / open.image.height : null}
+					>
+						{#if open.image}
+							<img
+								class="art-shot"
+								style:--focus={open.image.focus}
+								src={asset(open.image.src)}
+								alt={open.image.alt}
+								width={open.image.width}
+								height={open.image.height}
+								loading="lazy"
+								decoding="async"
+							/>
+						{:else if topo}
+							<svg
+								class="topo"
+								viewBox="0 0 {TOPO_W} {TOPO_H}"
+								preserveAspectRatio="xMidYMid slice"
+								aria-hidden="true"
+							>
+								{#each topo.rings as d, k (k)}
+									<path class="ring" class:index={k % 4 === 3} {d} />
+								{/each}
+								<path class="topo-peak" d="M{topo.peak.x} {topo.peak.y - 7}l7 12h-14z" />
+							</svg>
+							<figcaption>NO PHOTO FROM THIS STOP</figcaption>
+						{/if}
+					</figure>
+				</div>
+			</div>
 
 			<footer class="sheet-nav">
 				<button type="button" disabled={current === 0} onclick={() => step(-1)}>
-					<span aria-hidden="true">←</span> NEWER
+					<span aria-hidden="true">←</span> PREVIOUS
 				</button>
+				{#if open.url}
+					<a class="out" href={open.url} target="_blank" rel="noopener noreferrer"
+						><span class="long">VIEW ON {host(open.url).toUpperCase()}</span><span class="short"
+							>SOURCE</span
+						> <span aria-hidden="true">↗</span></a
+					>
+				{:else}
+					<!-- empty middle cell keeps next on the right -->
+					<span aria-hidden="true"></span>
+				{/if}
 				<button type="button" disabled={current === items.length - 1} onclick={() => step(1)}>
-					OLDER <span aria-hidden="true">→</span>
+					NEXT <span aria-hidden="true">→</span>
 				</button>
 			</footer>
 		</div>
@@ -897,53 +990,352 @@
 		transform: none;
 	}
 
-	/* ---- Dialog ---- */
+	/* ---- Dialog: a summit-shaped sheet ----
+	   The dialog box itself is invisible; the ridge header draws the top of the
+	   shape and the body continues its outline down to a diorama-style slab.
+	   The sheet has a fixed height that fits the viewport, so every stop reads
+	   without scrolling: the photo frame takes whatever height is left. */
 	.sheet {
-		width: min(640px, calc(100vw - 32px));
-		max-height: calc(100dvh - 48px);
+		width: min(720px, calc(100vw - 32px));
+		height: min(880px, calc(100dvh - 32px));
+		max-height: none;
 		margin: auto;
 		padding: 0;
+		/* only a last resort on very short screens */
 		overflow-y: auto;
 		overscroll-behavior: contain;
-		border: 1px solid var(--color-border);
-		border-top: 2px solid var(--color-accent);
-		background: var(--color-surface);
+		/* a gutter would cut into the ridge; wheel, touch and keys still scroll */
+		scrollbar-width: none;
+		border: 0;
+		background: transparent;
 		color: var(--color-text-primary);
+	}
+	/* The browser rings the focused dialog box, which would draw the very
+	   rectangle the ridge replaces; focus moves on to the controls inside. */
+	.sheet:focus,
+	.sheet:focus-visible {
+		outline: none;
+	}
+	.sheet::-webkit-scrollbar {
+		display: none;
 	}
 	.sheet::backdrop {
 		background: rgb(0 0 0 / 0.6);
 		backdrop-filter: blur(3px);
 	}
 	.sheet[open] {
-		animation: sheet-in 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+		animation: sheet-in 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 	}
 	@keyframes sheet-in {
 		from {
 			opacity: 0;
-			transform: translateY(12px);
+			transform: translateY(16px);
 		}
 	}
 	.sheet-inner {
-		padding: 20px 28px 24px;
+		--pad: 18px;
+		--side: 1px solid var(--color-border-hover);
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		min-height: 0;
+		container-type: inline-size;
+	}
+
+	/* Header: sky, ridge, flag; the organizer's disc sits under the summit. */
+	.peak {
+		position: relative;
+		flex: none;
+		height: var(--peak-h);
+	}
+	.ridge {
+		display: block;
+		overflow: visible;
+	}
+	.foot-stop {
+		stop-color: var(--color-surface);
+	}
+	.ridge-line {
+		fill: none;
+		stroke: var(--color-border-hover);
+		stroke-width: 1;
+		stroke-linejoin: round;
+	}
+	.flag {
+		transform-box: fill-box;
+		transform-origin: left center;
+		animation: flag-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+	}
+	@keyframes flag-in {
+		from {
+			transform: scaleX(0);
+		}
 	}
 	.sheet-bar {
+		position: absolute;
+		right: 0;
+		bottom: 10px;
+		left: 0;
 		display: flex;
 		align-items: center;
-		gap: 14px;
-		margin-bottom: 24px;
+		justify-content: space-between;
+		padding: 0 14px 0 18px;
 	}
 	.count {
 		font: 11px var(--font-mono);
 		letter-spacing: 0.12em;
 		color: var(--color-accent);
 	}
-	.rule {
-		flex: 1;
-		height: 1px;
-		background: var(--color-rule);
+	/* a bare X; the 34px box is only the tap target */
+	.close {
+		display: grid;
+		place-items: center;
+		width: 34px;
+		height: 34px;
+		padding: 0;
+		border: 0;
+		background: none;
+		color: var(--color-text-secondary);
+		cursor: pointer;
+		transition: color 0.2s;
 	}
-	.close,
+	.close svg {
+		width: 15px;
+		height: 15px;
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 1.75;
+		stroke-linecap: round;
+	}
+	.close:hover {
+		color: var(--color-accent);
+	}
+	.summit-disc {
+		position: absolute;
+		/* centred below the summit; the lower edge breaks into the body */
+		top: 64px;
+		left: 50%;
+		transform: translateX(-50%);
+	}
+	.disc.lg {
+		width: 84px;
+		height: 84px;
+		box-shadow:
+			0 0 0 1px var(--color-border-hover),
+			0 0 0 5px var(--color-surface),
+			0 0 0 6px var(--color-border-hover);
+	}
+
+	/* Body: the mountain's interior, edged in the same line as the ridge. */
+	.sheet-body,
+	.sheet-nav {
+		border-right: var(--side);
+		border-left: var(--side);
+		background: var(--color-surface);
+	}
+	.sheet-body {
+		display: flex;
+		flex: 1 1 auto;
+		flex-direction: column;
+		min-height: 0;
+		padding: 22px var(--pad) 16px;
+	}
+	.plaque {
+		flex: none;
+		text-align: center;
+	}
+	.awards {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 6px;
+	}
+	.plaque .award {
+		display: inline-block;
+		padding: 3px 8px;
+		border: 1px solid var(--color-text-primary);
+	}
+	.plaque h3 {
+		margin: 10px auto 4px;
+		max-width: 32ch;
+		font-size: 19px;
+		font-weight: 600;
+		line-height: 1.3;
+		letter-spacing: -0.025em;
+		text-wrap: balance;
+	}
+	.by {
+		font: 10px var(--font-mono);
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--color-text-muted);
+	}
+
+	/* Story: two rows of text (the trail log, then the description) with the
+	   photo filling the space below them, at every width. */
+	.story {
+		display: flex;
+		flex: 1 1 0;
+		flex-direction: column;
+		gap: 16px;
+		min-height: 0;
+		margin-top: 18px;
+	}
+	.notes {
+		display: contents;
+	}
+
+	/* Trail log: always three waypoints on one dashed route. */
+	.log {
+		position: relative;
+		display: grid;
+		flex: none;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		margin: 0;
+		text-align: center;
+	}
+	.log::before {
+		content: '';
+		position: absolute;
+		top: 15px;
+		right: calc(100% / 6);
+		left: calc(100% / 6);
+		border-top: 2px dashed color-mix(in srgb, var(--color-accent) 70%, transparent);
+	}
+	.log div {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding: 0 6px;
+	}
+	/* Waypoint: a ringed marker on the route (::before) with an icon for what
+	   it records (::after): a calendar, a map pin, a light bulb. The icons are
+	   masks, so they take the accent colour in either theme. */
+	.log div::before {
+		content: '';
+		box-sizing: border-box;
+		width: 32px;
+		height: 32px;
+		margin-bottom: 8px;
+		border: 1.5px solid var(--color-accent);
+		border-radius: 50%;
+		background: var(--color-surface);
+	}
+	.log div::after {
+		content: '';
+		position: absolute;
+		top: 8px;
+		left: 50%;
+		width: 16px;
+		height: 16px;
+		background: var(--color-accent);
+		transform: translateX(-50%);
+		mask: var(--icon) center / contain no-repeat;
+	}
+	.log .date {
+		--icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='5' width='18' height='16' rx='2'/%3E%3Cpath d='M16 3v4M8 3v4M3 10h18M8 14h2M14 14h2M8 17.5h2'/%3E%3C/svg%3E");
+	}
+	.log .venue {
+		--icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 21.5s-7-6.1-7-11.8a7 7 0 0 1 14 0c0 5.7-7 11.8-7 11.8z'/%3E%3Ccircle cx='12' cy='9.7' r='2.6'/%3E%3C/svg%3E");
+	}
+	.log .project {
+		--icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9.5 18h5M10.5 21.5h3M12 2.5a6.5 6.5 0 0 0-3.9 11.7c.8.6 1.3 1.5 1.4 2.3h5c.1-.8.6-1.7 1.4-2.3A6.5 6.5 0 0 0 12 2.5z'/%3E%3C/svg%3E");
+	}
+	.log dt {
+		font: 9px var(--font-mono);
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		color: var(--color-text-muted);
+	}
+	/* two lines reserved, so a long venue never shifts what follows */
+	.log dd {
+		display: -webkit-box;
+		overflow: hidden;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+		line-clamp: 2;
+		min-height: calc(2 * 1.35em);
+		margin: 3px 0 0;
+		font-size: 13px;
+		line-height: 1.35;
+		color: var(--color-text-primary);
+	}
+	.log dd.none {
+		color: var(--color-text-muted);
+	}
+	.desc {
+		flex: none;
+		margin: 0;
+		font-size: 13.5px;
+		line-height: 1.6;
+		color: var(--color-text-secondary);
+	}
+
+	/* Photo frame: fills the space left, the same for every stop. A photo of
+	   any other proportion is cropped to cover it, centred on its focus point;
+	   without a photo, a contour map holds the space. */
+	.art {
+		position: relative;
+		flex: 1 1 0;
+		min-height: 90px;
+		overflow: hidden;
+		margin: 0;
+		border: 1px solid var(--color-border);
+		background: var(--color-surface-alt);
+	}
+	.art-shot {
+		position: absolute;
+		inset: 0;
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: var(--focus, 50% 50%);
+		/* some artwork has a transparent header with dark marks: keep them legible */
+		background: #e6e6e6;
+	}
+	.topo {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+	}
+	.ring {
+		fill: none;
+		stroke: var(--color-border-hover);
+		stroke-width: 1;
+	}
+	.ring.index {
+		stroke: color-mix(in srgb, var(--color-text-primary) 30%, var(--color-surface));
+		stroke-width: 1.5;
+	}
+	.topo-peak {
+		fill: var(--color-accent);
+	}
+	.art figcaption {
+		position: absolute;
+		bottom: 10px;
+		left: 12px;
+		font: 9px var(--font-mono);
+		letter-spacing: 0.16em;
+		color: var(--color-text-muted);
+	}
+
+	/* Footer: previous, the source link (or its absence), next. The thick
+	   base is the cut face of the slab, as on the trail's diorama. */
+	.sheet-nav {
+		display: grid;
+		flex: none;
+		grid-template-columns: 1fr auto 1fr;
+		align-items: center;
+		gap: 12px;
+		padding: 12px var(--pad) 14px;
+		border-bottom: 10px solid
+			color-mix(in srgb, var(--color-text-primary) 30%, var(--color-surface));
+	}
 	.sheet-nav button {
+		justify-self: start;
 		padding: 6px 0;
 		border: 0;
 		background: none;
@@ -953,7 +1345,9 @@
 		cursor: pointer;
 		transition: color 0.2s;
 	}
-	.close:hover,
+	.sheet-nav button:last-child {
+		justify-self: end;
+	}
 	.sheet-nav button:hover:not(:disabled) {
 		color: var(--color-accent);
 	}
@@ -963,116 +1357,116 @@
 		outline: 2px solid var(--color-accent);
 		outline-offset: 4px;
 	}
-	.sheet-head {
-		display: flex;
-		align-items: center;
-		gap: 22px;
-	}
-	.disc.lg {
-		width: 88px;
-		height: 88px;
-		box-shadow:
-			0 0 0 1px var(--color-border),
-			0 0 0 5px var(--color-surface),
-			0 0 0 6px var(--color-border);
-	}
-	.awards {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 6px;
-	}
-	.sheet-head .award {
-		display: inline-block;
-		padding: 3px 8px;
-		border: 1px solid var(--color-text-primary);
-	}
-	.sheet-head h3 {
-		margin: 10px 0 4px;
-		font-size: 22px;
-		font-weight: 600;
-		line-height: 1.3;
-		letter-spacing: -0.025em;
-	}
-	.by {
-		font: 10px var(--font-mono);
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
-		color: var(--color-text-muted);
-	}
-	.facts {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-		gap: 1px;
-		margin: 24px 0 20px;
-		border: 1px solid var(--color-border);
-		background: var(--color-border);
-	}
-	.facts div {
-		padding: 12px 14px;
-		background: var(--color-surface-alt);
-	}
-	.facts dt {
-		font: 9px var(--font-mono);
-		letter-spacing: 0.16em;
-		text-transform: uppercase;
-		color: var(--color-text-muted);
-	}
-	.facts dd {
-		margin: 4px 0 0;
-		font-size: 13px;
-		color: var(--color-text-primary);
-	}
-	.desc {
-		font-size: 14px;
-		line-height: 1.75;
-		color: var(--color-text-secondary);
-	}
-	.art {
-		margin: 20px 0 0;
-		/* the artwork's transparent header has dark marks: keep them legible */
-		background: #e6e6e6;
-		border: 1px solid var(--color-border);
-	}
-	.art img {
-		display: block;
-		width: 100%;
-		height: auto;
-	}
 	.out {
-		display: inline-block;
-		margin-top: 18px;
 		font: 11px var(--font-mono);
 		letter-spacing: 0.08em;
 		color: var(--color-accent);
+		text-align: center;
 		text-underline-offset: 4px;
 	}
-	.out:hover {
+	a.out:hover {
 		text-decoration: underline;
 	}
-	.sheet-nav {
-		display: flex;
-		justify-content: space-between;
-		margin-top: 24px;
-		padding-top: 14px;
-		border-top: 1px solid var(--color-rule);
+	/* phones get the short label so the footer stays on one line */
+	.out .long {
+		display: none;
 	}
 	.sheet-nav button:disabled {
 		opacity: 0.35;
 		cursor: default;
 	}
 
-	@media (max-width: 479px) {
+	/* Short screens: a lower ridge, a smaller disc and tighter spacing, so
+	   the photo keeps a useful height without the sheet scrolling. */
+	.compact .summit-disc {
+		top: 50px;
+	}
+	.compact .disc.lg {
+		width: 66px;
+		height: 66px;
+	}
+	.compact .sheet-body {
+		padding-top: 18px;
+		padding-bottom: 12px;
+	}
+	.compact .plaque h3 {
+		margin-top: 8px;
+	}
+	.compact .story {
+		gap: 12px;
+		margin-top: 14px;
+	}
+	.compact .log dd {
+		-webkit-line-clamp: 1;
+		line-clamp: 1;
+		min-height: 1.35em;
+	}
+	.compact .art {
+		min-height: 90px;
+	}
+	.compact .sheet-nav {
+		padding-top: 8px;
+		padding-bottom: 10px;
+	}
+
+	@container (min-width: 600px) {
 		.sheet-inner {
-			padding: 16px 18px 20px;
+			--pad: 28px;
 		}
-		.sheet-head {
-			flex-direction: column;
-			align-items: flex-start;
-			gap: 16px;
+		.plaque h3 {
+			font-size: 22px;
 		}
-		.disc.lg {
-			width: 68px;
-			height: 68px;
+		.story {
+			gap: 18px;
+			margin-top: 22px;
+		}
+		.desc {
+			font-size: 14px;
+			line-height: 1.7;
+		}
+		.out .long {
+			display: inline;
+		}
+		.out .short {
+			display: none;
+		}
+	}
+
+	/* Web: the photo gets a full-width 16:10 frame instead of the leftover
+	   space, so it always shows at a proper size. The sheet grows to fit and
+	   scrolls a little on shorter screens. */
+	@media (min-width: 700px) {
+		.sheet {
+			height: auto;
+			max-height: calc(100dvh - 32px);
+		}
+		.sheet-inner {
+			height: auto;
+		}
+		.story {
+			flex: none;
+		}
+		.art,
+		.compact .art {
+			flex: none;
+			min-height: 0;
+			aspect-ratio: 16 / 10;
+		}
+	}
+
+	/* Artwork that must not be cropped. On the web the frame takes its own
+	   proportions; on phones the frame keeps flexing to fit the screen and the
+	   artwork is fitted whole inside it. */
+	@media (max-width: 699px) {
+		.art.natural .art-shot {
+			object-fit: contain;
+		}
+	}
+	@media (min-width: 700px) {
+		.art.natural {
+			flex: none;
+			min-height: 0;
+			aspect-ratio: var(--ratio);
 		}
 	}
 
@@ -1094,7 +1488,8 @@
 			opacity: 1;
 			transform: none;
 		}
-		.sheet[open] {
+		.sheet[open],
+		.flag {
 			animation: none;
 		}
 	}

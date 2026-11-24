@@ -238,3 +238,122 @@ export function tent(x: number, y: number, s = 1): { lit: string; dark: string; 
 		door: `M${f(x)} ${f(y - h * 0.62)}L${f(x + w * 0.3)} ${f(y)}L${f(x - w * 0.3)} ${f(y)}Z`
 	};
 }
+
+/**
+ * Silhouette of the recognition sheet's header: a low-poly ridge in a
+ * `width` x `height` box, with the summit centred at `SHEET_SUMMIT_Y`. The
+ * profile is fixed in proportion so every sheet wears the same mountain; only
+ * its width follows the dialog. Sides run straight down to the bottom edge so
+ * the body's borders continue the outline. The profile is drawn for a box
+ * `SHEET_PEAK_H` tall; a shorter `height` scales it down evenly.
+ */
+export const SHEET_PEAK_H = 150;
+export const SHEET_SUMMIT_Y = 30;
+const RIDGE: [number, number][] = [
+	[0, 104],
+	[0.08, 94],
+	[0.15, 106],
+	[0.25, 76],
+	[0.32, 88],
+	[0.42, 52],
+	[0.5, SHEET_SUMMIT_Y],
+	[0.57, 60],
+	[0.65, 48],
+	[0.74, 82],
+	[0.83, 70],
+	[0.92, 96],
+	[1, 88]
+];
+
+export function ridge(
+	width: number,
+	height: number
+): { facets: Facet[]; outline: string; summit: Point } {
+	const W = width;
+	const H = height;
+	const k = height / SHEET_PEAK_H;
+	const top = RIDGE.map(([x, y]) => ({ x: x * W, y: y * k }));
+	// A row of vertices partway down, under each segment's midpoint, breaks
+	// the face into triangles; jitter keeps it from looking like a comb.
+	const lowY = H - 26 * k;
+	const low = top.slice(0, -1).map((p, i) => ({
+		x: (p.x + top[i + 1].x) / 2,
+		y: lowY + (hash(i, 3) - 0.5) * 12 * k
+	}));
+	const lows = [{ x: 0, y: lowY }, ...low, { x: W, y: lowY }];
+	const tri = (a: Point, b: Point, c: Point, tone: number): Facet => ({
+		d: `M${f(a.x)} ${f(a.y)}L${f(b.x)} ${f(b.y)}L${f(c.x)} ${f(c.y)}Z`,
+		tone
+	});
+
+	const facets: Facet[] = [];
+	// Under the ridge line: slopes rising to the right face the light (upper
+	// left) and stay pale; slopes falling away turn darker the steeper they are.
+	for (let i = 0; i < top.length - 1; i++) {
+		const a = top[i];
+		const b = top[i + 1];
+		const slope = (b.y - a.y) / (b.x - a.x || 1);
+		const tone = slope < 0 ? (slope < -0.5 ? 0 : 1) : slope > 0.5 ? 5 : 4;
+		facets.push(tri(a, b, low[i], tone));
+	}
+	// Wedges between neighbouring lows, meeting the ridge at each vertex.
+	for (let i = 0; i < top.length; i++) {
+		facets.push(tri(top[i], lows[i], lows[i + 1], top[i].x < W / 2 ? 2 : 3));
+	}
+	// The foot: a band down to the bottom edge, lighter on the lit side.
+	for (let i = 0; i < lows.length - 1; i++) {
+		const a = lows[i];
+		const b = lows[i + 1];
+		const lit = (a.x + b.x) / 2 < W / 2;
+		facets.push(tri(a, b, { x: a.x, y: H }, lit ? 1 : 3));
+		facets.push(tri(b, { x: b.x, y: H }, { x: a.x, y: H }, lit ? 2 : 4));
+	}
+
+	const edge = top.map((p, i) => {
+		const x = i === 0 ? 0.5 : i === top.length - 1 ? W - 0.5 : p.x;
+		return `L${f(x)} ${f(p.y)}`;
+	});
+	const outline = `M0.5 ${H}${edge.join('')}L${f(W - 0.5)} ${H}`;
+	return { facets, outline, summit: { x: W / 2, y: SHEET_SUMMIT_Y * k } };
+}
+
+/**
+ * Topographic contour rings for a `width` x `height` box: the stand-in when a
+ * recognition has no photo, so every sheet keeps the same frame. `seed`
+ * varies the hill from one stop to the next while staying deterministic.
+ */
+export function contours(
+	width: number,
+	height: number,
+	seed: number
+): { rings: string[]; peak: Point } {
+	const cx = width * (0.56 + (hash(seed, 1) - 0.5) * 0.2);
+	const cy = height * (0.5 + (hash(seed, 2) - 0.5) * 0.2);
+	const SEG = 20;
+	const rings: string[] = [];
+	const step = Math.max(width, height) / 13;
+	for (let k = 1; k <= 9; k++) {
+		const pts: Point[] = [];
+		for (let s = 0; s < SEG; s++) {
+			const a = (s / SEG) * Math.PI * 2;
+			// Low-frequency wobble shared by neighbouring rings, so they nest.
+			const wob =
+				0.16 * Math.sin(a * 2 + seed) +
+				0.1 * Math.sin(a * 3 + seed * 1.7 + k * 0.15) +
+				(hash(s + seed * 31, k) - 0.5) * 0.06;
+			const r = k * step * (1 + wob);
+			pts.push({ x: cx + Math.cos(a) * r * 1.35, y: cy + Math.sin(a) * r });
+		}
+		// Closed Catmull-Rom loop.
+		let d = `M${f(pts[0].x)} ${f(pts[0].y)}`;
+		for (let i = 0; i < SEG; i++) {
+			const p0 = pts[(i - 1 + SEG) % SEG];
+			const p1 = pts[i];
+			const p2 = pts[(i + 1) % SEG];
+			const p3 = pts[(i + 2) % SEG];
+			d += ` C${f(p1.x + (p2.x - p0.x) / 6)} ${f(p1.y + (p2.y - p0.y) / 6)} ${f(p2.x - (p3.x - p1.x) / 6)} ${f(p2.y - (p3.y - p1.y) / 6)} ${f(p2.x)} ${f(p2.y)}`;
+		}
+		rings.push(d + 'Z');
+	}
+	return { rings, peak: { x: cx, y: cy } };
+}
